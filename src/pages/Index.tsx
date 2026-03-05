@@ -3,21 +3,26 @@ import { motion } from "framer-motion";
 import { Button } from "@/components/ui/button";
 import Layout from "@/components/Layout";
 import SectionHeading from "@/components/SectionHeading";
+import Testimonials from "@/components/Testimonials";
+import ClientLogos from "@/components/ClientLogos";
 import { Thermometer, Snowflake, Truck, Zap, Clock, Shield, Leaf, Building, ArrowRight, Phone } from "lucide-react";
 import heroBg from "@/assets/hero-bg.jpg";
+import serviceAc from "@/assets/service-ac.jpg";
+import serviceRefrig from "@/assets/service-refrig.jpg";
+import serviceTransport from "@/assets/service-transport.jpg";
 
 const services = [
-  { icon: Thermometer, title: "Air Conditioning", desc: "Installation, repairs, gas filling, major & minor services, and full HVAC-R maintenance for homes and offices.", link: "/services" },
-  { icon: Snowflake, title: "Refrigeration", desc: "Cold rooms, industrial refrigeration, bottle coolers, ice machines, domestic fridges, regas, and compressor changes.", link: "/services" },
-  { icon: Truck, title: "Transport Refrigeration", desc: "Breakdown response, repairs, maintenance, engine repair, battery replacement and full servicing for refrigerated trucks.", link: "/services" },
-  { icon: Zap, title: "Electrical", desc: "Wiring upgrades, DB panel upgrades, solar systems, lighting controls, power point installation and general electrical maintenance.", link: "/services" },
+  { icon: Thermometer, title: "Air Conditioning", desc: "Installation, repairs, gas filling, major & minor services, and full HVAC-R maintenance for homes and offices.", link: "/services", image: serviceAc },
+  { icon: Snowflake, title: "Refrigeration", desc: "Cold rooms, industrial refrigeration, bottle coolers, ice machines, domestic fridges, regas, and compressor changes.", link: "/services", image: serviceRefrig },
+  { icon: Truck, title: "Transport Refrigeration", desc: "Breakdown response, repairs, maintenance, engine repair, battery replacement and full servicing for refrigerated trucks.", link: "/services", image: serviceTransport },
+  { icon: Zap, title: "Electrical", desc: "Wiring upgrades, DB panel upgrades, solar systems, lighting controls, power point installation and general electrical maintenance.", link: "/services", image: null },
 ];
 
 const stats = [
-  { value: "24/7", label: "Support Available" },
+  { value: "500+", label: "Projects Completed" },
+  { value: "24/7", label: "Emergency Support" },
+  { value: "98%", label: "Client Retention" },
   { value: "4+", label: "Service Categories" },
-  { value: "100%", label: "Client Satisfaction Focus" },
-  { value: "ECO", label: "Eco-Friendly Solutions" },
 ];
 
 const steps = [
@@ -99,7 +104,7 @@ const Index = () => {
               transition={{ delay: 1.2 }}
               className="mt-12 flex flex-wrap gap-6"
             >
-              {["24/7 Support", "Certified Technicians", "Residential & Commercial"].map((badge) => (
+              {["24/7 Support", "Certified Technicians", "500+ Projects Completed"].map((badge) => (
                 <div key={badge} className="flex items-center gap-2 text-frost/50 text-sm">
                   <div className="h-1.5 w-1.5 rounded-full bg-ice" />
                   <span className="font-display uppercase tracking-wider text-xs">{badge}</span>
@@ -143,8 +148,15 @@ const Index = () => {
         </div>
       </section>
 
+      {/* Trust Badges */}
+      <section className="py-16 bg-frost-gradient">
+        <div className="container mx-auto px-4">
+          <ClientLogos />
+        </div>
+      </section>
+
       {/* Services */}
-      <section className="py-24 bg-frost-gradient">
+      <section className="py-24">
         <div className="container mx-auto px-4">
           <SectionHeading label="What We Do" heading="Four Core Services" description="From residential split units to industrial cold rooms and transport refrigeration — Frost Ice has you covered." />
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
@@ -156,15 +168,22 @@ const Index = () => {
                 viewport={{ once: true }}
                 transition={{ delay: i * 0.1, duration: 0.5 }}
               >
-                <Link to={s.link} className="group block h-full bg-card rounded-lg p-8 shadow-[var(--shadow-card)] hover:shadow-[var(--shadow-card-hover)] transition-all duration-300 hover:-translate-y-1 border border-border">
-                  <div className="h-12 w-12 rounded-lg bg-primary/10 flex items-center justify-center mb-5 group-hover:bg-primary/20 transition-colors">
-                    <s.icon className="h-6 w-6 text-primary" />
+                <Link to={s.link} className="group block h-full bg-card rounded-lg overflow-hidden shadow-[var(--shadow-card)] hover:shadow-[var(--shadow-card-hover)] transition-all duration-300 hover:-translate-y-1 border border-border">
+                  {s.image && (
+                    <div className="h-40 overflow-hidden">
+                      <img src={s.image} alt={s.title} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
+                    </div>
+                  )}
+                  <div className="p-8">
+                    <div className="h-12 w-12 rounded-lg bg-primary/10 flex items-center justify-center mb-5 group-hover:bg-primary/20 transition-colors">
+                      <s.icon className="h-6 w-6 text-primary" />
+                    </div>
+                    <h3 className="font-display text-xl font-700 uppercase text-secondary mb-3">{s.title}</h3>
+                    <p className="text-muted-foreground text-sm leading-relaxed mb-4">{s.desc}</p>
+                    <span className="inline-flex items-center gap-1 text-primary font-display text-sm uppercase tracking-wider group-hover:gap-2 transition-all">
+                      View Details <ArrowRight className="h-4 w-4" />
+                    </span>
                   </div>
-                  <h3 className="font-display text-xl font-700 uppercase text-secondary mb-3">{s.title}</h3>
-                  <p className="text-muted-foreground text-sm leading-relaxed mb-4">{s.desc}</p>
-                  <span className="inline-flex items-center gap-1 text-primary font-display text-sm uppercase tracking-wider group-hover:gap-2 transition-all">
-                    View Details <ArrowRight className="h-4 w-4" />
-                  </span>
                 </Link>
               </motion.div>
             ))}
@@ -191,8 +210,16 @@ const Index = () => {
         </div>
       </section>
 
-      {/* Why Choose */}
+      {/* Testimonials */}
       <section className="py-24">
+        <div className="container mx-auto px-4">
+          <SectionHeading label="Client Reviews" heading="What Our Clients Say" description="Don't just take our word for it — hear from the businesses and homeowners who trust Frost Ice with their cooling needs." />
+          <Testimonials />
+        </div>
+      </section>
+
+      {/* Why Choose */}
+      <section className="py-24 bg-frost-gradient">
         <div className="container mx-auto px-4">
           <SectionHeading label="Why Frost Ice" heading="The Trusted Choice for Cooling" description="Our expert team delivers exceptional service using cutting-edge technology and eco-friendly solutions tailored to your specific needs." />
           <div className="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-4xl mx-auto">

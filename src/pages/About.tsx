@@ -2,8 +2,11 @@ import { motion } from "framer-motion";
 import { Button } from "@/components/ui/button";
 import Layout from "@/components/Layout";
 import SectionHeading from "@/components/SectionHeading";
+import Testimonials from "@/components/Testimonials";
+import ClientLogos from "@/components/ClientLogos";
 import { Link } from "react-router-dom";
 import { Award, Users, Leaf, Lightbulb, ShieldCheck, Wrench, Phone, Target, Eye } from "lucide-react";
+import teamPhoto from "@/assets/team-photo.jpg";
 
 const values = [
   { icon: Award, num: "01", title: "Quality First", desc: "We use top-quality products and uphold the highest workmanship standards on every job — residential or commercial." },
@@ -53,18 +56,22 @@ const AboutPage = () => {
             </motion.div>
 
             <motion.div {...fadeUp} transition={{ delay: 0.2 }} className="space-y-4">
+              {/* Team Photo */}
+              <div className="rounded-lg overflow-hidden">
+                <img src={teamPhoto} alt="Frost Ice team of certified technicians" className="w-full h-56 object-cover" />
+              </div>
               <div className="bg-secondary rounded-lg p-8">
                 <h3 className="font-display text-lg uppercase tracking-wider text-ice mb-3">Our Mission</h3>
                 <p className="text-frost/70 text-sm leading-relaxed">Delivering innovative and reliable air conditioning and refrigeration systems to create optimal environments for our clients.</p>
               </div>
               <div className="grid grid-cols-2 gap-4">
-                <div className="bg-card border border-border rounded-lg p-6">
-                  <span className="font-display text-xs uppercase tracking-widest text-primary">Industry</span>
-                  <p className="font-display text-lg font-700 text-secondary mt-1">Aircon & Refrigeration</p>
+                <div className="bg-card border border-border rounded-lg p-6 text-center">
+                  <span className="font-display text-3xl font-800 text-primary">500+</span>
+                  <p className="font-display text-xs uppercase tracking-widest text-muted-foreground mt-1">Projects Done</p>
                 </div>
-                <div className="bg-card border border-border rounded-lg p-6">
-                  <span className="font-display text-xs uppercase tracking-widest text-primary">Status</span>
-                  <p className="font-display text-lg font-700 text-secondary mt-1">Registered (PTY) LTD</p>
+                <div className="bg-card border border-border rounded-lg p-6 text-center">
+                  <span className="font-display text-3xl font-800 text-primary">98%</span>
+                  <p className="font-display text-xs uppercase tracking-widest text-muted-foreground mt-1">Client Retention</p>
                 </div>
               </div>
               <div className="bg-primary/10 rounded-lg p-6 border border-primary/20">
@@ -73,6 +80,13 @@ const AboutPage = () => {
               </div>
             </motion.div>
           </div>
+        </div>
+      </section>
+
+      {/* Trust Badges */}
+      <section className="py-16">
+        <div className="container mx-auto px-4">
+          <ClientLogos />
         </div>
       </section>
 
@@ -123,6 +137,14 @@ const AboutPage = () => {
               </motion.div>
             ))}
           </div>
+        </div>
+      </section>
+
+      {/* Testimonials */}
+      <section className="py-24 bg-frost-gradient">
+        <div className="container mx-auto px-4">
+          <SectionHeading label="Client Reviews" heading="What Our Clients Say" />
+          <Testimonials />
         </div>
       </section>
 

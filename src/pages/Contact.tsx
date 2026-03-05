@@ -145,6 +145,34 @@ const ContactPage = () => {
               >
                 <MessageCircle className="h-5 w-5" /> Chat on WhatsApp
               </a>
+
+              {/* Trust indicator */}
+              <div className="bg-frost-gradient border border-border rounded-lg p-5 mt-2">
+                <div className="flex gap-1 mb-2">
+                  {Array.from({ length: 5 }).map((_, j) => (
+                    <svg key={j} className="h-3.5 w-3.5 fill-accent text-accent" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" /></svg>
+                  ))}
+                </div>
+                <p className="text-muted-foreground text-xs italic leading-relaxed">"Professional, clean, and the price was exactly as quoted."</p>
+                <p className="font-display text-[10px] uppercase tracking-widest text-secondary mt-2">— Sarah V., Pretoria</p>
+              </div>
+
+              <div className="flex items-center justify-center gap-4 mt-2 text-muted-foreground">
+                <div className="text-center">
+                  <span className="font-display text-lg font-800 text-primary">500+</span>
+                  <p className="font-display text-[9px] uppercase tracking-widest">Projects</p>
+                </div>
+                <div className="h-8 w-px bg-border" />
+                <div className="text-center">
+                  <span className="font-display text-lg font-800 text-primary">98%</span>
+                  <p className="font-display text-[9px] uppercase tracking-widest">Retention</p>
+                </div>
+                <div className="h-8 w-px bg-border" />
+                <div className="text-center">
+                  <span className="font-display text-lg font-800 text-primary">24/7</span>
+                  <p className="font-display text-[9px] uppercase tracking-widest">Support</p>
+                </div>
+              </div>
             </div>
 
             {/* Form */}

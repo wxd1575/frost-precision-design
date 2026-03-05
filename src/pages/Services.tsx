@@ -3,8 +3,13 @@ import { motion } from "framer-motion";
 import { Button } from "@/components/ui/button";
 import Layout from "@/components/Layout";
 import SectionHeading from "@/components/SectionHeading";
-import { Thermometer, Snowflake, Truck, Zap, Phone, Mail, ArrowRight, Check } from "lucide-react";
+import Testimonials from "@/components/Testimonials";
+import ClientLogos from "@/components/ClientLogos";
+import { Thermometer, Snowflake, Truck, Zap, Phone, Mail, ArrowRight, Check, Star } from "lucide-react";
 import { Link } from "react-router-dom";
+import serviceAc from "@/assets/service-ac.jpg";
+import serviceRefrig from "@/assets/service-refrig.jpg";
+import serviceTransport from "@/assets/service-transport.jpg";
 
 const tabs = [
   { id: "ac", label: "Air Conditioning", icon: Thermometer },
@@ -13,7 +18,7 @@ const tabs = [
   { id: "electrical", label: "Electrical", icon: Zap },
 ];
 
-const serviceData: Record<string, { badge: string; title: string; desc: string; services: string[]; benefits?: string[]; cardLabel: string; cardSub: string }> = {
+const serviceData: Record<string, { badge: string; title: string; desc: string; services: string[]; benefits?: string[]; cardLabel: string; cardSub: string; image?: string; testimonial?: { text: string; name: string; role: string } }> = {
   ac: {
     badge: "Service 01",
     title: "Air Conditioning",
@@ -22,6 +27,8 @@ const serviceData: Record<string, { badge: string; title: string; desc: string; 
     benefits: ["Increases efficiency and performance of your AC", "Extends lifespan of your unit", "Decreases your electricity bill", "Improves air quality by removing harmful bacteria"],
     cardLabel: "Air Conditioning",
     cardSub: "Residential & Commercial",
+    image: serviceAc,
+    testimonial: { text: "Frost Ice installed a new split unit in our home within 24 hours. Professional and the price was exactly as quoted.", name: "Sarah van der Merwe", role: "Homeowner, Pretoria" },
   },
   refrig: {
     badge: "Service 02",
@@ -30,6 +37,8 @@ const serviceData: Record<string, { badge: string; title: string; desc: string; 
     services: ["Freezer & Cold Room Installation", "Industrial Refrigeration", "Cabinet & Plant Room Maintenance", "Bottle Coolers", "Drinking Water Chillers", "Ice Machines", "Buy & Sell Old Fridges", "Domestic Fridge Repairs", "Regas Services", "Compressor Changes"],
     cardLabel: "Refrigeration",
     cardSub: "Industrial & Domestic",
+    image: serviceRefrig,
+    testimonial: { text: "When our cold room went down on a Friday night, Frost Ice had a technician on-site within 2 hours.", name: "Linda Botha", role: "Restaurant Owner, Sandton" },
   },
   transport: {
     badge: "Service 03",
@@ -38,6 +47,8 @@ const serviceData: Record<string, { badge: string; title: string; desc: string; 
     services: ["Breakdown Response", "Repairs", "Services & Maintenance", "Troubleshooting", "Engine Repair", "Bleed & Start", "Jumpstart", "Battery Replacement", "General Maintenance"],
     cardLabel: "Transport Refrig.",
     cardSub: "Fleet & Logistics",
+    image: serviceTransport,
+    testimonial: { text: "We rely on Frost Ice for our entire fleet of 12 refrigerated trucks. Their 24/7 response has saved us from losing stock multiple times.", name: "James Mkhize", role: "Operations Manager, FreshCo" },
   },
   electrical: {
     badge: "Service 04",
@@ -64,6 +75,13 @@ const ServicesPage = () => {
             description="Expert cooling, refrigeration, and electrical solutions for residential, commercial, and transport applications — all backed by our 24/7 support team."
             light
           />
+        </div>
+      </section>
+
+      {/* Trust Badges */}
+      <section className="py-12 bg-secondary">
+        <div className="container mx-auto px-4">
+          <ClientLogos variant="light" />
         </div>
       </section>
 
@@ -96,6 +114,13 @@ const ServicesPage = () => {
             className="grid grid-cols-1 lg:grid-cols-3 gap-10"
           >
             <div className="lg:col-span-2 space-y-8">
+              {/* Service Image */}
+              {data.image && (
+                <div className="rounded-lg overflow-hidden">
+                  <img src={data.image} alt={data.title} className="w-full h-64 object-cover" />
+                </div>
+              )}
+
               <div>
                 <span className="font-display text-xs uppercase tracking-[0.3em] text-primary">{data.badge}</span>
                 <h3 className="font-display text-4xl font-800 uppercase text-secondary mt-2">{data.title}</h3>
@@ -127,6 +152,19 @@ const ServicesPage = () => {
                   </div>
                 </div>
               )}
+
+              {/* Inline testimonial */}
+              {data.testimonial && (
+                <div className="bg-frost-gradient border border-border rounded-lg p-6">
+                  <div className="flex gap-1 mb-3">
+                    {Array.from({ length: 5 }).map((_, j) => (
+                      <Star key={j} className="h-3.5 w-3.5 fill-accent text-accent" />
+                    ))}
+                  </div>
+                  <p className="text-muted-foreground text-sm italic leading-relaxed">"{data.testimonial.text}"</p>
+                  <p className="font-display text-xs font-700 uppercase text-secondary mt-3">{data.testimonial.name} — <span className="text-muted-foreground font-normal normal-case">{data.testimonial.role}</span></p>
+                </div>
+              )}
             </div>
 
             {/* Side Card */}
@@ -147,9 +185,33 @@ const ServicesPage = () => {
                     <Mail className="h-4 w-4" /> info@frostyiceaircon.co.za
                   </a>
                 </div>
+
+                {/* Trust mini-stats */}
+                <div className="mt-8 pt-6 border-t border-ice/10 space-y-3">
+                  <div className="flex justify-between text-frost/60 text-xs">
+                    <span className="font-display uppercase tracking-wider">Projects</span>
+                    <span className="font-display font-700 text-ice">500+</span>
+                  </div>
+                  <div className="flex justify-between text-frost/60 text-xs">
+                    <span className="font-display uppercase tracking-wider">Client Retention</span>
+                    <span className="font-display font-700 text-ice">98%</span>
+                  </div>
+                  <div className="flex justify-between text-frost/60 text-xs">
+                    <span className="font-display uppercase tracking-wider">Response Time</span>
+                    <span className="font-display font-700 text-ice">&lt; 1 Hour</span>
+                  </div>
+                </div>
               </div>
             </div>
           </motion.div>
+        </div>
+      </section>
+
+      {/* Testimonials */}
+      <section className="py-24 bg-frost-gradient">
+        <div className="container mx-auto px-4">
+          <SectionHeading label="Client Reviews" heading="Trusted by Businesses & Homeowners" />
+          <Testimonials />
         </div>
       </section>
 

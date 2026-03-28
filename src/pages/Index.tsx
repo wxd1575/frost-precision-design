@@ -10,12 +10,14 @@ import heroBg from "@/assets/hero-bg.jpg";
 import serviceAc from "@/assets/service-ac.jpg";
 import serviceRefrig from "@/assets/service-refrig.jpg";
 import serviceTransport from "@/assets/service-transport.jpg";
+import serviceElectrical from "@/assets/service-electrical.jpg";
+import whyChooseUs from "@/assets/why-choose-us.jpg";
 
 const services = [
   { icon: Thermometer, title: "Air Conditioning", desc: "Installation, repairs, gas filling, major & minor services, and full HVAC-R maintenance for homes and offices.", link: "/services", image: serviceAc },
   { icon: Snowflake, title: "Refrigeration", desc: "Cold rooms, industrial refrigeration, bottle coolers, ice machines, domestic fridges, regas, and compressor changes.", link: "/services", image: serviceRefrig },
   { icon: Truck, title: "Transport Refrigeration", desc: "Breakdown response, repairs, maintenance, engine repair, battery replacement and full servicing for refrigerated trucks.", link: "/services", image: serviceTransport },
-  { icon: Zap, title: "Electrical", desc: "Wiring upgrades, DB panel upgrades, solar systems, lighting controls, power point installation and general electrical maintenance.", link: "/services", image: null },
+  { icon: Zap, title: "Electrical", desc: "Wiring upgrades, DB panel upgrades, solar systems, lighting controls, power point installation and general electrical maintenance.", link: "/services", image: serviceElectrical },
 ];
 
 const stats = [
@@ -222,18 +224,23 @@ const Index = () => {
       <section className="py-24 bg-frost-gradient">
         <div className="container mx-auto px-4">
           <SectionHeading label="Why Frost Ice" heading="The Trusted Choice for Cooling" description="Our expert team delivers exceptional service using cutting-edge technology and eco-friendly solutions tailored to your specific needs." />
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-4xl mx-auto">
-            {whyPoints.map((p, i) => (
-              <motion.div key={p.title} {...fadeUp} transition={{ delay: i * 0.1 }} className="flex gap-5">
-                <div className="h-12 w-12 shrink-0 rounded-lg bg-primary/10 flex items-center justify-center">
-                  <p.icon className="h-6 w-6 text-primary" />
-                </div>
-                <div>
-                  <h3 className="font-display text-lg font-700 uppercase text-secondary">{p.title}</h3>
-                  <p className="text-muted-foreground text-sm leading-relaxed mt-1">{p.desc}</p>
-                </div>
-              </motion.div>
-            ))}
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 max-w-5xl mx-auto items-center">
+            <motion.div {...fadeUp} className="rounded-lg overflow-hidden">
+              <img src={whyChooseUs} alt="Frost Ice technician servicing rooftop HVAC unit" loading="lazy" width={1024} height={640} className="w-full h-80 object-cover rounded-lg" />
+            </motion.div>
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
+              {whyPoints.map((p, i) => (
+                <motion.div key={p.title} {...fadeUp} transition={{ delay: i * 0.1 }} className="flex gap-4">
+                  <div className="h-10 w-10 shrink-0 rounded-lg bg-primary/10 flex items-center justify-center">
+                    <p.icon className="h-5 w-5 text-primary" />
+                  </div>
+                  <div>
+                    <h3 className="font-display text-sm font-700 uppercase text-secondary">{p.title}</h3>
+                    <p className="text-muted-foreground text-xs leading-relaxed mt-1">{p.desc}</p>
+                  </div>
+                </motion.div>
+              ))}
+            </div>
           </div>
         </div>
       </section>

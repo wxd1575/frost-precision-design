@@ -7,6 +7,7 @@ import ClientLogos from "@/components/ClientLogos";
 import { Link } from "react-router-dom";
 import { Award, Users, Leaf, Lightbulb, ShieldCheck, Wrench, Phone, Target, Eye } from "lucide-react";
 import teamPhoto from "@/assets/team-photo.jpg";
+import aboutHero from "@/assets/about-hero.jpg";
 
 const values = [
   { icon: Award, num: "01", title: "Quality First", desc: "We use top-quality products and uphold the highest workmanship standards on every job — residential or commercial." },
@@ -28,8 +29,11 @@ const AboutPage = () => {
   return (
     <Layout>
       {/* Hero */}
-      <section className="bg-hero-gradient pt-32 pb-20">
-        <div className="container mx-auto px-4">
+      <section className="relative bg-hero-gradient pt-32 pb-20 overflow-hidden">
+        <div className="absolute inset-0">
+          <img src={aboutHero} alt="Modern air conditioning unit" className="w-full h-full object-cover opacity-15" />
+        </div>
+        <div className="container mx-auto px-4 relative z-10">
           <SectionHeading
             label="Who We Are"
             heading="About Frost Ice"

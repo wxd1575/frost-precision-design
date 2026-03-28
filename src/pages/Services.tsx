@@ -10,6 +10,7 @@ import { Link } from "react-router-dom";
 import serviceAc from "@/assets/service-ac.jpg";
 import serviceRefrig from "@/assets/service-refrig.jpg";
 import serviceTransport from "@/assets/service-transport.jpg";
+import serviceElectrical from "@/assets/service-electrical.jpg";
 
 const tabs = [
   { id: "ac", label: "Air Conditioning", icon: Thermometer },
@@ -55,8 +56,11 @@ const serviceData: Record<string, { badge: string; title: string; desc: string; 
     title: "Electrical Services",
     desc: "From solar installations to DB board upgrades, our licensed electricians handle all your electrical needs with safety and precision.",
     services: ["Lighting Controls", "Wiring Upgrades", "Electrical Installations", "Solar Systems", "Panel DB Upgrades", "Test & Tag", "Power Point Installation", "General Electrical Maintenance"],
+    benefits: ["Ensures safety compliance for your property", "Reduces energy costs with efficient systems", "Prevents electrical faults and fire hazards", "Increases property value with modern upgrades"],
     cardLabel: "Electrical Services",
     cardSub: "Residential & Commercial",
+    image: serviceElectrical,
+    testimonial: { text: "Frost Ice upgraded our entire DB board and installed solar panels. Clean work, fair pricing, and they even helped us with the paperwork.", name: "David Naidoo", role: "Business Owner, Johannesburg" },
   },
 };
 

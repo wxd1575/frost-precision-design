@@ -8,14 +8,13 @@ const Footer = () => {
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-10">
           {/* Brand */}
           <div>
-            <div className="mb-4">
-              <span className="font-display text-2xl font-800 tracking-tight">
-                FROST <span className="text-ice">/</span> ICE
-              </span>
-              <p className="font-body text-[10px] uppercase tracking-[0.25em] text-ice/70">
-                Aircon & Refrigeration
-              </p>
-            </div>
+            <Link to="/" className="block mb-6 transition-opacity hover:opacity-80">
+              <img 
+                src="/frostice-logo-white.png" 
+                alt="Frost & Ice Aircon" 
+                className="w-56 md:w-64 lg:w-80 h-auto object-contain" 
+              />
+            </Link>
             <p className="text-frost/60 text-sm leading-relaxed">
               Delivering innovative and reliable air conditioning and refrigeration systems to create optimal environments for our clients.
             </p>

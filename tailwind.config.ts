@@ -17,6 +17,11 @@ export default {
         display: ['"Barlow Condensed"', 'sans-serif'],
         body: ['"DM Sans"', 'sans-serif'],
       },
+      fontWeight: {
+        '700': '700',
+        '800': '800',
+        '900': '900',
+      },
       colors: {
         border: "hsl(var(--border))",
         input: "hsl(var(--input))",

@@ -3,10 +3,11 @@ import { motion } from "framer-motion";
 import { Button } from "@/components/ui/button";
 import Layout from "@/components/Layout";
 import SectionHeading from "@/components/SectionHeading";
-import { Phone, Mail, Globe, Clock, MessageCircle, CheckCircle } from "lucide-react";
+import { Phone, Mail, Globe, Clock, MessageCircle, CheckCircle, Loader2 } from "lucide-react";
 import { Link } from "react-router-dom";
 import { z } from "zod";
 import { useToast } from "@/hooks/use-toast";
+import { supabase } from "@/lib/supabase";
 
 const quoteSchema = z.object({
   firstName: z.string().trim().min(1, "First name is required").max(50),
@@ -38,6 +39,7 @@ const ContactPage = () => {
   const [form, setForm] = useState<QuoteForm>(initialForm);
   const [errors, setErrors] = useState<Partial<Record<keyof QuoteForm, string>>>({});
   const [submitted, setSubmitted] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false);
   const { toast } = useToast();
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>) => {
@@ -48,7 +50,7 @@ const ContactPage = () => {
     }
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     const result = quoteSchema.safeParse(form);
     if (!result.success) {
@@ -60,6 +62,31 @@ const ContactPage = () => {
       setErrors(fieldErrors);
       return;
     }
+
+    setIsSubmitting(true);
+    const { error } = await supabase.from("contact_submissions").insert({
+      first_name: form.firstName,
+      last_name: form.lastName,
+      email: form.email,
+      phone: form.phone,
+      client_type: form.clientType,
+      service_required: form.serviceRequired,
+      address: form.address || null,
+      urgency: form.urgency || null,
+      message: form.message,
+      status: "new",
+    });
+    setIsSubmitting(false);
+
+    if (error) {
+      toast({
+        title: "Submission Failed",
+        description: error.message,
+        variant: "destructive",
+      });
+      return;
+    }
+
     setSubmitted(true);
     toast({ title: "Quote Request Sent!", description: "Our team will be in touch shortly." });
   };
@@ -300,7 +327,13 @@ const ContactPage = () => {
 
                   <div className="flex items-center justify-between flex-wrap gap-4">
                     <p className="text-muted-foreground text-xs">Your details are kept private and will not be shared.</p>
-                    <Button type="submit" variant="secondary" size="lg">Send Quote Request</Button>
+                    <Button type="submit" variant="secondary" size="lg" disabled={isSubmitting}>
+                      {isSubmitting ? (
+                        <><Loader2 className="mr-2 h-4 w-4 animate-spin" /> Sending...</>
+                      ) : (
+                        "Send Quote Request"
+                      )}
+                    </Button>
                   </div>
                 </form>
               </div>

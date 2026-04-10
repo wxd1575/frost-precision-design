@@ -72,15 +72,66 @@ const ContactPage = () => {
   if (submitted) {
     return (
       <Layout>
-        <section className="bg-hero-gradient pt-32 pb-20 min-h-[60vh] flex items-center">
-          <div className="container mx-auto px-4 text-center">
-            <motion.div initial={{ opacity: 0, scale: 0.9 }} animate={{ opacity: 1, scale: 1 }}>
-              <CheckCircle className="h-20 w-20 text-ice mx-auto mb-6" />
-              <h2 className="font-display text-4xl md:text-5xl font-800 uppercase text-frost mb-4">Quote Request Sent!</h2>
-              <p className="text-frost/70 text-lg max-w-xl mx-auto mb-8">Thank you — our team will be in touch with you shortly to discuss your requirements and provide a tailored quote.</p>
-              <Link to="/">
-                <Button variant="hero" size="xl">Back to Home</Button>
-              </Link>
+        <section className="bg-hero-gradient pt-32 pb-20 min-h-screen flex items-center relative overflow-hidden">
+          {/* Animated Background Elements */}
+          <div className="absolute top-1/4 -right-20 w-96 h-96 bg-secondary/10 rounded-full blur-3xl animate-pulse" />
+          <div className="absolute bottom-1/4 -left-20 w-96 h-96 bg-primary/20 rounded-full blur-3xl" />
+          
+          <div className="container mx-auto px-4 relative z-10">
+            <motion.div 
+              initial={{ opacity: 0, y: 30 }} 
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.6, ease: "easeOut" }}
+              className="max-w-2xl mx-auto"
+            >
+              <div className="bg-white/5 backdrop-blur-xl border border-white/10 p-12 md:p-16 rounded-3xl shadow-2xl text-center">
+                <div className="w-24 h-24 bg-secondary/10 rounded-full flex items-center justify-center mx-auto mb-8 relative">
+                  <motion.div
+                    initial={{ scale: 0 }}
+                    animate={{ scale: 1 }}
+                    transition={{ delay: 0.3, type: "spring", stiffness: 200 }}
+                  >
+                    <CheckCircle className="h-12 w-12 text-secondary" />
+                  </motion.div>
+                  <div className="absolute inset-0 rounded-full border border-secondary/20 animate-ping" />
+                </div>
+                
+                <h2 className="font-display text-4xl md:text-5xl font-800 uppercase text-frost mb-6 tracking-tight">
+                  Quote Request <span className="text-secondary">Received</span>
+                </h2>
+                
+                <p className="text-frost/70 text-lg mb-10 leading-relaxed font-body">
+                  Thank you for choosing Frost & Ice. Your request has been prioritised. Our technical team will review your requirements and contact you within the hour.
+                </p>
+                
+                <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
+                  <Link to="/" className="w-full sm:w-auto">
+                    <Button variant="secondary" size="xl" className="w-full sm:w-auto uppercase tracking-widest font-bold px-12">
+                      Back to Home
+                    </Button>
+                  </Link>
+                  <Link to="/services" className="w-full sm:w-auto">
+                    <Button variant="outline" size="xl" className="w-full sm:w-auto bg-transparent text-frost border-frost/20 hover:bg-frost/10 uppercase tracking-widest font-bold">
+                      Explore Services
+                    </Button>
+                  </Link>
+                </div>
+                
+                <div className="mt-12 pt-8 border-t border-white/5 flex items-center justify-center gap-8">
+                  <div className="text-center">
+                    <p className="text-[10px] uppercase tracking-widest text-frost/40 mb-1">Average Response</p>
+                    <p className="font-display text-sm font-bold text-frost">45 Minutes</p>
+                  </div>
+                  <div className="w-px h-8 bg-white/5" />
+                  <div className="text-center">
+                    <p className="text-[10px] uppercase tracking-widest text-frost/40 mb-1">Status</p>
+                    <p className="font-display text-sm font-bold text-secondary flex items-center gap-1.5">
+                      <span className="w-1.5 h-1.5 rounded-full bg-secondary" />
+                      Prioritised
+                    </p>
+                  </div>
+                </div>
+              </div>
             </motion.div>
           </div>
         </section>
@@ -91,7 +142,7 @@ const ContactPage = () => {
   return (
     <Layout>
       {/* Hero */}
-      <section className="bg-hero-gradient pt-32 pb-20">
+      <section className="bg-primary pt-32 pb-20">
         <div className="container mx-auto px-4">
           <SectionHeading
             label="Free Consultation"
@@ -249,7 +300,7 @@ const ContactPage = () => {
 
                   <div className="flex items-center justify-between flex-wrap gap-4">
                     <p className="text-muted-foreground text-xs">Your details are kept private and will not be shared.</p>
-                    <Button type="submit" variant="hero" size="lg">Send Quote Request</Button>
+                    <Button type="submit" variant="secondary" size="lg">Send Quote Request</Button>
                   </div>
                 </form>
               </div>

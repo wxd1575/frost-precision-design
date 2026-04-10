@@ -28,7 +28,7 @@ const AboutPage = () => {
   return (
     <Layout>
       {/* Hero */}
-      <section className="bg-hero-gradient pt-32 pb-20">
+      <section className="bg-primary pt-32 pb-20">
         <div className="container mx-auto px-4">
           <SectionHeading
             label="Who We Are"
@@ -44,14 +44,14 @@ const AboutPage = () => {
         <div className="container mx-auto px-4">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-start">
             <motion.div {...fadeUp}>
-              <SectionHeading label="Company Overview" heading="Frost Ice Aircon & Refrigeration" center={false} />
+              <SectionHeading label="Company Overview" heading="Frost Ice Aircon & Refrigeration" align="left" />
               <div className="space-y-4 text-muted-foreground leading-relaxed">
                 <p>Frost Ice Aircon & Refrigeration (PTY) LTD is a leading provider of comprehensive air conditioning and refrigeration solutions. With a strong commitment to customer satisfaction and environmental sustainability, we have established ourselves as a trusted partner for both residential and commercial clients.</p>
                 <p>Our team of highly skilled technicians offers a wide range of services including installation, repair, maintenance, and energy optimisation. We pride ourselves on delivering exceptional service, utilising cutting-edge technology, and providing eco-friendly solutions tailored to your specific needs.</p>
                 <p>With a focus on delivering comfort, efficiency, and reliability, Frost Ice is your go-to choice for all your cooling and refrigeration requirements.</p>
               </div>
               <Link to="/contact" className="mt-8 inline-block">
-                <Button variant="hero" size="lg">Get a Free Quote</Button>
+                <Button variant="secondary" size="lg">Get a Free Quote</Button>
               </Link>
             </motion.div>
 
@@ -91,8 +91,8 @@ const AboutPage = () => {
       </section>
 
       {/* Mission & Vision */}
-      <section className="py-24 bg-secondary diagonal-clip-both">
-        <div className="container mx-auto px-4 py-12">
+      <section className="py-24 bg-primary">
+        <div className="container mx-auto px-4">
           <SectionHeading label="Our Direction" heading="Mission & Vision" light />
           <div className="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-4xl mx-auto">
             <motion.div {...fadeUp} className="bg-frost/5 border border-ice/10 rounded-lg p-8">
@@ -141,7 +141,7 @@ const AboutPage = () => {
       </section>
 
       {/* Testimonials */}
-      <section className="py-24 bg-frost-gradient">
+      <section className="py-24 bg-background">
         <div className="container mx-auto px-4">
           <SectionHeading label="Client Reviews" heading="What Our Clients Say" />
           <Testimonials />
@@ -149,17 +149,15 @@ const AboutPage = () => {
       </section>
 
       {/* CTA */}
-      <section className="bg-secondary py-20 diagonal-clip">
-        <div className="container mx-auto px-4 text-center pb-12">
+      <section className="bg-primary py-24 relative overflow-hidden">
+        <div className="container mx-auto px-4 text-center relative z-10">
           <SectionHeading label="Ready to Start?" heading="Let's Build Your Perfect Cooling Solution" description="Contact us today for a free, no-obligation quote tailored to your specific needs." light />
-          <div className="flex flex-wrap justify-center gap-4">
+          <div className="flex flex-wrap justify-center gap-4 mt-12">
             <Link to="/contact">
-              <Button variant="hero" size="xl">Get a Free Quote</Button>
+              <Button variant="secondary" size="xl" className="uppercase tracking-widest font-bold px-12">Get a Free Quote</Button>
             </Link>
-            <a href="tel:+27845893702">
-              <Button variant="heroOutline" size="xl">
-                <Phone className="h-5 w-5 mr-2" /> Call Us Now
-              </Button>
+            <a href="tel:+27845893702" className="flex items-center gap-3 px-8 text-frost hover:text-secondary transition-colors font-display font-bold uppercase tracking-widest leading-none">
+              <Phone size={20} /> +27 84 589 3702
             </a>
           </div>
         </div>

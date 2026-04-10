@@ -10,12 +10,13 @@ import heroBg from "@/assets/hero-bg.jpg";
 import serviceAc from "@/assets/service-ac.jpg";
 import serviceRefrig from "@/assets/service-refrig.jpg";
 import serviceTransport from "@/assets/service-transport.jpg";
+import serviceElectrical from "@/assets/service-electrical.jpg";
 
 const services = [
   { icon: Thermometer, title: "Air Conditioning", desc: "Installation, repairs, gas filling, major & minor services, and full HVAC-R maintenance for homes and offices.", link: "/services", image: serviceAc },
   { icon: Snowflake, title: "Refrigeration", desc: "Cold rooms, industrial refrigeration, bottle coolers, ice machines, domestic fridges, regas, and compressor changes.", link: "/services", image: serviceRefrig },
   { icon: Truck, title: "Transport Refrigeration", desc: "Breakdown response, repairs, maintenance, engine repair, battery replacement and full servicing for refrigerated trucks.", link: "/services", image: serviceTransport },
-  { icon: Zap, title: "Electrical", desc: "Wiring upgrades, DB panel upgrades, solar systems, lighting controls, power point installation and general electrical maintenance.", link: "/services", image: null },
+  { icon: Zap, title: "Electrical", desc: "Wiring upgrades, DB panel upgrades, solar systems, lighting controls, power point installation and general electrical maintenance.", link: "/services", image: serviceElectrical },
 ];
 
 const stats = [
@@ -40,97 +41,74 @@ const whyPoints = [
 ];
 
 const fadeUp = {
-  initial: { opacity: 0, y: 40 },
+  initial: { opacity: 0, y: 30 },
   whileInView: { opacity: 1, y: 0 },
-  viewport: { once: true, margin: "-80px" },
-  transition: { duration: 0.6 },
+  viewport: { once: true, margin: "-100px" },
+  transition: { duration: 0.5 },
 };
 
 const Index = () => {
   return (
     <Layout>
       {/* Hero */}
-      <section className="relative min-h-screen flex items-center overflow-hidden">
+      <section className="relative min-h-[90vh] flex items-center overflow-hidden bg-primary">
         <div className="absolute inset-0">
-          <img src={heroBg} alt="HVAC systems" className="w-full h-full object-cover" />
-          <div className="absolute inset-0 bg-hero-gradient opacity-90" />
+          <img src={heroBg} alt="HVAC systems" className="w-full h-full object-cover opacity-20" />
+          <div className="absolute inset-0 bg-primary opacity-60" />
         </div>
-        <div className="container mx-auto px-4 relative z-10 pt-24 pb-16">
-          <div className="max-w-3xl">
-            <motion.span
-              initial={{ opacity: 0, x: -20 }}
-              animate={{ opacity: 1, x: 0 }}
-              transition={{ delay: 0.2 }}
-              className="inline-block font-display text-xs uppercase tracking-[0.3em] text-ice mb-4 border border-ice/30 px-4 py-1.5 rounded-full"
-            >
-              South Africa's Cooling Experts
-            </motion.span>
-            <motion.h1
-              initial={{ opacity: 0, y: 30 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.4, duration: 0.7 }}
-              className="font-display text-6xl md:text-8xl lg:text-9xl font-800 uppercase leading-[0.9] text-frost mb-6"
-            >
-              Reliable<br />
-              <span className="text-gradient-ice">Cooling,</span><br />
-              Year-Round.
-            </motion.h1>
-            <motion.p
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              transition={{ delay: 0.7 }}
-              className="text-frost/70 text-lg md:text-xl max-w-xl mb-8 leading-relaxed"
-            >
-              Expert air conditioning, refrigeration, transport refrigeration and electrical services — for homes and businesses across South Africa.
-            </motion.p>
+        
+        <div className="container mx-auto px-4 relative z-10 pt-48 pb-24">
+          <div className="max-w-4xl">
             <motion.div
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.9 }}
+              transition={{ duration: 0.5 }}
+              className="inline-flex items-center gap-2 px-3 py-1 bg-secondary/10 border border-secondary/20 rounded-full mb-6"
+            >
+              <span className="w-2 h-2 rounded-full bg-secondary animate-pulse" />
+              <span className="text-frost text-xs font-bold uppercase tracking-widest">South Africa's Cooling Experts</span>
+            </motion.div>
+            
+            <motion.h1
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.1, duration: 0.5 }}
+              className="font-display text-4xl md:text-6xl lg:text-7xl font-800 uppercase leading-[1.1] text-frost mb-6"
+            >
+              Reliable <span className="text-secondary">Cooling</span>,<br />
+              Anywhere. Anytime.
+            </motion.h1>
+            
+            <motion.p
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.2, duration: 0.5 }}
+              className="text-frost/80 text-lg md:text-xl max-w-2xl mb-10 leading-relaxed font-body"
+            >
+              Complete air conditioning, refrigeration, and electrical solutions. Our certified technicians provide precision installations and emergency repairs for homes and businesses.
+            </motion.p>
+            
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.3, duration: 0.5 }}
               className="flex flex-wrap gap-4"
             >
               <Link to="/contact">
-                <Button variant="hero" size="xl">Get a Free Quote</Button>
+                <Button variant="secondary" size="xl" className="uppercase tracking-widest font-bold">Request a Quote</Button>
               </Link>
               <Link to="/services">
-                <Button variant="heroOutline" size="xl">Our Services</Button>
+                <Button variant="outline" size="xl" className="bg-transparent text-frost border-frost/20 hover:bg-frost/10 uppercase tracking-widest font-bold">Our Services</Button>
               </Link>
             </motion.div>
-
-            {/* Trust badges */}
-            <motion.div
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              transition={{ delay: 1.2 }}
-              className="mt-12 flex flex-wrap gap-6"
-            >
-              {["24/7 Support", "Certified Technicians", "500+ Projects Completed"].map((badge) => (
-                <div key={badge} className="flex items-center gap-2 text-frost/50 text-sm">
-                  <div className="h-1.5 w-1.5 rounded-full bg-ice" />
-                  <span className="font-display uppercase tracking-wider text-xs">{badge}</span>
-                </div>
-              ))}
-            </motion.div>
           </div>
-
-          {/* Floating 24/7 badge */}
-          <motion.div
-            initial={{ opacity: 0, scale: 0.8 }}
-            animate={{ opacity: 1, scale: 1 }}
-            transition={{ delay: 1.4 }}
-            className="hidden lg:flex absolute right-8 top-1/2 -translate-y-1/2 flex-col items-center justify-center h-28 w-28 rounded-full border-2 border-ice/30 bg-secondary/50 backdrop-blur-sm animate-float"
-          >
-            <span className="font-display text-3xl font-800 text-ice">24/7</span>
-            <span className="font-display text-[10px] uppercase tracking-widest text-frost/70">Emergency</span>
-            <span className="font-display text-[10px] uppercase tracking-widest text-frost/70">Service</span>
-          </motion.div>
         </div>
       </section>
 
       {/* Stats Bar */}
-      <section className="bg-secondary py-8 relative z-10">
+      <section className="bg-primary border-y border-white/5 py-12">
         <div className="container mx-auto px-4">
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-8">
             {stats.map((s, i) => (
               <motion.div
                 key={s.label}
@@ -140,49 +118,54 @@ const Index = () => {
                 transition={{ delay: i * 0.1 }}
                 className="text-center"
               >
-                <span className="font-display text-3xl md:text-4xl font-800 text-ice">{s.value}</span>
-                <p className="font-display text-xs uppercase tracking-widest text-frost/50 mt-1">{s.label}</p>
+                <div className="text-4xl md:text-5xl font-800 text-secondary mb-2">{s.value}</div>
+                <div className="text-[10px] uppercase tracking-[0.2em] text-frost/50 font-bold">{s.label}</div>
               </motion.div>
             ))}
           </div>
         </div>
       </section>
 
-      {/* Trust Badges */}
-      <section className="py-16 bg-frost-gradient">
+      {/* Partners */}
+      <section className="py-16 bg-white border-b border-border">
         <div className="container mx-auto px-4">
           <ClientLogos />
         </div>
       </section>
 
       {/* Services */}
-      <section className="py-24">
+      <section className="py-24 bg-frost">
         <div className="container mx-auto px-4">
-          <SectionHeading label="What We Do" heading="Four Core Services" description="From residential split units to industrial cold rooms and transport refrigeration — Frost Ice has you covered." />
+          <SectionHeading 
+            label="Expert Solutions" 
+            heading="Our Core Services" 
+            description="Professional installations and maintenance across all cooling systems." 
+          />
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
             {services.map((s, i) => (
               <motion.div
                 key={s.title}
-                initial={{ opacity: 0, y: 30 }}
+                initial={{ opacity: 0, y: 20 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
-                transition={{ delay: i * 0.1, duration: 0.5 }}
+                transition={{ delay: i * 0.1 }}
+                className="h-full"
               >
-                <Link to={s.link} className="group block h-full bg-card rounded-lg overflow-hidden shadow-[var(--shadow-card)] hover:shadow-[var(--shadow-card-hover)] transition-all duration-300 hover:-translate-y-1 border border-border">
+                <Link to={s.link} className="group bg-white h-full block rounded-xl overflow-hidden shadow-sm hover:shadow-xl transition-all duration-500 border border-border">
                   {s.image && (
-                    <div className="h-40 overflow-hidden">
-                      <img src={s.image} alt={s.title} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
+                    <div className="h-48 overflow-hidden grayscale group-hover:grayscale-0 transition-all duration-700">
+                      <img src={s.image} alt={s.title} className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700" />
                     </div>
                   )}
                   <div className="p-8">
-                    <div className="h-12 w-12 rounded-lg bg-primary/10 flex items-center justify-center mb-5 group-hover:bg-primary/20 transition-colors">
-                      <s.icon className="h-6 w-6 text-primary" />
+                    <div className="w-12 h-12 bg-primary/5 rounded-lg flex items-center justify-center mb-6 text-primary group-hover:bg-primary group-hover:text-white transition-colors duration-500">
+                      <s.icon size={24} />
                     </div>
-                    <h3 className="font-display text-xl font-700 uppercase text-secondary mb-3">{s.title}</h3>
-                    <p className="text-muted-foreground text-sm leading-relaxed mb-4">{s.desc}</p>
-                    <span className="inline-flex items-center gap-1 text-primary font-display text-sm uppercase tracking-wider group-hover:gap-2 transition-all">
-                      View Details <ArrowRight className="h-4 w-4" />
-                    </span>
+                    <h3 className="font-display text-xl font-800 uppercase text-primary mb-4 tracking-tight">{s.title}</h3>
+                    <p className="text-muted-foreground text-sm leading-relaxed mb-6 font-body">{s.desc}</p>
+                    <div className="flex items-center gap-2 text-xs font-bold uppercase tracking-widest text-primary">
+                      Learn More <ArrowRight size={14} className="group-hover:translate-x-1 transition-transform" />
+                    </div>
                   </div>
                 </Link>
               </motion.div>
@@ -192,66 +175,80 @@ const Index = () => {
       </section>
 
       {/* How It Works */}
-      <section className="py-24 bg-secondary diagonal-clip-reverse">
-        <div className="container mx-auto px-4 pt-16">
-          <SectionHeading label="Simple Process" heading="How It Works" light />
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+      <section className="py-24 bg-primary">
+        <div className="container mx-auto px-4">
+          <SectionHeading label="The Process" heading="How We Work" light />
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12">
             {steps.map((step, i) => (
-              <motion.div key={step.num} {...fadeUp} transition={{ delay: i * 0.15 }} className="relative">
-                <span className="font-display text-6xl font-800 text-ice/10">{step.num}</span>
-                <h3 className="font-display text-lg font-700 uppercase text-frost mt-2">{step.title}</h3>
-                <p className="text-frost/60 text-sm leading-relaxed mt-2">{step.desc}</p>
-                {i < steps.length - 1 && (
-                  <div className="hidden lg:block absolute top-8 right-0 w-12 h-0.5 bg-ice/20" />
-                )}
+              <motion.div 
+                key={step.num} 
+                {...fadeUp} 
+                transition={{ delay: i * 0.1 }}
+                className="relative"
+              >
+                <div className="text-7xl font-800 text-white/5 absolute -top-8 -left-4 select-none">{step.num}</div>
+                <h3 className="font-display text-xl font-800 uppercase text-frost mb-4 relative z-10">{step.title}</h3>
+                <p className="text-frost/60 text-sm leading-relaxed font-body relative z-10">{step.desc}</p>
               </motion.div>
             ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Why Choose Us */}
+      <section className="py-24 bg-white">
+        <div className="container mx-auto px-4">
+          <div className="flex flex-col lg:flex-row gap-16 items-center">
+            <div className="lg:w-1/2">
+              <SectionHeading 
+                label="Why Frost Ice" 
+                heading="The Cooling Authority" 
+                description="With years of diagnostic expertise and a commitment to quality, we are the first choice for home and business owners."
+                align="left"
+              />
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-8 mt-12">
+                {whyPoints.map((p, i) => (
+                  <motion.div key={p.title} {...fadeUp} transition={{ delay: i * 0.1 }} className="flex gap-4">
+                    <div className="w-10 h-10 shrink-0 bg-secondary/10 rounded flex items-center justify-center text-secondary">
+                      <p.icon size={20} />
+                    </div>
+                    <div>
+                      <h4 className="font-display font-800 uppercase text-primary text-sm mb-1">{p.title}</h4>
+                      <p className="text-muted-foreground text-xs leading-relaxed font-body">{p.desc}</p>
+                    </div>
+                  </motion.div>
+                ))}
+              </div>
+            </div>
+            <div className="lg:w-1/2 w-full">
+              <div className="aspect-square rounded-2xl overflow-hidden border-8 border-frost">
+                <img src={serviceAc} alt="Expert AC Service" className="w-full h-full object-cover" />
+              </div>
+            </div>
           </div>
         </div>
       </section>
 
       {/* Testimonials */}
-      <section className="py-24">
+      <section className="py-24 bg-frost">
         <div className="container mx-auto px-4">
-          <SectionHeading label="Client Reviews" heading="What Our Clients Say" description="Don't just take our word for it — hear from the businesses and homeowners who trust Frost Ice with their cooling needs." />
+          <SectionHeading label="Testimonials" heading="Trusted by Hundreds" />
           <Testimonials />
         </div>
       </section>
 
-      {/* Why Choose */}
-      <section className="py-24 bg-frost-gradient">
-        <div className="container mx-auto px-4">
-          <SectionHeading label="Why Frost Ice" heading="The Trusted Choice for Cooling" description="Our expert team delivers exceptional service using cutting-edge technology and eco-friendly solutions tailored to your specific needs." />
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-4xl mx-auto">
-            {whyPoints.map((p, i) => (
-              <motion.div key={p.title} {...fadeUp} transition={{ delay: i * 0.1 }} className="flex gap-5">
-                <div className="h-12 w-12 shrink-0 rounded-lg bg-primary/10 flex items-center justify-center">
-                  <p.icon className="h-6 w-6 text-primary" />
-                </div>
-                <div>
-                  <h3 className="font-display text-lg font-700 uppercase text-secondary">{p.title}</h3>
-                  <p className="text-muted-foreground text-sm leading-relaxed mt-1">{p.desc}</p>
-                </div>
-              </motion.div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* CTA Strip */}
-      <section className="bg-secondary py-20 diagonal-clip">
-        <div className="container mx-auto px-4 text-center pb-12">
-          <motion.div {...fadeUp}>
-            <h2 className="font-display text-4xl md:text-5xl font-800 uppercase text-frost mb-4">Ready to Stay Cool?</h2>
-            <p className="text-frost/60 text-lg mb-8">Get a free, no-obligation quote from our expert team today.</p>
+      {/* CTA */}
+      <section className="py-24 bg-primary relative overflow-hidden">
+        <div className="container mx-auto px-4 relative z-10 text-center">
+          <motion.div {...fadeUp} className="max-w-3xl mx-auto">
+            <h2 className="font-display text-4xl md:text-6xl font-800 uppercase text-frost mb-6">Experience Better Cooling Today</h2>
+            <p className="text-frost/60 text-lg mb-10 font-body">Don't settle for less than optimal comfort. Get a professional assessment and quote from our certified team.</p>
             <div className="flex flex-wrap justify-center gap-4">
               <Link to="/contact">
-                <Button variant="hero" size="xl">Get a Free Quote</Button>
+                <Button variant="secondary" size="xl" className="uppercase tracking-widest font-bold px-12">Contact Us</Button>
               </Link>
-              <a href="tel:+27845893702">
-                <Button variant="heroOutline" size="xl">
-                  <Phone className="h-5 w-5 mr-2" /> +27 84 589 3702
-                </Button>
+              <a href="tel:+27845893702" className="flex items-center gap-3 px-8 text-frost hover:text-secondary transition-colors font-display font-bold uppercase tracking-widest">
+                <Phone size={20} /> +27 84 589 3702
               </a>
             </div>
           </motion.div>

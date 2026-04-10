@@ -26,9 +26,9 @@ const Navbar = () => {
 
   return (
     <nav
-      className={`fixed top-0 left-0 right-0 z-50 transition-all duration-500 ease-out ${
+      className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
         scrolled
-          ? "bg-secondary/80 backdrop-blur-xl shadow-[0_8px_32px_rgba(0,0,0,0.3)] py-3 border-b border-white/5"
+          ? "bg-primary shadow-xl py-3 border-b border-white/5"
           : "bg-transparent py-6"
       }`}
     >
@@ -38,7 +38,7 @@ const Navbar = () => {
           <img 
             src="/frostice-logo-white.png" 
             alt="Frost & Ice Aircon" 
-            className="w-48 sm:w-56 lg:w-72 h-auto object-contain" 
+            className="w-40 sm:w-48 lg:w-56 h-auto object-contain" 
           />
         </Link>
 
@@ -48,22 +48,22 @@ const Navbar = () => {
             <Link
               key={link.to}
               to={link.to}
-              className={`relative font-display text-base lg:text-lg uppercase tracking-widest transition-all duration-300 hover:-translate-y-0.5 ${
+              className={`font-display text-base uppercase tracking-widest transition-colors ${
                 location.pathname === link.to
-                  ? "text-ice drop-shadow-[0_0_8px_rgba(195,236,255,0.6)]"
-                  : "text-frost/80 hover:text-ice"
+                  ? "text-secondary font-bold"
+                  : "text-frost/90 hover:text-secondary"
               }`}
             >
               {link.label}
             </Link>
           ))}
-          <a href="tel:+27845893702" className="group flex items-center gap-2 text-frost/80 hover:text-ice transition-all duration-300 hover:-translate-y-0.5">
-            <Phone className="h-4 w-4 group-hover:scale-110 transition-transform duration-300" />
-            <span className="font-display text-base lg:text-lg tracking-widest">+27 84 589 3702</span>
+          <a href="tel:+27845893702" className="flex items-center gap-2 text-frost group hover:text-secondary transition-colors font-display text-base tracking-widest">
+            <Phone size={14} className="group-hover:scale-110 transition-transform" />
+            <span>+27 84 589 3702</span>
           </a>
           <Link to="/contact">
-            <Button variant="hero" size="default">
-              Get a Quote
+            <Button variant="secondary" size="sm" className="font-bold uppercase tracking-widest px-6">
+              Quote
             </Button>
           </Link>
         </div>
@@ -85,26 +85,26 @@ const Navbar = () => {
             initial={{ opacity: 0, height: 0 }}
             animate={{ opacity: 1, height: "auto" }}
             exit={{ opacity: 0, height: 0 }}
-            className="lg:hidden bg-secondary/98 backdrop-blur-md overflow-hidden"
+            className="lg:hidden bg-primary border-t border-white/10"
           >
-            <div className="container mx-auto px-4 py-6 flex flex-col gap-4">
+            <div className="container mx-auto px-4 py-8 flex flex-col gap-6">
               {navLinks.map((link) => (
                 <Link
                   key={link.to}
                   to={link.to}
-                  className={`font-display text-lg uppercase tracking-widest py-2 border-b border-ice/10 ${
-                    location.pathname === link.to ? "text-ice" : "text-frost/80"
+                  className={`font-display text-xl uppercase tracking-widest ${
+                    location.pathname === link.to ? "text-secondary font-bold" : "text-frost/80"
                   }`}
                 >
                   {link.label}
                 </Link>
               ))}
-              <a href="tel:+27845893702" className="flex items-center gap-2 text-frost/80 py-2">
-                <Phone className="h-4 w-4" />
-                <span className="font-display tracking-wider">+27 84 589 3702</span>
+              <a href="tel:+27845893702" className="flex items-center gap-2 text-frost/80 text-lg font-display tracking-widest">
+                <Phone size={18} />
+                <span>+27 84 589 3702</span>
               </a>
               <Link to="/contact">
-                <Button variant="hero" size="lg" className="w-full">
+                <Button variant="secondary" size="lg" className="w-full font-bold uppercase tracking-widest">
                   Get a Quote
                 </Button>
               </Link>

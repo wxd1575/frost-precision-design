@@ -47,7 +47,8 @@ import {
   MapPin, 
   Type, 
   ExternalLink,
-  Loader2
+  Loader2,
+  Zap
 } from "lucide-react";
 
 type Lead = {
@@ -66,10 +67,10 @@ type Lead = {
 };
 
 const statusColors = {
-  new: "bg-blue-500/20 text-blue-400 border-blue-500/30",
-  contacted: "bg-yellow-500/20 text-yellow-400 border-yellow-500/30",
-  quoted: "bg-purple-500/20 text-purple-400 border-purple-500/30",
-  closed: "bg-green-500/20 text-green-400 border-green-500/30",
+  new: "bg-blue-50 text-blue-700 border-blue-100",
+  contacted: "bg-amber-50 text-amber-700 border-amber-100",
+  quoted: "bg-cyan-50 text-cyan-700 border-cyan-100",
+  closed: "bg-emerald-50 text-emerald-700 border-emerald-100",
 };
 
 const Dashboard = () => {
@@ -178,32 +179,44 @@ const Dashboard = () => {
   );
 
   const stats = [
-    { label: "Total Leads", value: leads.length, icon: Users, color: "text-ice" },
-    { label: "Active Pipeline", value: leads.filter(l => l.status !== "closed").length, icon: Clock, color: "text-yellow-400" },
-    { label: "Success Rate", value: leads.length ? Math.round((leads.filter(l => l.status === "closed").length / leads.length) * 100) + "%" : "0%", icon: CheckCircle, color: "text-green-400" },
-    { label: "Critical Needs", value: leads.filter(l => l.urgency === "Emergency").length, icon: Calendar, color: "text-red-400" },
+    { label: "Total Leads", value: leads.length, icon: Users, color: "text-secondary", trend: "+12%", spark: "M0 20 Q10 5, 20 15 T40 10", color_class: "secondary" },
+    { label: "Active Leads", value: leads.filter(l => l.status !== "closed").length, icon: Clock, color: "text-blue-600", trend: "+5%", spark: "M0 15 Q15 20, 30 10 T40 18", color_class: "blue-500" },
+    { label: "Success Rate", value: leads.length ? Math.round((leads.filter(l => l.status === "closed").length / leads.length) * 100) + "%" : "0%", icon: CheckCircle, color: "text-emerald-600", trend: "Excelent", spark: "M0 20 Q10 10, 20 20 T40 5", color_class: "emerald-500" },
+    { label: "Critical Needs", value: leads.filter(l => l.urgency === "Emergency").length, icon: Calendar, color: "text-rose-600", trend: "Immediate", spark: "M0 10 Q10 20, 20 5 T40 15", color_class: "rose-500" },
   ];
 
   return (
-    <div className="min-h-screen relative font-body text-white selection:bg-ice/30">
-      {/* Immersive Background */}
-      <div className="fixed inset-0 bg-hero-gradient -z-10" />
-      <div className="fixed inset-0 bg-[url('https://www.transparenttextures.com/patterns/carbon-fibre.png')] opacity-10 -z-10" />
-      
+    <div className="min-h-screen bg-frost font-body text-primary relative overflow-hidden">
+      {/* Mesh Gradient Background */}
+      <div className="absolute inset-0 pointer-events-none opacity-40">
+        <div className="absolute top-[-10%] left-[-10%] w-[40%] h-[40%] bg-secondary/10 blur-[120px] rounded-full animate-float" />
+        <div className="absolute bottom-[-10%] right-[-10%] w-[50%] h-[50%] bg-ice/20 blur-[150px] rounded-full animate-float" style={{ animationDelay: '1s' }} />
+      </div>
       {/* Top Navbar */}
-      <header className="sticky top-0 z-40 w-full border-b border-white/10 bg-black/20 backdrop-blur-xl">
-        <div className="container mx-auto px-6 h-20 flex items-center justify-between">
-          <div className="flex items-center gap-4">
-            <Link to="/" className="font-display font-900 text-2xl tracking-tighter text-white uppercase italic hover:text-ice transition-colors">
-              FROST <span className="text-ice not-italic">/</span> ICE
+      <header className="sticky top-0 z-40 w-full bg-primary shadow-md border-b border-white/10">
+        <div className="container mx-auto px-6 h-18 flex items-center justify-between py-4">
+          <div className="flex items-center gap-6">
+            <Link to="/" className="flex items-center group transition-all hover:opacity-90 active:scale-95">
+              <img 
+                src="/frostice-logo-white.png" 
+                alt="Frost & Ice Aircon" 
+                className="h-12 w-auto object-contain filter drop-shadow-[0_0_8px_rgba(255,255,255,0.3)]" 
+              />
             </Link>
-            <div className="h-4 w-px bg-white/10 mx-2" />
-            <Badge variant="outline" className="font-bold tracking-[0.2em] text-[10px] uppercase text-ice border-ice/20 bg-ice/5 px-3 py-1">Command Center</Badge>
+            <div className="h-8 w-px bg-white/10 mx-2 hidden md:block" />
+            <span className="text-[11px] uppercase tracking-[0.4em] font-800 text-ice select-none hidden md:block">
+              Admin <span className="text-frost opacity-70 italic">Management Portal</span>
+            </span>
           </div>
           
           <div className="flex items-center gap-4">
-            <Button variant="ghost" size="sm" className="text-frost/60 hover:text-white" onClick={handleLogout}>
-              <LogOut className="h-4 w-4 mr-2" /> Sign Out
+            <Button 
+              variant="outline" 
+              size="sm" 
+              className="text-frost border-frost/20 hover:bg-frost/10 hover:text-white uppercase tracking-widest font-bold text-[10px]" 
+              onClick={handleLogout}
+            >
+              <LogOut className="h-3 w-3 mr-2" /> Sign Out
             </Button>
           </div>
         </div>
@@ -211,24 +224,32 @@ const Dashboard = () => {
 
       <main className="container mx-auto px-6 py-12 space-y-12">
         {/* Welcome Section */}
-        <div className="flex flex-col md:flex-row md:items-end justify-between gap-6">
+        <div className="flex flex-col md:flex-row md:items-end justify-between gap-8">
           <div>
-            <h1 className="font-display text-4xl font-900 uppercase tracking-tight mb-2">Operation <span className="text-ice">Overview</span></h1>
-            <p className="text-frost/40 font-bold uppercase tracking-[0.3em] text-[10px]">Managing global precision cooling requests</p>
+            <span className="text-secondary font-display text-xs uppercase tracking-[0.3em] mb-2 block">Management Dashboard</span>
+            <h1 className="font-display text-4xl md:text-5xl font-800 uppercase text-primary leading-tight tracking-wider">Leads <span className="text-secondary">Overview</span></h1>
+            <p className="text-muted-foreground text-sm mt-4 max-w-xl leading-relaxed">
+              Real-time monitoring and management of all service inquiries across South Africa.
+            </p>
           </div>
           <div className="flex items-center gap-3">
             <div className="relative group">
-              <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-frost/30 group-focus-within:text-ice transition-colors" />
+              <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-slate-400 group-focus-within:text-secondary group-focus-within:scale-110 transition-all" />
               <input 
                 type="text" 
-                placeholder="Search database..."
+                placeholder="Search leads..."
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
-                className="bg-white/5 border border-white/10 rounded-xl pl-10 pr-4 py-2.5 text-sm w-full md:w-64 focus:outline-none focus:border-ice/50 focus:ring-4 focus:ring-ice/10 transition-all placeholder:text-frost/20"
+                className="bg-white/80 backdrop-blur-md border border-white/40 rounded-xl pl-10 pr-4 py-3 text-sm w-full md:w-80 focus:outline-none focus:border-secondary focus:ring-[6px] focus:ring-secondary/5 transition-all placeholder:text-muted-foreground shadow-sm"
               />
             </div>
-            <Button variant="outline" className="border-white/10 bg-white/5 hover:bg-white/10" onClick={exportToCSV}>
-              <Download className="h-4 w-4" />
+            <Button 
+              variant="outline" 
+              className="border-white/40 bg-white/80 backdrop-blur-md hover:bg-slate-50 shadow-sm h-12 w-12 p-0 rounded-xl group" 
+              onClick={exportToCSV}
+              title="Export to CSV"
+            >
+              <Download className="h-5 w-5 text-primary group-hover:text-secondary transition-colors" />
             </Button>
           </div>
         </div>
@@ -241,17 +262,31 @@ const Dashboard = () => {
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: i * 0.1 }}
               key={stat.label}
+              className="h-full"
             >
-              <Card className="bg-white/5 backdrop-blur-xl border-white/10 overflow-hidden group">
-                <div className={`absolute top-0 left-0 w-1 h-full ${stat.color} opacity-20`} />
+              <Card className="bg-white/70 backdrop-blur-xl border-white/40 shadow-sm hover:shadow-xl hover:-translate-y-1 transition-all duration-500 h-full flex flex-col justify-between overflow-hidden group rounded-2xl relative">
+                <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-transparent via-secondary/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
                 <CardHeader className="pb-2">
                   <div className="flex items-center justify-between">
-                    <CardDescription className="text-frost/40 font-bold uppercase text-[10px] tracking-widest">{stat.label}</CardDescription>
-                    <stat.icon className={`h-4 w-4 ${stat.color} opacity-40 group-hover:scale-110 transition-transform`} />
+                    <CardDescription className="text-muted-foreground font-display text-[10px] uppercase tracking-[0.3em] font-800">{stat.label}</CardDescription>
+                    <div className="w-10 h-10 rounded-xl bg-primary/5 flex items-center justify-center text-secondary group-hover:bg-primary group-hover:text-white transition-all duration-500 shadow-inner">
+                      <stat.icon size={18} />
+                    </div>
                   </div>
                 </CardHeader>
-                <CardContent>
-                  <div className={`text-4xl font-900 font-display ${stat.color}`}>{stat.value}</div>
+                <CardContent className="pb-6 relative">
+                  <div className="flex items-end justify-between relative z-10">
+                    <div className="text-4xl font-800 font-display text-primary leading-none tracking-tight">{stat.value}</div>
+                    <div className={`text-[9px] font-900 px-2 py-0.5 rounded-full ${stat.color === 'text-rose-600' ? 'bg-rose-50 text-rose-600' : 'bg-emerald-50 text-emerald-600'} uppercase tracking-tight`}>
+                      {stat.trend}
+                    </div>
+                  </div>
+                  {/* Subtle Sparkline */}
+                  <div className="absolute bottom-4 left-6 right-6 h-8 opacity-20 pointer-events-none">
+                    <svg className="w-full h-full" viewBox="0 0 40 25" preserveAspectRatio="none">
+                      <path d={stat.spark} fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" className={`text-${stat.color_class}`} />
+                    </svg>
+                  </div>
                 </CardContent>
               </Card>
             </motion.div>
@@ -259,110 +294,122 @@ const Dashboard = () => {
         </div>
 
         {/* Table Section */}
-        <Card className="bg-white/5 backdrop-blur-xl border-white/10 overflow-hidden">
-          <CardHeader className="border-b border-white/5 py-8 px-8">
-            <CardTitle className="font-display text-xl uppercase tracking-wider text-ice">Mission Log: Quote Submissions</CardTitle>
+        <Card className="bg-white/70 backdrop-blur-xl border-white/40 shadow-xl overflow-hidden mb-12 rounded-2xl">
+          <CardHeader className="border-b border-white/20 py-8 px-10 flex flex-row items-center justify-between space-y-0 bg-slate-50/30">
+            <div>
+              <CardTitle className="font-display text-xl uppercase tracking-[0.3em] text-primary font-800">Service Inquiries</CardTitle>
+              <CardDescription className="text-xs text-muted-foreground mt-1.5 flex items-center gap-2">
+                <span className="h-1.5 w-1.5 rounded-full bg-emerald-500 animate-pulse" />
+                Live coordination of incoming service requests
+              </CardDescription>
+            </div>
+            <Badge variant="outline" className="text-[11px] uppercase font-800 tracking-[0.25em] text-primary border-primary/20 px-4 py-1.5 bg-white shadow-sm">
+              {filteredLeads.length} Total Records
+            </Badge>
           </CardHeader>
           <CardContent className="p-0">
             {isLoading ? (
               <div className="h-96 flex flex-col items-center justify-center gap-4">
-                <Loader2 className="h-10 w-10 text-ice animate-spin" />
-                <p className="text-frost/40 font-bold uppercase text-[10px] tracking-widest">Accessing Subsurface Data...</p>
+                <Loader2 className="h-10 w-10 text-secondary animate-spin" />
+                <p className="text-muted-foreground font-display text-[10px] uppercase tracking-[0.2em] font-800">Synchronizing Data...</p>
               </div>
             ) : filteredLeads.length === 0 ? (
               <div className="h-96 flex flex-col items-center justify-center text-center p-8">
-                <div className="h-16 w-16 rounded-full bg-white/5 flex items-center justify-center mb-6">
-                  <Search className="h-8 w-8 text-frost/20" />
+                <div className="h-20 w-20 rounded-2xl bg-frost flex items-center justify-center mb-6">
+                  <Search className="h-10 w-10 text-secondary" />
                 </div>
-                <h3 className="font-display text-lg uppercase tracking-wider text-white mb-2">Log is Empty</h3>
-                <p className="text-frost/40 max-w-xs mx-auto text-sm">No submissions match your current search criteria or the database is currently dormant.</p>
+                <h3 className="font-display text-xl font-800 uppercase text-primary mb-3">No Results Found</h3>
+                <p className="text-muted-foreground max-w-xs mx-auto text-sm">We couldn't find any leads matching your current search parameters.</p>
               </div>
             ) : (
               <div className="overflow-x-auto">
                 <Table>
-                  <TableHeader>
-                    <TableRow className="border-white/5 hover:bg-transparent">
-                      <TableHead className="text-frost/40 font-bold uppercase text-[10px] tracking-widest py-6 px-8">Arrival Date</TableHead>
-                      <TableHead className="text-frost/40 font-bold uppercase text-[10px] tracking-widest py-6">Operative</TableHead>
-                      <TableHead className="text-frost/40 font-bold uppercase text-[10px] tracking-widest py-6">Objective</TableHead>
-                      <TableHead className="text-frost/40 font-bold uppercase text-[10px] tracking-widest py-6">Urgency</TableHead>
-                      <TableHead className="text-frost/40 font-bold uppercase text-[10px] tracking-widest py-6 w-[200px]">Phase</TableHead>
-                      <TableHead className="text-frost/40 font-bold uppercase text-[10px] tracking-widest py-6 px-8 text-right">Actions</TableHead>
+                  <TableHeader className="bg-slate-100/30">
+                    <TableRow className="border-white/20 hover:bg-transparent">
+                      <TableHead className="text-primary/70 font-800 uppercase text-[10px] tracking-[0.2em] py-6 px-10">Submission Date</TableHead>
+                      <TableHead className="text-primary/70 font-800 uppercase text-[10px] tracking-[0.2em] py-6">Client Identity</TableHead>
+                      <TableHead className="text-primary/70 font-800 uppercase text-[10px] tracking-[0.2em] py-6">Service Type</TableHead>
+                      <TableHead className="text-primary/70 font-800 uppercase text-[10px] tracking-[0.2em] py-6">Urgency</TableHead>
+                      <TableHead className="text-primary/70 font-800 uppercase text-[10px] tracking-[0.2em] py-6 w-[200px]">Status</TableHead>
+                      <TableHead className="text-primary/70 font-800 uppercase text-[10px] tracking-[0.2em] py-6 px-10 text-right">Utility</TableHead>
                     </TableRow>
                   </TableHeader>
                   <TableBody>
                     <AnimatePresence>
-                      {filteredLeads.map((lead) => (
+                      {filteredLeads.map((lead, index) => (
                         <motion.tr 
                           key={lead.id}
-                          initial={{ opacity: 0 }}
-                          animate={{ opacity: 1 }}
+                          initial={{ opacity: 0, y: 10 }}
+                          animate={{ opacity: 1, y: 0 }}
+                          transition={{ delay: index * 0.05 }}
                           exit={{ opacity: 0, x: -20 }}
-                          className="border-white/5 hover:bg-white/5 transition-colors group"
+                          className="border-border hover:bg-frost/40 transition-colors group cursor-default"
                         >
-                          <TableCell className="px-8 py-5">
+                          <TableCell className="px-10 py-6">
                             <div className="flex items-center gap-3">
-                              <Calendar className="h-3 w-3 text-ice/40" />
-                              <span className="text-xs font-bold text-frost/70">
-                                {new Date(lead.created_at).toLocaleDateString()}
+                              <Calendar className="h-3.5 w-3.5 text-secondary" />
+                              <span className="text-xs font-bold text-primary/80">
+                                {new Date(lead.created_at).toLocaleDateString("en-ZA", { day: '2-digit', month: 'short', year: 'numeric' })}
                               </span>
                             </div>
                           </TableCell>
-                          <TableCell className="py-5">
+                          <TableCell className="py-6">
                             <div>
-                              <p className="font-900 text-sm tracking-tight text-white">{lead.first_name} {lead.last_name}</p>
-                              <div className="flex items-center gap-2 mt-1">
-                                <Badge variant="secondary" className="text-[9px] uppercase font-bold py-0 h-4 bg-ice/10 text-ice border-none">{lead.client_type}</Badge>
-                                <span className="text-[10px] text-frost/30 truncate max-w-[150px]">{lead.email}</span>
+                              <p className="font-800 text-sm tracking-tight text-primary uppercase font-display">{lead.first_name} {lead.last_name}</p>
+                              <div className="flex items-center gap-2 mt-1.5">
+                                <span className="text-[9px] font-900 bg-secondary/10 text-secondary px-2 rounded-sm uppercase tracking-tighter">{lead.client_type}</span>
+                                <span className="text-[10px] text-muted-foreground/80 font-medium truncate max-w-[150px]">{lead.email}</span>
                               </div>
                             </div>
                           </TableCell>
-                          <TableCell className="py-5">
-                            <div className="flex items-center gap-2">
-                              <Type className="h-3 w-3 text-ice/40" />
-                              <p className="text-xs font-bold text-frost/80">{lead.service_required}</p>
+                          <TableCell className="py-6">
+                            <div className="flex items-center gap-2.5">
+                              <div className="h-2 w-2 rounded-full bg-ice shadow-[0_0_8px_rgba(165,243,252,0.8)]" />
+                              <p className="text-xs font-bold text-primary/80 uppercase tracking-tight">{lead.service_required}</p>
                             </div>
                           </TableCell>
-                          <TableCell className="py-5">
+                          <TableCell className="py-6">
                             {lead.urgency === "Emergency" ? (
-                              <Badge className="bg-red-500/20 text-red-400 border-red-500/30 text-[9px] uppercase font-black animate-pulse">Critical</Badge>
+                              <Badge className="bg-red-600 text-white border-none text-[9px] uppercase font-900 px-3 h-6 flex items-center gap-1.5 shadow-lg shadow-red-200 animate-pulse">
+                                <Zap className="h-2.5 w-2.5 fill-current" /> Emergency
+                              </Badge>
                             ) : (
-                              <Badge variant="outline" className="text-frost/40 border-white/10 text-[9px] uppercase font-bold">{lead.urgency || "Standard"}</Badge>
+                              <Badge variant="outline" className="text-muted-foreground/60 border-white/40 text-[9px] uppercase font-800 font-display px-3 h-6">Normal Priority</Badge>
                             )}
                           </TableCell>
-                          <TableCell className="py-5">
+                          <TableCell className="py-6">
                             <Select 
                               defaultValue={lead.status} 
                               onValueChange={(val) => handleStatusChange(lead.id, val)}
                             >
-                              <SelectTrigger className={`h-8 font-black text-[10px] uppercase tracking-widest border-0 rounded-lg ${statusColors[lead.status]}`}>
+                              <SelectTrigger className={`h-9 font-800 text-[9px] uppercase tracking-[0.2em] border-white/40 rounded-lg shadow-sm focus:ring-4 focus:ring-secondary/10 transition-all ${statusColors[lead.status]}`}>
                                 <SelectValue placeholder="Status" />
                               </SelectTrigger>
-                              <SelectContent className="bg-secondary border-white/10 text-white">
-                                <SelectItem value="new" className="text-[10px] uppercase tracking-widest font-bold focus:bg-white/10">Initial</SelectItem>
-                                <SelectItem value="contacted" className="text-[10px] uppercase tracking-widest font-bold focus:bg-white/10">Contacted</SelectItem>
-                                <SelectItem value="quoted" className="text-[10px] uppercase tracking-widest font-bold focus:bg-white/10">Proposal Sent</SelectItem>
-                                <SelectItem value="closed" className="text-[10px] uppercase tracking-widest font-bold focus:bg-white/10">Completed</SelectItem>
+                              <SelectContent className="bg-white/95 backdrop-blur-xl border-white/40 text-primary font-display shadow-2xl rounded-xl">
+                                <SelectItem value="new" className="text-[10px] uppercase tracking-widest font-800 focus:bg-frost/40 py-2.5">New Inquiry</SelectItem>
+                                <SelectItem value="contacted" className="text-[10px] uppercase tracking-widest font-800 focus:bg-frost/40 py-2.5">Contact Established</SelectItem>
+                                <SelectItem value="quoted" className="text-[10px] uppercase tracking-widest font-800 focus:bg-frost/40 py-2.5">Quotation Issued</SelectItem>
+                                <SelectItem value="closed" className="text-[10px] uppercase tracking-widest font-800 focus:bg-frost/40 py-2.5">Service Finalised</SelectItem>
                               </SelectContent>
                             </Select>
                           </TableCell>
-                          <TableCell className="py-5 px-8 text-right">
-                            <div className="flex items-center justify-end gap-2">
+                          <TableCell className="py-6 px-10 text-right">
+                            <div className="flex items-center justify-end gap-3 opacity-0 group-hover:opacity-100 transition-all translate-x-4 group-hover:translate-x-0">
                               <Button 
-                                variant="ghost" 
+                                variant="outline" 
                                 size="sm" 
-                                className="h-8 w-8 p-0 text-frost/40 hover:text-ice hover:bg-ice/5 rounded-lg"
+                                className="h-9 px-4 border-white/40 bg-white text-primary text-[10px] font-800 uppercase tracking-[0.2em] hover:bg-secondary hover:text-white hover:border-secondary transition-all shadow-sm"
                                 onClick={() => setSelectedLead(lead)}
                               >
-                                <Eye className="h-4 w-4" />
+                                Review
                               </Button>
                               <Button 
                                 variant="ghost" 
                                 size="sm" 
-                                className="h-8 w-8 p-0 text-frost/40 hover:text-red-400 hover:bg-red-400/5 rounded-lg"
+                                className="h-9 w-9 p-0 text-muted-foreground hover:text-red-600 hover:bg-red-50 rounded-xl transition-colors"
                                 onClick={() => handleDelete(lead.id)}
                               >
-                                <Trash2 className="h-4 w-4" />
+                                <Trash2 className="h-4.5 w-4.5" />
                               </Button>
                             </div>
                           </TableCell>
@@ -381,74 +428,89 @@ const Dashboard = () => {
       <Dialog open={!!selectedLead} onOpenChange={() => setSelectedLead(null)}>
         <AnimatePresence>
           {selectedLead && (
-            <DialogContent className="max-w-2xl bg-secondary/95 backdrop-blur-3xl border-white/10 text-white shadow-2xl p-0 overflow-hidden font-body">
-              <DialogHeader className="p-8 pb-4 relative">
-                <div className="absolute top-0 left-0 w-full h-2 bg-ice shadow-[0_0_20px_rgba(45,160,255,0.5)]" />
-                <div className="flex items-center justify-between mt-4">
+            <DialogContent className="max-w-2xl bg-white border-border text-primary shadow-2xl p-0 overflow-hidden font-body rounded-2xl">
+              <DialogHeader className="p-10 pb-6 relative bg-primary text-white border-b border-white/10">
+                <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
                   <div>
-                    <DialogTitle className="text-3xl font-900 uppercase tracking-tight mb-2">
-                      Request <span className="text-ice">Protocol</span>
+                    <span className="text-secondary font-display text-[10px] uppercase tracking-[0.3em] font-800 mb-2 block">Service Inquiry Detail</span>
+                    <DialogTitle className="text-3xl font-800 uppercase tracking-tight font-display">
+                      Client <span className="text-secondary">Inquiry</span>
                     </DialogTitle>
-                    <DialogDescription className="text-frost/40 font-bold uppercase text-[10px] tracking-widest">
-                      Lead ID: {selectedLead.id.split('-')[0].toUpperCase()}
+                    <DialogDescription className="text-frost/60 font-bold uppercase text-[10px] tracking-widest mt-1 font-body">
+                      Reference ID: {selectedLead.id.split("-")[0].toUpperCase()}
                     </DialogDescription>
                   </div>
                   <div className="flex items-center gap-3">
-                    <Badge className={statusColors[selectedLead.status]}>{selectedLead.status.toUpperCase()}</Badge>
-                    {selectedLead.urgency === "Emergency" && <Badge className="bg-red-500 text-white font-black animate-pulse">EMERGENCY</Badge>}
+                    <Badge variant="outline" className={`border-none px-3 py-1 font-800 uppercase text-[9px] tracking-widest ${statusColors[selectedLead.status]}`}>
+                      {selectedLead.status === "closed" ? "Completed" : selectedLead.status.replace("_", " ")}
+                    </Badge>
+                    {selectedLead.urgency === "Emergency" && (
+                      <Badge className="bg-red-600 text-white font-800 uppercase text-[9px] tracking-widest px-3 py-1 animate-pulse">
+                        High Priority
+                      </Badge>
+                    )}
                   </div>
                 </div>
               </DialogHeader>
               
-              <div className="px-8 pb-10 space-y-8 max-h-[70vh] overflow-y-auto custom-scrollbar">
-                {/* Info Grid */}
-                <div className="grid grid-cols-2 gap-8">
-                  <div className="space-y-6">
-                    <div className="space-y-1">
-                      <p className="text-[10px] uppercase font-black text-ice tracking-tighter">Operative</p>
-                      <p className="font-bold text-lg">{selectedLead.first_name} {selectedLead.last_name}</p>
+              <div className="px-10 py-10 space-y-10 max-h-[70vh] overflow-y-auto custom-scrollbar">
+                {/* Info Block Grid */}
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-10">
+                  <div className="space-y-8">
+                    <div className="space-y-2">
+                      <p className="text-[10px] uppercase font-800 text-secondary tracking-[0.2em] font-display">Client Name</p>
+                      <p className="font-800 text-xl text-primary font-display uppercase">{selectedLead.first_name} {selectedLead.last_name}</p>
+                      <Badge variant="secondary" className="bg-frost text-primary border-none text-[9px] font-800 uppercase px-2">{selectedLead.client_type}</Badge>
                     </div>
-                    <div className="space-y-1">
-                      <p className="text-[10px] uppercase font-black text-ice tracking-tighter">Communications</p>
-                      <p className="text-sm font-medium">{selectedLead.email}</p>
-                      <p className="text-sm text-frost/40">{selectedLead.phone}</p>
+                    <div className="space-y-3">
+                      <p className="text-[10px] uppercase font-800 text-secondary tracking-[0.2em] font-display">Contact Channels</p>
+                      <div className="flex flex-col gap-1.5">
+                        <p className="text-sm font-bold text-primary/80">{selectedLead.email}</p>
+                        <p className="text-sm font-medium text-muted-foreground">{selectedLead.phone}</p>
+                      </div>
                     </div>
                   </div>
-                  <div className="space-y-6">
-                    <div className="space-y-1">
-                      <p className="text-[10px] uppercase font-black text-ice tracking-tighter">Objective</p>
-                      <p className="font-bold text-lg text-white">{selectedLead.service_required}</p>
+                  <div className="space-y-8">
+                    <div className="space-y-2">
+                      <p className="text-[10px] uppercase font-800 text-secondary tracking-[0.2em] font-display">Service Requested</p>
+                      <p className="font-800 text-xl text-primary font-display uppercase leading-tight">{selectedLead.service_required}</p>
                     </div>
-                    <div className="space-y-1">
-                      <p className="text-[10px] uppercase font-black text-ice tracking-tighter">Coordinates</p>
-                      <div className="flex items-start gap-2">
-                        <MapPin className="h-3 w-3 text-ice mt-1 shrink-0" />
-                        <p className="text-sm font-medium leading-relaxed">{selectedLead.address || "No target address provided"}</p>
+                    <div className="space-y-2">
+                      <p className="text-[10px] uppercase font-800 text-secondary tracking-[0.2em] font-display">Service Location</p>
+                      <div className="flex items-start gap-2.5">
+                        <MapPin className="h-4 w-4 text-secondary mt-0.5 shrink-0" />
+                        <p className="text-sm font-medium text-primary/80 leading-relaxed italic border-l-2 border-frost pl-3">
+                          {selectedLead.address || "Location not provided."}
+                        </p>
                       </div>
                     </div>
                   </div>
                 </div>
 
-                {/* Message Body */}
-                <div className="bg-white/5 border border-white/5 rounded-2xl p-6 relative group overflow-hidden">
-                  <div className="absolute top-0 right-0 p-3 opacity-20 group-hover:opacity-40 transition-opacity">
-                    <Type className="h-6 w-6 text-ice" />
+                {/* Narrative / Message */}
+                <div className="bg-frost/40 border border-frost rounded-xl p-8 relative overflow-hidden">
+                  <div className="absolute top-0 right-0 p-4 opacity-5">
+                    <Type size={120} className="text-primary rotate-12" />
                   </div>
-                  <p className="text-[10px] uppercase font-black text-frost/40 tracking-widest mb-4">Transmission Content</p>
-                  <p className="text-sm text-frost/80 leading-relaxed font-medium">
-                    {selectedLead.message || "No specific mission details provided."}
+                  <p className="text-[10px] uppercase font-800 text-primary/40 tracking-[0.2em] font-display mb-6">Detailed Description</p>
+                  <p className="text-base text-primary/90 leading-relaxed font-medium relative z-10">
+                    {selectedLead.message ? `"${selectedLead.message}"` : "No description provided with this submission."}
                   </p>
                 </div>
 
-                {/* Bottom Actions */}
-                <div className="flex items-center gap-4 pt-4">
-                  <Button asChild className="flex-1 bg-ice/10 text-ice border border-ice/20 hover:bg-ice/20 transition-all">
+                {/* Administrative Actions */}
+                <div className="flex flex-col sm:flex-row items-center gap-4 pt-6 border-t border-border">
+                  <Button asChild className="w-full sm:flex-1 bg-secondary hover:bg-secondary/90 text-white font-800 uppercase tracking-widest py-7 rounded-xl shadow-lg shadow-secondary/20 transition-all hover:-translate-y-0.5 active:translate-y-0">
                     <a href={`mailto:${selectedLead.email}`}>
-                      <ExternalLink className="h-4 w-4 mr-2" /> Open Channel
+                      <ExternalLink className="h-4 w-4 mr-2" /> Respond via Email
                     </a>
                   </Button>
-                  <Button variant="ghost" className="text-red-400 hover:text-red-500 hover:bg-red-400/5" onClick={() => handleDelete(selectedLead.id)}>
-                    Erased Lead
+                  <Button 
+                    variant="outline" 
+                    className="w-full sm:w-auto text-red-600 border-red-100 hover:bg-red-50 hover:border-red-200 font-800 uppercase tracking-widest py-7 px-8 rounded-xl" 
+                    onClick={() => handleDelete(selectedLead.id)}
+                  >
+                    Delete Record
                   </Button>
                 </div>
               </div>
@@ -459,17 +521,17 @@ const Dashboard = () => {
 
       <style dangerouslySetInnerHTML={{ __html: `
         .custom-scrollbar::-webkit-scrollbar {
-          width: 4px;
+          width: 6px;
         }
         .custom-scrollbar::-webkit-scrollbar-track {
-          background: rgba(255, 255, 255, 0.02);
+          background: transparent;
         }
         .custom-scrollbar::-webkit-scrollbar-thumb {
-          background: rgba(45, 160, 255, 0.2);
-          border-radius: 10px;
+          background: #D1D5DB;
+          border-radius: 20px;
         }
         .custom-scrollbar::-webkit-scrollbar-thumb:hover {
-          background: rgba(45, 160, 255, 0.4);
+          background: #9CA3AF;
         }
       `}} />
     </div>

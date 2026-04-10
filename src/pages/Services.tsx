@@ -10,6 +10,7 @@ import { Link } from "react-router-dom";
 import serviceAc from "@/assets/service-ac.jpg";
 import serviceRefrig from "@/assets/service-refrig.jpg";
 import serviceTransport from "@/assets/service-transport.jpg";
+import serviceElectrical from "@/assets/service-electrical.jpg";
 
 const tabs = [
   { id: "ac", label: "Air Conditioning", icon: Thermometer },
@@ -57,6 +58,8 @@ const serviceData: Record<string, { badge: string; title: string; desc: string; 
     services: ["Lighting Controls", "Wiring Upgrades", "Electrical Installations", "Solar Systems", "Panel DB Upgrades", "Test & Tag", "Power Point Installation", "General Electrical Maintenance"],
     cardLabel: "Electrical Services",
     cardSub: "Residential & Commercial",
+    image: serviceElectrical,
+    testimonial: { text: "Outstanding solar installation and DB board upgrade. The team was efficient, clean, and explained everything clearly.", name: "David Ndlovu", role: "Business Owner, Centurion" },
   },
 };
 
@@ -67,7 +70,7 @@ const ServicesPage = () => {
   return (
     <Layout>
       {/* Hero */}
-      <section className="bg-hero-gradient pt-32 pb-20">
+      <section className="bg-primary pt-32 pb-20">
         <div className="container mx-auto px-4">
           <SectionHeading
             label="What We Offer"
@@ -155,7 +158,7 @@ const ServicesPage = () => {
 
               {/* Inline testimonial */}
               {data.testimonial && (
-                <div className="bg-frost-gradient border border-border rounded-lg p-6">
+                <div className="bg-muted border border-border rounded-lg p-6">
                   <div className="flex gap-1 mb-3">
                     {Array.from({ length: 5 }).map((_, j) => (
                       <Star key={j} className="h-3.5 w-3.5 fill-accent text-accent" />
@@ -174,7 +177,7 @@ const ServicesPage = () => {
                 <p className="font-display text-xs uppercase tracking-widest text-ice/70 mt-1">{data.cardSub}</p>
                 <div className="mt-8 space-y-4">
                   <Link to="/contact">
-                    <Button variant="hero" size="lg" className="w-full">
+                    <Button variant="secondary" size="lg" className="w-full">
                       <ArrowRight className="h-4 w-4 mr-2" /> Request Service
                     </Button>
                   </Link>
@@ -208,7 +211,7 @@ const ServicesPage = () => {
       </section>
 
       {/* Testimonials */}
-      <section className="py-24 bg-frost-gradient">
+      <section className="py-24 bg-background">
         <div className="container mx-auto px-4">
           <SectionHeading label="Client Reviews" heading="Trusted by Businesses & Homeowners" />
           <Testimonials />
@@ -216,12 +219,12 @@ const ServicesPage = () => {
       </section>
 
       {/* CTA */}
-      <section className="bg-secondary py-20 diagonal-clip">
-        <div className="container mx-auto px-4 text-center pb-12">
+      <section className="bg-primary py-24 relative overflow-hidden">
+        <div className="container mx-auto px-4 text-center relative z-10">
           <h2 className="font-display text-4xl md:text-5xl font-800 uppercase text-frost mb-4">Need a Service?</h2>
           <p className="text-frost/60 text-lg mb-8">Get a free, no-obligation quote from our expert team today.</p>
           <Link to="/contact">
-            <Button variant="hero" size="xl">Get a Free Quote</Button>
+            <Button variant="secondary" size="xl" className="uppercase tracking-widest font-bold px-12">Get a Free Quote</Button>
           </Link>
         </div>
       </section>

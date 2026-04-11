@@ -208,9 +208,9 @@ const ContactPage = () => {
                   <div className="h-10 w-10 rounded-lg bg-primary/10 flex items-center justify-center"><Phone className="h-5 w-5 text-primary" /></div>
                   <span className="text-sm">+27 84 589 3702</span>
                 </a>
-                <a href="mailto:info@frostyiceaircon.co.za" className="flex items-center gap-3 text-muted-foreground hover:text-primary transition-colors">
+                <a href="mailto:info@frosticeaircon.com" className="flex items-center gap-3 text-muted-foreground hover:text-primary transition-colors">
                   <div className="h-10 w-10 rounded-lg bg-primary/10 flex items-center justify-center"><Mail className="h-5 w-5 text-primary" /></div>
-                  <span className="text-sm">info@frostyiceaircon.co.za</span>
+                  <span className="text-sm">info@frosticeaircon.com</span>
                 </a>
                 <div className="flex items-center gap-3 text-muted-foreground">
                   <div className="h-10 w-10 rounded-lg bg-primary/10 flex items-center justify-center"><Globe className="h-5 w-5 text-primary" /></div>

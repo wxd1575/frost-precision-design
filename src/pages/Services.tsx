@@ -189,8 +189,8 @@ const ServicesPage = () => {
                   <a href="tel:+27845893702" className="flex items-center gap-2 text-frost/60 text-sm justify-center hover:text-ice transition-colors">
                     <Phone className="h-4 w-4" /> +27 84 589 3702
                   </a>
-                  <a href="mailto:info@frostyiceaircon.co.za" className="flex items-center gap-2 text-frost/60 text-sm justify-center hover:text-ice transition-colors">
-                    <Mail className="h-4 w-4" /> info@frostyiceaircon.co.za
+                  <a href="mailto:info@frosticeaircon.com" className="flex items-center gap-2 text-frost/60 text-sm justify-center hover:text-ice transition-colors">
+                    <Mail className="h-4 w-4" /> info@frosticeaircon.com
                   </a>
                 </div>
 

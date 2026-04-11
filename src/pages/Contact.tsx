@@ -8,6 +8,7 @@ import { Link } from "react-router-dom";
 import { z } from "zod";
 import { useToast } from "@/hooks/use-toast";
 import { supabase } from "@/lib/supabase";
+import SEO from "@/components/SEO";
 
 const quoteSchema = z.object({
   firstName: z.string().trim().min(1, "First name is required").max(50),
@@ -99,6 +100,10 @@ const ContactPage = () => {
   if (submitted) {
     return (
       <Layout>
+        <SEO 
+          title="Contact Us"
+          description="Get a free quote for your air conditioning and refrigeration projects. Contact Frost & Ice Aircon today."
+        />
         <section className="bg-hero-gradient pt-32 pb-20 min-h-screen flex items-center relative overflow-hidden">
           {/* Animated Background Elements */}
           <div className="absolute top-1/4 -right-20 w-96 h-96 bg-secondary/10 rounded-full blur-3xl animate-pulse" />

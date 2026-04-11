@@ -2,6 +2,7 @@ import { useState } from "react";
 import { motion } from "framer-motion";
 import { Button } from "@/components/ui/button";
 import Layout from "@/components/Layout";
+import SEO from "@/components/SEO";
 import SectionHeading from "@/components/SectionHeading";
 import Testimonials from "@/components/Testimonials";
 import ClientLogos from "@/components/ClientLogos";
@@ -69,6 +70,10 @@ const ServicesPage = () => {
 
   return (
     <Layout>
+      <SEO 
+        title="Our Services"
+        description="Explore our specialized services: Air Conditioning, Commercial Refrigeration, Transport Refrigeration, and Advanced Electrical Solutions."
+      />
       {/* Hero */}
       <section className="bg-primary pt-32 pb-20">
         <div className="container mx-auto px-4">

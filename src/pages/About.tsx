@@ -1,6 +1,7 @@
 import { motion } from "framer-motion";
 import { Button } from "@/components/ui/button";
 import Layout from "@/components/Layout";
+import SEO from "@/components/SEO";
 import SectionHeading from "@/components/SectionHeading";
 import Testimonials from "@/components/Testimonials";
 import ClientLogos from "@/components/ClientLogos";
@@ -27,6 +28,10 @@ const fadeUp = {
 const AboutPage = () => {
   return (
     <Layout>
+      <SEO 
+        title="About Us"
+        description="Learn about Frost & Ice Aircon, our experienced team, our mission, and our values in providing premier HVAC and refrigeration solutions."
+      />
       {/* Hero */}
       <section className="bg-primary pt-32 pb-20">
         <div className="container mx-auto px-4">

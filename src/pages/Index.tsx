@@ -2,6 +2,7 @@ import { Link } from "react-router-dom";
 import { motion } from "framer-motion";
 import { Button } from "@/components/ui/button";
 import Layout from "@/components/Layout";
+import SEO from "@/components/SEO";
 import SectionHeading from "@/components/SectionHeading";
 import Testimonials from "@/components/Testimonials";
 import ClientLogos from "@/components/ClientLogos";
@@ -50,6 +51,7 @@ const fadeUp = {
 const Index = () => {
   return (
     <Layout>
+      <SEO />
       {/* Hero */}
       <section className="relative min-h-[90vh] flex items-center overflow-hidden bg-primary">
         <div className="absolute inset-0">

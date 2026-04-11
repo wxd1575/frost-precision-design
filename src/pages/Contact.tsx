@@ -281,19 +281,19 @@ const ContactPage = () => {
                     <h4 className="font-display text-sm uppercase tracking-widest text-secondary mb-4">Your Details</h4>
                     <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                       <div>
-                        <input name="firstName" value={form.firstName} onChange={handleChange} placeholder="First Name *" className={inputClass("firstName")} />
+                        <input name="firstName" value={form.firstName} onChange={handleChange} placeholder="First Name *" autoComplete="given-name" disabled={isSubmitting} className={inputClass("firstName")} />
                         {errors.firstName && <p className="text-destructive text-xs mt-1">{errors.firstName}</p>}
                       </div>
                       <div>
-                        <input name="lastName" value={form.lastName} onChange={handleChange} placeholder="Last Name *" className={inputClass("lastName")} />
+                        <input name="lastName" value={form.lastName} onChange={handleChange} placeholder="Last Name *" autoComplete="family-name" disabled={isSubmitting} className={inputClass("lastName")} />
                         {errors.lastName && <p className="text-destructive text-xs mt-1">{errors.lastName}</p>}
                       </div>
                       <div>
-                        <input name="email" type="email" value={form.email} onChange={handleChange} placeholder="Email Address *" className={inputClass("email")} />
+                        <input name="email" type="email" value={form.email} onChange={handleChange} placeholder="Email Address *" autoComplete="email" disabled={isSubmitting} className={inputClass("email")} />
                         {errors.email && <p className="text-destructive text-xs mt-1">{errors.email}</p>}
                       </div>
                       <div>
-                        <input name="phone" value={form.phone} onChange={handleChange} placeholder="Phone Number *" className={inputClass("phone")} />
+                        <input name="phone" type="tel" value={form.phone} onChange={handleChange} placeholder="Phone Number *" autoComplete="tel" disabled={isSubmitting} className={inputClass("phone")} />
                         {errors.phone && <p className="text-destructive text-xs mt-1">{errors.phone}</p>}
                       </div>
                     </div>
@@ -303,24 +303,24 @@ const ContactPage = () => {
                     <h4 className="font-display text-sm uppercase tracking-widest text-secondary mb-4">Service Details</h4>
                     <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                       <div>
-                        <select name="clientType" value={form.clientType} onChange={handleChange} className={inputClass("clientType")}>
+                        <select name="clientType" value={form.clientType} onChange={handleChange} disabled={isSubmitting} className={inputClass("clientType")}>
                           <option value="">Client Type *</option>
                           {clientTypes.map((t) => <option key={t} value={t}>{t}</option>)}
                         </select>
                         {errors.clientType && <p className="text-destructive text-xs mt-1">{errors.clientType}</p>}
                       </div>
                       <div>
-                        <select name="serviceRequired" value={form.serviceRequired} onChange={handleChange} className={inputClass("serviceRequired")}>
+                        <select name="serviceRequired" value={form.serviceRequired} onChange={handleChange} disabled={isSubmitting} className={inputClass("serviceRequired")}>
                           <option value="">Service Required *</option>
                           {serviceOptions.map((s) => <option key={s} value={s}>{s}</option>)}
                         </select>
                         {errors.serviceRequired && <p className="text-destructive text-xs mt-1">{errors.serviceRequired}</p>}
                       </div>
                       <div>
-                        <input name="address" value={form.address} onChange={handleChange} placeholder="Service Address / Area" className={inputClass("address")} />
+                        <input name="address" value={form.address} onChange={handleChange} placeholder="Service Address / Area" disabled={isSubmitting} className={inputClass("address")} />
                       </div>
                       <div>
-                        <select name="urgency" value={form.urgency} onChange={handleChange} className={inputClass("urgency")}>
+                        <select name="urgency" value={form.urgency} onChange={handleChange} disabled={isSubmitting} className={inputClass("urgency")}>
                           <option value="">How Urgent Is This?</option>
                           {urgencyOptions.map((u) => <option key={u} value={u}>{u}</option>)}
                         </select>
@@ -331,6 +331,7 @@ const ContactPage = () => {
                         name="message"
                         value={form.message}
                         onChange={handleChange}
+                        disabled={isSubmitting}
                         rows={4}
                         placeholder="Tell Us More * — Describe your issue or requirements"
                         className={inputClass("message")}

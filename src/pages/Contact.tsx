@@ -88,6 +88,15 @@ const ContactPage = () => {
       return;
     }
 
+    // Track the successful lead conversion in Google Analytics
+    if (typeof window !== "undefined" && typeof window.gtag === "function") {
+      window.gtag("event", "generate_lead", {
+        currency: "ZAR",
+        value: 1, // Optional qualitative value
+        service_type: form.serviceRequired,
+      });
+    }
+
     setSubmitted(true);
     toast({ title: "Quote Request Sent!", description: "Our team will be in touch shortly." });
   };

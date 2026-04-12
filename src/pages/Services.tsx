@@ -8,10 +8,10 @@ import Testimonials from "@/components/Testimonials";
 import ClientLogos from "@/components/ClientLogos";
 import { Thermometer, Snowflake, Truck, Zap, Phone, Mail, ArrowRight, Check, Star } from "lucide-react";
 import { Link } from "react-router-dom";
-import serviceAc from "@/assets/service-ac.jpg";
-import serviceRefrig from "@/assets/service-refrig.jpg";
-import serviceTransport from "@/assets/service-transport.jpg";
-import serviceElectrical from "@/assets/service-electrical.jpg";
+import serviceAc from "@/assets/service-ac.webp";
+import serviceRefrig from "@/assets/service-refrig.webp";
+import serviceTransport from "@/assets/service-transport.webp";
+import serviceElectrical from "@/assets/service-electrical.webp";
 
 const tabs = [
   { id: "ac", label: "Air Conditioning", icon: Thermometer },
@@ -125,7 +125,7 @@ const ServicesPage = () => {
               {/* Service Image */}
               {data.image && (
                 <div className="rounded-lg overflow-hidden">
-                  <img src={data.image} alt={data.title} className="w-full h-64 object-cover" />
+                  <img src={data.image} alt={data.title} loading="lazy" decoding="async" className="w-full h-64 object-cover" />
                 </div>
               )}
 

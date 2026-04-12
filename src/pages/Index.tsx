@@ -7,11 +7,11 @@ import SectionHeading from "@/components/SectionHeading";
 import Testimonials from "@/components/Testimonials";
 import ClientLogos from "@/components/ClientLogos";
 import { Thermometer, Snowflake, Truck, Zap, Clock, Shield, Leaf, Building, ArrowRight, Phone } from "lucide-react";
-import heroBg from "@/assets/hero-bg.jpg";
-import serviceAc from "@/assets/service-ac.jpg";
-import serviceRefrig from "@/assets/service-refrig.jpg";
-import serviceTransport from "@/assets/service-transport.jpg";
-import serviceElectrical from "@/assets/service-electrical.jpg";
+import heroBg from "@/assets/hero-bg.webp";
+import serviceAc from "@/assets/service-ac.webp";
+import serviceRefrig from "@/assets/service-refrig.webp";
+import serviceTransport from "@/assets/service-transport.webp";
+import serviceElectrical from "@/assets/service-electrical.webp";
 
 const services = [
   { icon: Thermometer, title: "Air Conditioning", desc: "Installation, repairs, gas filling, major & minor services, and full HVAC-R maintenance for homes and offices.", link: "/services", image: serviceAc },
@@ -55,7 +55,7 @@ const Index = () => {
       {/* Hero */}
       <section className="relative min-h-[90vh] flex items-center overflow-hidden bg-primary">
         <div className="absolute inset-0">
-          <img src={heroBg} alt="HVAC systems" className="w-full h-full object-cover opacity-20" />
+          <img src={heroBg} alt="HVAC systems" fetchpriority="high" className="w-full h-full object-cover opacity-20" />
           <div className="absolute inset-0 bg-primary opacity-60" />
         </div>
         
@@ -156,7 +156,7 @@ const Index = () => {
                 <Link to={s.link} className="group bg-white h-full block rounded-xl overflow-hidden shadow-sm hover:shadow-xl transition-all duration-500 border border-border">
                   {s.image && (
                     <div className="h-48 overflow-hidden grayscale group-hover:grayscale-0 transition-all duration-700">
-                      <img src={s.image} alt={s.title} className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700" />
+                      <img src={s.image} alt={s.title} loading="lazy" decoding="async" className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700" />
                     </div>
                   )}
                   <div className="p-8">

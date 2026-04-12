@@ -63,7 +63,7 @@ const AboutPage = () => {
             <motion.div {...fadeUp} transition={{ delay: 0.2 }} className="space-y-4">
               {/* Team Photo */}
               <div className="rounded-lg overflow-hidden">
-                <img src={teamPhoto} alt="Frost Ice team of certified technicians" className="w-full h-56 object-cover" />
+                <img src={teamPhoto} alt="Frost Ice team of certified technicians" loading="lazy" decoding="async" className="w-full h-56 object-cover" />
               </div>
               <div className="bg-secondary rounded-lg p-8">
                 <h3 className="font-display text-lg uppercase tracking-wider text-ice mb-3">Our Mission</h3>

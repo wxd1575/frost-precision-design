@@ -7,7 +7,7 @@ import Testimonials from "@/components/Testimonials";
 import ClientLogos from "@/components/ClientLogos";
 import { Link } from "react-router-dom";
 import { Award, Users, Leaf, Lightbulb, ShieldCheck, Wrench, Phone, Target, Eye } from "lucide-react";
-import teamPhoto from "@/assets/team-photo.jpg";
+import teamPhoto from "@/assets/team-photo.webp";
 
 const values = [
   { icon: Award, num: "01", title: "Quality First", desc: "We use top-quality products and uphold the highest workmanship standards on every job — residential or commercial." },

@@ -1,5 +1,5 @@
 import { Link } from "react-router-dom";
-import { Phone, Mail, Globe } from "lucide-react";
+import { Phone, Mail, Globe, Facebook } from "lucide-react";
 
 const Footer = () => {
   return (
@@ -68,6 +68,10 @@ const Footer = () => {
               <li className="flex items-center gap-3 text-frost/60 text-sm">
                 <Globe className="h-4 w-4 text-ice" />
                 <span>www.frosticeaircon.com</span>
+              </li>
+              <li className="flex items-center gap-3 text-frost/60 text-sm">
+                <Facebook className="h-4 w-4 text-ice" />
+                <a href="https://www.facebook.com/p/Frosty-Ice-Aircon-61556123652800" target="_blank" rel="noopener noreferrer" className="hover:text-ice transition-colors">Facebook Page</a>
               </li>
             </ul>
           </div>

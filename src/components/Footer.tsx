@@ -63,11 +63,11 @@ const Footer = () => {
               </li>
               <li className="flex items-center gap-3 text-frost/60 text-sm">
                 <Mail className="h-4 w-4 text-ice" />
-                <a href="mailto:info@frosticeaircon.com" className="hover:text-ice transition-colors">info@frosticeaircon.com</a>
+                <a href="mailto:info@frosticeaircon.co.za" className="hover:text-ice transition-colors">info@frosticeaircon.co.za</a>
               </li>
               <li className="flex items-center gap-3 text-frost/60 text-sm">
                 <Globe className="h-4 w-4 text-ice" />
-                <span>www.frosticeaircon.com</span>
+                <span>www.frosticeaircon.co.za</span>
               </li>
               <li className="flex items-center gap-3 text-frost/60 text-sm">
                 <Facebook className="h-4 w-4 text-ice" />

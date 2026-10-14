@@ -23,7 +23,7 @@ const SEO = ({
     "image": "https://frosticeaircon.co.za/favicon.png",
     "url": "https://frosticeaircon.co.za",
     "telephone": "+27845893702",
-    "email": "info@frosticeaircon.com",
+    "email": "info@frosticeaircon.co.za",
     "address": {
       "@type": "PostalAddress",
       "addressCountry": "ZA"

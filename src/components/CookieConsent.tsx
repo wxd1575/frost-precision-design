@@ -3,23 +3,17 @@ import { motion, AnimatePresence } from "framer-motion";
 import { Button } from "@/components/ui/button";
 import { Shield } from "lucide-react";
 
-declare global {
-  interface Window {
-    gtag: (...args: any[]) => void;
-  }
-}
+// `window.gtag` and `window.dataLayer` are declared in @/lib/analytics.
 
 export default function CookieConsent() {
   const [showBanner, setShowBanner] = useState(false);
 
   useEffect(() => {
-    // Check if user has already made a choice
+    // A stored answer is already restored in index.html, before the GTM
+    // container loads. Here we only decide whether to ask in the first place.
     const consent = localStorage.getItem("cookie-consent");
     if (!consent) {
       setShowBanner(true);
-    } else {
-      // If they already accepted previously, ensure Google Analytics knows about it on load
-      applyConsent(consent === "granted" ? "granted" : "denied");
     }
   }, []);
 

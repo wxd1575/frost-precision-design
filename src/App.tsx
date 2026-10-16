@@ -1,8 +1,10 @@
+import { useEffect } from "react";
 import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { BrowserRouter, Routes, Route, useLocation } from "react-router-dom";
+import { initClickTracking, trackPageView } from "@/lib/analytics";
 import { HelmetProvider } from "react-helmet-async";
 import Index from "./pages/Index";
 import Services from "./pages/Services";
@@ -17,6 +19,23 @@ import CookieConsent from "./components/CookieConsent";
 
 const queryClient = new QueryClient();
 
+/**
+ * Sends one page_view per route, including the first. The document title is
+ * set by react-helmet, so we wait a tick to let it land before reporting.
+ */
+const Analytics = () => {
+  const location = useLocation();
+
+  useEffect(() => initClickTracking(), []);
+
+  useEffect(() => {
+    const timer = window.setTimeout(trackPageView, 50);
+    return () => window.clearTimeout(timer);
+  }, [location.pathname, location.search]);
+
+  return null;
+};
+
 const App = () => (
   <HelmetProvider>
     <QueryClientProvider client={queryClient}>
@@ -25,6 +44,7 @@ const App = () => (
       <Sonner />
       <CookieConsent />
       <BrowserRouter>
+        <Analytics />
         <Routes>
           <Route path="/" element={<Index />} />
           <Route path="/services" element={<Services />} />

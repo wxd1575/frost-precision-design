@@ -1,16 +1,34 @@
 <!doctype html>
 <html lang="en">
   <head>
-    <!-- Google Consent Mode v2 Default Settings -->
+    <!-- Google Consent Mode v2 -->
     <script>
       window.dataLayer = window.dataLayer || [];
       function gtag(){dataLayer.push(arguments);}
+
       gtag('consent', 'default', {
         'ad_storage': 'denied',
         'ad_user_data': 'denied',
         'ad_personalization': 'denied',
-        'analytics_storage': 'denied'
+        'analytics_storage': 'denied',
+        'wait_for_update': 500
       });
+
+      // Restore a previously given answer BEFORE the container loads, so a
+      // returning visitor's page view is not sent in the denied state.
+      try {
+        var storedConsent = localStorage.getItem('cookie-consent');
+        if (storedConsent === 'granted' || storedConsent === 'denied') {
+          gtag('consent', 'update', {
+            'ad_storage': storedConsent,
+            'ad_user_data': storedConsent,
+            'ad_personalization': storedConsent,
+            'analytics_storage': storedConsent
+          });
+        }
+      } catch (e) {
+        // Storage unavailable: defaults stand.
+      }
     </script>
 
     <!-- Google Tag Manager -->
@@ -20,16 +38,10 @@
     'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
     })(window,document,'script','dataLayer','GTM-K58HR5MF');</script>
     <!-- End Google Tag Manager -->
-    
-    <!-- Google tag (gtag.js) -->
-    <script async src="https://www.googletagmanager.com/gtag/js?id=G-61633SMHZE"></script>
-    <script>
-      window.dataLayer = window.dataLayer || [];
-      function gtag(){dataLayer.push(arguments);}
-      gtag('js', new Date());
-
-      gtag('config', 'G-61633SMHZE');
-    </script>
+    <!--
+      GA4 (G-61633SMHZE) is loaded by the GTM container, not here. Do not add a
+      gtag.js snippet to this page: it duplicates the tag and double-counts.
+    -->
 
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />

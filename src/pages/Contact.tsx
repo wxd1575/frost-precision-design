@@ -8,6 +8,7 @@ import { Link } from "react-router-dom";
 import { z } from "zod";
 import { useToast } from "@/hooks/use-toast";
 import { supabase } from "@/lib/supabase";
+import { trackGenerateLead } from "@/lib/analytics";
 import SEO from "@/components/SEO";
 
 const quoteSchema = z.object({
@@ -88,14 +89,13 @@ const ContactPage = () => {
       return;
     }
 
-    // Track the successful lead conversion in Google Analytics
-    if (typeof window !== "undefined" && typeof window.gtag === "function") {
-      window.gtag("event", "generate_lead", {
-        currency: "ZAR",
-        value: 1, // Optional qualitative value
-        service_type: form.serviceRequired,
-      });
-    }
+    // Track the successful lead conversion via the dataLayer, so GTM owns
+    // which tags (GA4, Google Ads) fire off it.
+    trackGenerateLead({
+      service_type: form.serviceRequired,
+      client_type: form.clientType,
+      urgency: form.urgency || undefined,
+    });
 
     setSubmitted(true);
     toast({ title: "Quote Request Sent!", description: "Our team will be in touch shortly." });

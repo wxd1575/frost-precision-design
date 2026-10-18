@@ -3,108 +3,15 @@ import { motion } from "framer-motion";
 import { Button } from "@/components/ui/button";
 import Layout from "@/components/Layout";
 import SectionHeading from "@/components/SectionHeading";
-import { Phone, Mail, Globe, Clock, MessageCircle, CheckCircle, Loader2 } from "lucide-react";
+import { Phone, Mail, Globe, Clock, MessageCircle, CheckCircle } from "lucide-react";
 import { Link } from "react-router-dom";
-import { z } from "zod";
-import { useToast } from "@/hooks/use-toast";
-import { supabase } from "@/lib/supabase";
 import SEO from "@/components/SEO";
-
-const quoteSchema = z.object({
-  firstName: z.string().trim().min(1, "First name is required").max(50),
-  lastName: z.string().trim().min(1, "Last name is required").max(50),
-  email: z.string().trim().email("Invalid email address").max(255),
-  phone: z.string().trim().min(1, "Phone number is required").max(20),
-  clientType: z.string().min(1, "Select a client type"),
-  serviceRequired: z.string().min(1, "Select a service"),
-  address: z.string().max(200).optional(),
-  urgency: z.string().optional(),
-  message: z.string().trim().min(1, "Tell us about your requirements").max(2000),
-});
-
-type QuoteForm = z.infer<typeof quoteSchema>;
-
-const initialForm: QuoteForm = {
-  firstName: "", lastName: "", email: "", phone: "",
-  clientType: "", serviceRequired: "", address: "", urgency: "", message: "",
-};
-
-const clientTypes = ["Residential", "Commercial", "Industrial", "Transport"];
-const serviceOptions = [
-  "AC Installation", "AC Repair", "AC Service", "Gas Filling", "Cold Room",
-  "Industrial Refrigeration", "Domestic Fridge", "Regas", "Transport Refrigeration", "Electrical", "Other",
-];
-const urgencyOptions = ["Emergency", "This week", "This month", "Just planning"];
+import QuoteForm from "@/components/QuoteForm";
+import TrackedLink from "@/components/TrackedLink";
+import { EMAIL, EMAIL_HREF, PHONE_DISPLAY, PHONE_HREF, whatsappUrl } from "@/lib/tracking/config";
 
 const ContactPage = () => {
-  const [form, setForm] = useState<QuoteForm>(initialForm);
-  const [errors, setErrors] = useState<Partial<Record<keyof QuoteForm, string>>>({});
   const [submitted, setSubmitted] = useState(false);
-  const [isSubmitting, setIsSubmitting] = useState(false);
-  const { toast } = useToast();
-
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>) => {
-    const { name, value } = e.target;
-    setForm((prev) => ({ ...prev, [name]: value }));
-    if (errors[name as keyof QuoteForm]) {
-      setErrors((prev) => ({ ...prev, [name]: undefined }));
-    }
-  };
-
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    const result = quoteSchema.safeParse(form);
-    if (!result.success) {
-      const fieldErrors: Partial<Record<keyof QuoteForm, string>> = {};
-      result.error.issues.forEach((issue) => {
-        const field = issue.path[0] as keyof QuoteForm;
-        if (!fieldErrors[field]) fieldErrors[field] = issue.message;
-      });
-      setErrors(fieldErrors);
-      return;
-    }
-
-    setIsSubmitting(true);
-    const { error } = await supabase.from("contact_submissions").insert({
-      first_name: form.firstName,
-      last_name: form.lastName,
-      email: form.email,
-      phone: form.phone,
-      client_type: form.clientType,
-      service_required: form.serviceRequired,
-      address: form.address || null,
-      urgency: form.urgency || null,
-      message: form.message,
-      status: "new",
-    });
-    setIsSubmitting(false);
-
-    if (error) {
-      toast({
-        title: "Submission Failed",
-        description: error.message,
-        variant: "destructive",
-      });
-      return;
-    }
-
-    // Track the successful lead conversion in Google Analytics
-    if (typeof window !== "undefined" && typeof window.gtag === "function") {
-      window.gtag("event", "generate_lead", {
-        currency: "ZAR",
-        value: 1, // Optional qualitative value
-        service_type: form.serviceRequired,
-      });
-    }
-
-    setSubmitted(true);
-    toast({ title: "Quote Request Sent!", description: "Our team will be in touch shortly." });
-  };
-
-  const inputClass = (field: keyof QuoteForm) =>
-    `w-full px-4 py-3 rounded-lg border font-body text-sm transition-colors duration-200 bg-card text-foreground focus:outline-none focus:ring-2 focus:ring-primary/50 ${
-      errors[field] ? "border-destructive" : "border-border"
-    }`;
 
   if (submitted) {
     return (
@@ -182,6 +89,10 @@ const ContactPage = () => {
 
   return (
     <Layout>
+      <SEO
+        title="Contact Us"
+        description="Get a free quote for your air conditioning and refrigeration projects. Contact Frost & Ice Aircon today."
+      />
       {/* Hero */}
       <section className="bg-primary pt-32 pb-20">
         <div className="container mx-auto px-4">
@@ -204,17 +115,17 @@ const ContactPage = () => {
                 <p className="text-muted-foreground text-sm">Prefer to call or email? Reach us directly below.</p>
               </div>
               <div className="space-y-4">
-                <a href="tel:+27845893702" className="flex items-center gap-3 text-muted-foreground hover:text-primary transition-colors">
+                <TrackedLink kind="call" placement="contact_page" href={PHONE_HREF} className="flex items-center gap-3 text-muted-foreground hover:text-primary transition-colors">
                   <div className="h-10 w-10 rounded-lg bg-primary/10 flex items-center justify-center"><Phone className="h-5 w-5 text-primary" /></div>
-                  <span className="text-sm">+27 84 589 3702</span>
-                </a>
-                <a href="mailto:info@frosticeaircon.co.za" className="flex items-center gap-3 text-muted-foreground hover:text-primary transition-colors">
+                  <span className="text-sm">{PHONE_DISPLAY}</span>
+                </TrackedLink>
+                <TrackedLink kind="email" placement="contact_page" href={EMAIL_HREF} className="flex items-center gap-3 text-muted-foreground hover:text-primary transition-colors">
                   <div className="h-10 w-10 rounded-lg bg-primary/10 flex items-center justify-center"><Mail className="h-5 w-5 text-primary" /></div>
-                  <span className="text-sm">info@frosticeaircon.co.za</span>
-                </a>
+                  <span className="text-sm">{EMAIL}</span>
+                </TrackedLink>
                 <div className="flex items-center gap-3 text-muted-foreground">
                   <div className="h-10 w-10 rounded-lg bg-primary/10 flex items-center justify-center"><Globe className="h-5 w-5 text-primary" /></div>
-                  <span className="text-sm">www.frostyiceaircon.co.za</span>
+                  <span className="text-sm">www.frosticeaircon.co.za</span>
                 </div>
               </div>
 
@@ -229,14 +140,16 @@ const ContactPage = () => {
                 </div>
               </div>
 
-              <a
-                href="https://wa.me/27845893702"
+              <TrackedLink
+                kind="whatsapp"
+                placement="contact_page"
+                href={whatsappUrl("Hi Frostice, I'd like a quote. (from /contact)")}
                 target="_blank"
                 rel="noopener noreferrer"
                 className="flex items-center justify-center gap-2 w-full py-3 rounded-lg bg-[hsl(142,70%,45%)] text-primary-foreground font-display uppercase tracking-wider text-sm hover:bg-[hsl(142,70%,40%)] transition-colors"
               >
                 <MessageCircle className="h-5 w-5" /> Chat on WhatsApp
-              </a>
+              </TrackedLink>
 
               {/* Trust indicator */}
               <div className="bg-frost-gradient border border-border rounded-lg p-5 mt-2">
@@ -276,81 +189,7 @@ const ContactPage = () => {
                   <p className="text-muted-foreground text-sm mt-2">Fill in your details below and we'll respond within the hour during business hours.</p>
                 </div>
 
-                <form onSubmit={handleSubmit} className="space-y-6">
-                  <div>
-                    <h4 className="font-display text-sm uppercase tracking-widest text-secondary mb-4">Your Details</h4>
-                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                      <div>
-                        <input name="firstName" value={form.firstName} onChange={handleChange} placeholder="First Name *" autoComplete="given-name" disabled={isSubmitting} className={inputClass("firstName")} />
-                        {errors.firstName && <p className="text-destructive text-xs mt-1">{errors.firstName}</p>}
-                      </div>
-                      <div>
-                        <input name="lastName" value={form.lastName} onChange={handleChange} placeholder="Last Name *" autoComplete="family-name" disabled={isSubmitting} className={inputClass("lastName")} />
-                        {errors.lastName && <p className="text-destructive text-xs mt-1">{errors.lastName}</p>}
-                      </div>
-                      <div>
-                        <input name="email" type="email" value={form.email} onChange={handleChange} placeholder="Email Address *" autoComplete="email" disabled={isSubmitting} className={inputClass("email")} />
-                        {errors.email && <p className="text-destructive text-xs mt-1">{errors.email}</p>}
-                      </div>
-                      <div>
-                        <input name="phone" type="tel" value={form.phone} onChange={handleChange} placeholder="Phone Number *" autoComplete="tel" disabled={isSubmitting} className={inputClass("phone")} />
-                        {errors.phone && <p className="text-destructive text-xs mt-1">{errors.phone}</p>}
-                      </div>
-                    </div>
-                  </div>
-
-                  <div>
-                    <h4 className="font-display text-sm uppercase tracking-widest text-secondary mb-4">Service Details</h4>
-                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                      <div>
-                        <select name="clientType" value={form.clientType} onChange={handleChange} disabled={isSubmitting} className={inputClass("clientType")}>
-                          <option value="">Client Type *</option>
-                          {clientTypes.map((t) => <option key={t} value={t}>{t}</option>)}
-                        </select>
-                        {errors.clientType && <p className="text-destructive text-xs mt-1">{errors.clientType}</p>}
-                      </div>
-                      <div>
-                        <select name="serviceRequired" value={form.serviceRequired} onChange={handleChange} disabled={isSubmitting} className={inputClass("serviceRequired")}>
-                          <option value="">Service Required *</option>
-                          {serviceOptions.map((s) => <option key={s} value={s}>{s}</option>)}
-                        </select>
-                        {errors.serviceRequired && <p className="text-destructive text-xs mt-1">{errors.serviceRequired}</p>}
-                      </div>
-                      <div>
-                        <input name="address" value={form.address} onChange={handleChange} placeholder="Service Address / Area" disabled={isSubmitting} className={inputClass("address")} />
-                      </div>
-                      <div>
-                        <select name="urgency" value={form.urgency} onChange={handleChange} disabled={isSubmitting} className={inputClass("urgency")}>
-                          <option value="">How Urgent Is This?</option>
-                          {urgencyOptions.map((u) => <option key={u} value={u}>{u}</option>)}
-                        </select>
-                      </div>
-                    </div>
-                    <div className="mt-4">
-                      <textarea
-                        name="message"
-                        value={form.message}
-                        onChange={handleChange}
-                        disabled={isSubmitting}
-                        rows={4}
-                        placeholder="Tell Us More * — Describe your issue or requirements"
-                        className={inputClass("message")}
-                      />
-                      {errors.message && <p className="text-destructive text-xs mt-1">{errors.message}</p>}
-                    </div>
-                  </div>
-
-                  <div className="flex items-center justify-between flex-wrap gap-4">
-                    <p className="text-muted-foreground text-xs">Your details are kept private and will not be shared.</p>
-                    <Button type="submit" variant="secondary" size="lg" disabled={isSubmitting}>
-                      {isSubmitting ? (
-                        <><Loader2 className="mr-2 h-4 w-4 animate-spin" /> Sending...</>
-                      ) : (
-                        "Send Quote Request"
-                      )}
-                    </Button>
-                  </div>
-                </form>
+                <QuoteForm formLocation="contact_page" onSuccess={() => setSubmitted(true)} />
               </div>
             </div>
           </div>

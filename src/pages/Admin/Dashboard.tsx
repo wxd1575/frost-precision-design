@@ -48,6 +48,7 @@ import {
   Type, 
   ExternalLink,
   Loader2,
+  PhoneCall,
   Zap
 } from "lucide-react";
 
@@ -64,6 +65,29 @@ type Lead = {
   message: string;
   status: "new" | "contacted" | "quoted" | "closed";
   created_at: string;
+  // Attribution and outcome fields (added by the lead attribution migration).
+  lead_source?: string | null;
+  utm_source?: string | null;
+  utm_medium?: string | null;
+  utm_campaign?: string | null;
+  utm_term?: string | null;
+  gclid?: string | null;
+  landing_page?: string | null;
+  referrer?: string | null;
+  suburb?: string | null;
+  contact_method?: "form" | "call" | "whatsapp" | null;
+  outcome?: "won" | "lost" | "no_answer" | null;
+  revenue?: number | string | null;
+};
+
+const outcomeLabels = { won: "Job won", lost: "Lost", no_answer: "No answer" } as const;
+const callServices = ["AC Repair", "AC Installation", "AC Service", "Regas", "Other"];
+
+// Quote every cell, and neutralise spreadsheet formulas from user-supplied text.
+const csvCell = (value: unknown) => {
+  let text = value === null || value === undefined ? "" : String(value);
+  if (/^[=+\-@\t\r]/.test(text)) text = `'${text}`;
+  return `"${text.replace(/"/g, '""')}"`;
 };
 
 const statusColors = {
@@ -78,6 +102,12 @@ const Dashboard = () => {
   const [isLoading, setIsLoading] = useState(true);
   const [selectedLead, setSelectedLead] = useState<Lead | null>(null);
   const [searchQuery, setSearchQuery] = useState("");
+  const [outcomeDraft, setOutcomeDraft] = useState("");
+  const [revenueDraft, setRevenueDraft] = useState("");
+  const [isSavingOutcome, setIsSavingOutcome] = useState(false);
+  const [callOpen, setCallOpen] = useState(false);
+  const [isLoggingCall, setIsLoggingCall] = useState(false);
+  const [callForm, setCallForm] = useState({ name: "", phone: "", service: "AC Repair", source: "Google Ads – call", notes: "" });
   const { toast } = useToast();
   const navigate = useNavigate();
 
@@ -103,6 +133,72 @@ const Dashboard = () => {
   useEffect(() => {
     fetchLeads();
   }, []);
+
+  useEffect(() => {
+    setOutcomeDraft(selectedLead?.outcome ?? "");
+    setRevenueDraft(selectedLead?.revenue != null ? String(selectedLead.revenue) : "");
+  }, [selectedLead]);
+
+  const handleOutcomeSave = async () => {
+    if (!selectedLead) return;
+    const revenue = revenueDraft.trim() === "" ? null : Number(revenueDraft);
+    if (revenue !== null && (!Number.isFinite(revenue) || revenue < 0)) {
+      toast({ title: "Invalid revenue", description: "Enter a positive amount in rand.", variant: "destructive" });
+      return;
+    }
+    const outcome = (outcomeDraft || null) as Lead["outcome"];
+
+    setIsSavingOutcome(true);
+    const { error } = await supabase
+      .from("contact_submissions")
+      .update({ outcome, revenue })
+      .eq("id", selectedLead.id);
+    setIsSavingOutcome(false);
+
+    if (error) {
+      toast({ title: "Update Failed", description: error.message, variant: "destructive" });
+      return;
+    }
+    const updated = { ...selectedLead, outcome, revenue };
+    setSelectedLead(updated);
+    setLeads((prev) => prev.map((l) => (l.id === updated.id ? updated : l)));
+    toast({ title: "Outcome saved", description: "Job outcome and revenue updated." });
+  };
+
+  const handleLogCall = async (e: React.FormEvent) => {
+    e.preventDefault();
+    const name = callForm.name.trim();
+    const phone = callForm.phone.trim();
+    if (!name || !phone) {
+      toast({ title: "Missing details", description: "A name and phone number are required.", variant: "destructive" });
+      return;
+    }
+    const [firstName, ...rest] = name.split(/\s+/);
+
+    setIsLoggingCall(true);
+    const { error } = await supabase.from("contact_submissions").insert({
+      first_name: firstName,
+      last_name: rest.join(" ") || "-",
+      email: "",
+      phone,
+      client_type: "Not captured",
+      service_required: callForm.service,
+      message: callForm.notes.trim() || "Phone call logged manually.",
+      status: "new",
+      lead_source: callForm.source.trim() || "Phone call",
+      contact_method: "call",
+    });
+    setIsLoggingCall(false);
+
+    if (error) {
+      toast({ title: "Could not log call", description: error.message, variant: "destructive" });
+      return;
+    }
+    toast({ title: "Call logged", description: "The call now appears in your leads." });
+    setCallOpen(false);
+    setCallForm({ name: "", phone: "", service: "AC Repair", source: "Google Ads – call", notes: "" });
+    fetchLeads();
+  };
 
   const handleStatusChange = async (leadId: string, newStatus: string) => {
     const { error } = await supabase
@@ -143,28 +239,43 @@ const Dashboard = () => {
   };
 
   const exportToCSV = () => {
-    const headers = ["Date", "Name", "Email", "Phone", "Type", "Service", "Status", "Message"];
-    const rows = leads.map(l => [
-      new Date(l.created_at).toLocaleDateString(),
+    const headers = [
+      "Date", "Name", "Email", "Phone", "Type", "Service", "Status", "Message",
+      "Lead source", "Contact method", "Suburb", "Landing page", "UTM source", "UTM medium",
+      "UTM campaign", "UTM term", "Click ID (gclid)", "Referrer", "Outcome", "Revenue (ZAR)",
+    ];
+    const rows = leads.map((l) => [
+      new Date(l.created_at).toLocaleDateString("en-ZA"),
       `${l.first_name} ${l.last_name}`,
       l.email,
       l.phone,
       l.client_type,
       l.service_required,
       l.status,
-      l.message.replace(/,/g, ";")
+      l.message,
+      l.lead_source,
+      l.contact_method,
+      l.suburb,
+      l.landing_page,
+      l.utm_source,
+      l.utm_medium,
+      l.utm_campaign,
+      l.utm_term,
+      l.gclid,
+      l.referrer,
+      l.outcome,
+      l.revenue,
     ]);
 
-    const csvContent = "data:text/csv;charset=utf-8," 
-      + [headers, ...rows].map(e => e.join(",")).join("\n");
-    
-    const encodedUri = encodeURI(csvContent);
+    const csv = [headers, ...rows].map((row) => row.map(csvCell).join(",")).join("\n");
+    const url = URL.createObjectURL(new Blob([csv], { type: "text/csv;charset=utf-8" }));
     const link = document.createElement("a");
-    link.setAttribute("href", encodedUri);
-    link.setAttribute("download", `frost_leads_${new Date().toISOString().split('T')[0]}.csv`);
+    link.href = url;
+    link.download = `frost_leads_${new Date().toISOString().split("T")[0]}.csv`;
     document.body.appendChild(link);
     link.click();
     document.body.removeChild(link);
+    URL.revokeObjectURL(url);
   };
 
   const handleLogout = async () => {
@@ -243,6 +354,15 @@ const Dashboard = () => {
                 className="bg-white/80 backdrop-blur-md border border-white/40 rounded-xl pl-10 pr-4 py-3 text-sm w-full md:w-80 focus:outline-none focus:border-secondary focus:ring-[6px] focus:ring-secondary/5 transition-all placeholder:text-muted-foreground shadow-sm"
               />
             </div>
+            <Button
+              variant="outline"
+              className="border-white/40 bg-white/80 backdrop-blur-md hover:bg-slate-50 shadow-sm h-12 w-12 p-0 rounded-xl group"
+              onClick={() => setCallOpen(true)}
+              title="Log a phone call"
+              aria-label="Log a phone call"
+            >
+              <PhoneCall className="h-5 w-5 text-primary group-hover:text-secondary transition-colors" />
+            </Button>
             <Button 
               variant="outline" 
               className="border-white/40 bg-white/80 backdrop-blur-md hover:bg-slate-50 shadow-sm h-12 w-12 p-0 rounded-xl group" 
@@ -367,6 +487,10 @@ const Dashboard = () => {
                               <div className="h-2 w-2 rounded-full bg-ice shadow-[0_0_8px_rgba(165,243,252,0.8)]" />
                               <p className="text-xs font-bold text-primary/80 uppercase tracking-tight">{lead.service_required}</p>
                             </div>
+                            <p className="mt-1.5 text-[10px] text-muted-foreground/80 font-medium">
+                              {lead.lead_source || "Source unknown"}
+                              {lead.outcome ? ` · ${outcomeLabels[lead.outcome]}` : ""}
+                            </p>
                           </TableCell>
                           <TableCell className="py-6">
                             {lead.urgency === "Emergency" ? (
@@ -487,6 +611,48 @@ const Dashboard = () => {
                   </div>
                 </div>
 
+                {/* Source and outcome */}
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-10">
+                  <div className="space-y-3">
+                    <p className="text-[10px] uppercase font-800 text-secondary tracking-[0.2em] font-display">Lead Source</p>
+                    <p className="font-800 text-lg text-primary font-display uppercase leading-tight">{selectedLead.lead_source || "Source unknown"}</p>
+                    <dl className="text-xs text-primary/70 space-y-1">
+                      {selectedLead.suburb && <div><dt className="inline font-bold">Suburb: </dt><dd className="inline">{selectedLead.suburb}</dd></div>}
+                      {selectedLead.landing_page && <div><dt className="inline font-bold">Landing page: </dt><dd className="inline">{selectedLead.landing_page}</dd></div>}
+                      {selectedLead.utm_campaign && <div><dt className="inline font-bold">Campaign: </dt><dd className="inline">{selectedLead.utm_campaign}</dd></div>}
+                      {selectedLead.utm_term && <div><dt className="inline font-bold">Keyword: </dt><dd className="inline">{selectedLead.utm_term}</dd></div>}
+                      {selectedLead.gclid && <div><dt className="inline font-bold">Google click ID: </dt><dd className="inline">recorded</dd></div>}
+                      {selectedLead.referrer && <div><dt className="inline font-bold">Referrer: </dt><dd className="inline break-all">{selectedLead.referrer}</dd></div>}
+                      <div><dt className="inline font-bold">Contact method: </dt><dd className="inline">{selectedLead.contact_method || "form"}</dd></div>
+                    </dl>
+                  </div>
+                  <div className="space-y-3">
+                    <p className="text-[10px] uppercase font-800 text-secondary tracking-[0.2em] font-display">Job Outcome</p>
+                    <Select value={outcomeDraft} onValueChange={setOutcomeDraft}>
+                      <SelectTrigger aria-label="Job outcome"><SelectValue placeholder="Not recorded" /></SelectTrigger>
+                      <SelectContent>
+                        <SelectItem value="won">Job won</SelectItem>
+                        <SelectItem value="lost">Lost</SelectItem>
+                        <SelectItem value="no_answer">No answer</SelectItem>
+                      </SelectContent>
+                    </Select>
+                    <input
+                      type="number"
+                      min="0"
+                      step="0.01"
+                      inputMode="decimal"
+                      aria-label="Revenue in rand"
+                      placeholder="Revenue (R)"
+                      value={revenueDraft}
+                      onChange={(e) => setRevenueDraft(e.target.value)}
+                      className="w-full rounded-md border border-border px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-secondary/30"
+                    />
+                    <Button onClick={handleOutcomeSave} disabled={isSavingOutcome} className="w-full">
+                      {isSavingOutcome ? <Loader2 className="h-4 w-4 animate-spin" /> : "Save Outcome"}
+                    </Button>
+                  </div>
+                </div>
+
                 {/* Narrative / Message */}
                 <div className="bg-frost/40 border border-frost rounded-xl p-8 relative overflow-hidden">
                   <div className="absolute top-0 right-0 p-4 opacity-5">
@@ -517,6 +683,27 @@ const Dashboard = () => {
             </DialogContent>
           )}
         </AnimatePresence>
+      </Dialog>
+
+      <Dialog open={callOpen} onOpenChange={setCallOpen}>
+        <DialogContent className="max-w-md bg-white text-primary">
+          <DialogHeader>
+            <DialogTitle className="font-display uppercase">Log a Phone Call</DialogTitle>
+            <DialogDescription>Calls do not reach the CRM on their own. Add them here so cost per lead is accurate.</DialogDescription>
+          </DialogHeader>
+          <form onSubmit={handleLogCall} className="space-y-3">
+            <input aria-label="Caller name" placeholder="Caller name *" value={callForm.name} onChange={(e) => setCallForm({ ...callForm, name: e.target.value })} className="w-full rounded-md border border-border px-3 py-2 text-sm" />
+            <input aria-label="Caller phone" type="tel" placeholder="Phone number *" value={callForm.phone} onChange={(e) => setCallForm({ ...callForm, phone: e.target.value })} className="w-full rounded-md border border-border px-3 py-2 text-sm" />
+            <select aria-label="Service" value={callForm.service} onChange={(e) => setCallForm({ ...callForm, service: e.target.value })} className="w-full rounded-md border border-border px-3 py-2 text-sm">
+              {callServices.map((svc) => <option key={svc} value={svc}>{svc}</option>)}
+            </select>
+            <input aria-label="Lead source" placeholder="Lead source" value={callForm.source} onChange={(e) => setCallForm({ ...callForm, source: e.target.value })} className="w-full rounded-md border border-border px-3 py-2 text-sm" />
+            <textarea aria-label="Notes" rows={3} placeholder="Notes (suburb, fault, timing)" value={callForm.notes} onChange={(e) => setCallForm({ ...callForm, notes: e.target.value })} className="w-full rounded-md border border-border px-3 py-2 text-sm" />
+            <Button type="submit" disabled={isLoggingCall} className="w-full">
+              {isLoggingCall ? <Loader2 className="h-4 w-4 animate-spin" /> : "Log Call"}
+            </Button>
+          </form>
+        </DialogContent>
       </Dialog>
 
       <style dangerouslySetInnerHTML={{ __html: `

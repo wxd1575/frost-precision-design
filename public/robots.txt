@@ -1,6 +1,8 @@
 # Allow search crawlers and legitimate browsers
 User-agent: *
 Allow: /
+Disallow: /admin
+Disallow: /login
 
 # Specifically ALLOW AI Search/Browsing bots
 User-agent: ChatGPT-User

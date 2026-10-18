@@ -139,9 +139,10 @@ const LandingPage = ({ content }: { content: LandingContent }) => {
       {/* Areas */}
       <section className="py-10 bg-card border-y border-border">
         <div className="container mx-auto px-4">
-          <h2 className="font-display text-2xl font-800 uppercase text-secondary mb-2">Areas We Serve in Ekurhuleni</h2>
+          <h2 className="font-display text-2xl font-800 uppercase text-secondary mb-2">Areas We Serve Across Gauteng</h2>
           <p className="text-muted-foreground font-body mb-4">
-            Homes and businesses across Ekurhuleni, Gauteng. Not on the list? Ask us.
+            Homes and businesses in Sandton, Midrand, Centurion and across the East Rand.
+            Not on the list? Ask us.
           </p>
           <div className="space-y-2">
             {SERVICE_REGIONS.map(({ region, suburbs }) => (

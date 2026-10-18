@@ -3,13 +3,13 @@ import type { LandingContent } from "@/components/landing/LandingPage";
 import whyChooseUs from "@/assets/why-choose-us.webp";
 
 const content: LandingContent = {
-  seoTitle: "Aircon Installation in Ekurhuleni",
+  seoTitle: "Aircon Installation in Gauteng",
   seoDescription:
-    "Need a new aircon installed? Frosty Ice supplies and installs air conditioners, or installs your own unit, for homes and businesses in Ekurhuleni. Request a quote.",
-  eyebrow: "Aircon installation · Ekurhuleni",
+    "Need a new aircon installed? Frosty Ice supplies and installs air conditioners, or installs your own unit, in Sandton, Midrand, Centurion and the East Rand.",
+  eyebrow: "Aircon installation · Gauteng",
   heading: "Need a New Aircon Installed?",
   subheading:
-    "Supply-and-install or installation-only for homes and businesses across Ekurhuleni. Tell us your location and get a quote.",
+    "Supply-and-install or installation-only for homes and businesses in Sandton, Midrand, Centurion and across the East Rand. Tell us your location and get a quote.",
   highlights: [
     "Supply and installation, or install your own unit",
     "Split units for homes, offices and shops",

@@ -8,8 +8,24 @@ describe("service areas", () => {
     expect(SERVICE_SUBURBS.filter((s) => s === "Thokoza")).toHaveLength(1);
   });
 
-  it("keeps the main service areas and drops the non-suburb notes", () => {
-    for (const name of ["Boksburg", "Benoni", "Germiston", "Kempton Park", "Edenvale", "Alberton", "Springs"]) {
+  it("leads with the corridors the ads target", () => {
+    // The campaign targets Sandton, Midrand and Centurion first, then the
+    // Kempton Park–Edenvale–Boksburg route, so those regions must come first.
+    expect(SERVICE_REGIONS.slice(0, 5).map((r) => r.region)).toEqual([
+      "Sandton & Bryanston",
+      "Midrand & Kyalami",
+      "Centurion & Irene",
+      "Kempton Park & Edenvale",
+      "Boksburg & Germiston",
+    ]);
+  });
+
+  it("covers every area the ads target, plus the Germiston base", () => {
+    for (const name of [
+      "Sandton", "Midrand", "Centurion",
+      "Kempton Park", "Edenvale", "Boksburg",
+      "Germiston", "Benoni", "Alberton", "Springs",
+    ]) {
       expect(SERVICE_SUBURBS).toContain(name);
     }
     expect(SERVICE_SUBURBS.some((s) => /fringe|Ekurhuleni NU/i.test(s))).toBe(false);

@@ -3,13 +3,13 @@ import type { LandingContent } from "@/components/landing/LandingPage";
 import serviceAc from "@/assets/service-ac.webp";
 
 const content: LandingContent = {
-  seoTitle: "Aircon Repairs in Ekurhuleni",
+  seoTitle: "Aircon Repairs in Gauteng",
   seoDescription:
-    "Aircon not cooling, leaking or noisy? Frosty Ice repairs, regas and services air conditioners for homes and businesses in Ekurhuleni. Call or WhatsApp us.",
-  eyebrow: "Aircon repairs · Ekurhuleni",
+    "Aircon not cooling, leaking or noisy? Frosty Ice repairs, regas and services air conditioners in Sandton, Midrand, Centurion and the East Rand. Call or WhatsApp.",
+  eyebrow: "Aircon repairs · Gauteng",
   heading: "Aircon Not Cooling? Get It Fixed.",
   subheading:
-    "Qualified technicians for aircon repairs, regas and servicing for homes and businesses across Ekurhuleni.",
+    "Qualified technicians for aircon repairs, regas and servicing for homes and businesses in Sandton, Midrand, Centurion and across the East Rand.",
   highlights: [
     "Repairs, regas and gas refills",
     "Homes, offices and shops",

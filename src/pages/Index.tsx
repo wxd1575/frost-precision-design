@@ -8,6 +8,8 @@ import Testimonials from "@/components/Testimonials";
 import ClientLogos from "@/components/ClientLogos";
 import { Thermometer, Snowflake, Truck, Zap, Clock, Shield, Leaf, Building, ArrowRight, Phone } from "lucide-react";
 import heroBg from "@/assets/hero-bg.webp";
+import TrackedLink from "@/components/TrackedLink";
+import { PHONE_DISPLAY, PHONE_HREF } from "@/lib/tracking/config";
 import serviceAc from "@/assets/service-ac.webp";
 import serviceRefrig from "@/assets/service-refrig.webp";
 import serviceTransport from "@/assets/service-transport.webp";
@@ -249,9 +251,9 @@ const Index = () => {
               <Link to="/contact">
                 <Button variant="secondary" size="xl" className="uppercase tracking-widest font-bold px-12">Contact Us</Button>
               </Link>
-              <a href="tel:+27845893702" className="flex items-center gap-3 px-8 text-frost hover:text-secondary transition-colors font-display font-bold uppercase tracking-widest">
-                <Phone size={20} /> +27 84 589 3702
-              </a>
+              <TrackedLink kind="call" placement="home_cta" href={PHONE_HREF} className="flex items-center gap-3 px-8 text-frost hover:text-secondary transition-colors font-display font-bold uppercase tracking-widest">
+                <Phone size={20} /> {PHONE_DISPLAY}
+              </TrackedLink>
             </div>
           </motion.div>
         </div>

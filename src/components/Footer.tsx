@@ -1,5 +1,7 @@
 import { Link } from "react-router-dom";
 import { Phone, Mail, Globe, Facebook } from "lucide-react";
+import TrackedLink from "@/components/TrackedLink";
+import { EMAIL, EMAIL_HREF, PHONE_DISPLAY, PHONE_HREF } from "@/lib/tracking/config";
 
 const Footer = () => {
   return (
@@ -59,11 +61,11 @@ const Footer = () => {
             <ul className="space-y-3">
               <li className="flex items-center gap-3 text-frost/60 text-sm">
                 <Phone className="h-4 w-4 text-ice" />
-                <a href="tel:+27845893702" className="hover:text-ice transition-colors">+27 84 589 3702</a>
+                <TrackedLink kind="call" placement="footer" href={PHONE_HREF} className="hover:text-ice transition-colors">{PHONE_DISPLAY}</TrackedLink>
               </li>
               <li className="flex items-center gap-3 text-frost/60 text-sm">
                 <Mail className="h-4 w-4 text-ice" />
-                <a href="mailto:info@frosticeaircon.co.za" className="hover:text-ice transition-colors">info@frosticeaircon.co.za</a>
+                <TrackedLink kind="email" placement="footer" href={EMAIL_HREF} className="hover:text-ice transition-colors">{EMAIL}</TrackedLink>
               </li>
               <li className="flex items-center gap-3 text-frost/60 text-sm">
                 <Globe className="h-4 w-4 text-ice" />

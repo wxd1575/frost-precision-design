@@ -1,6 +1,8 @@
 import { motion } from "framer-motion";
 import { Button } from "@/components/ui/button";
 import Layout from "@/components/Layout";
+import TrackedLink from "@/components/TrackedLink";
+import { PHONE_DISPLAY, PHONE_HREF } from "@/lib/tracking/config";
 import SEO from "@/components/SEO";
 import SectionHeading from "@/components/SectionHeading";
 import Testimonials from "@/components/Testimonials";
@@ -161,9 +163,9 @@ const AboutPage = () => {
             <Link to="/contact">
               <Button variant="secondary" size="xl" className="uppercase tracking-widest font-bold px-12">Get a Free Quote</Button>
             </Link>
-            <a href="tel:+27845893702" className="flex items-center gap-3 px-8 text-frost hover:text-secondary transition-colors font-display font-bold uppercase tracking-widest leading-none">
-              <Phone size={20} /> +27 84 589 3702
-            </a>
+            <TrackedLink kind="call" placement="about_cta" href={PHONE_HREF} className="flex items-center gap-3 px-8 text-frost hover:text-secondary transition-colors font-display font-bold uppercase tracking-widest leading-none">
+              <Phone size={20} /> {PHONE_DISPLAY}
+            </TrackedLink>
           </div>
         </div>
       </section>

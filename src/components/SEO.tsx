@@ -52,11 +52,11 @@ const SEO = ({
       <meta property="og:title" content={fullTitle} />
       <meta property="og:description" content={description} />
       <meta property="og:type" content={type} />
-      <meta property="og:image" content="/favicon.png" />
+      <meta property="og:image" content="https://frosticeaircon.co.za/favicon.png" />
       <meta name="twitter:card" content="summary_large_image" />
       <meta name="twitter:title" content={fullTitle} />
       <meta name="twitter:description" content={description} />
-      <meta name="twitter:image" content="/favicon.png" />
+      <meta name="twitter:image" content="https://frosticeaircon.co.za/favicon.png" />
       <link rel="canonical" href={canonicalUrl} />
       <script type="application/ld+json">
         {JSON.stringify(localBusinessSchema)}

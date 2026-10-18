@@ -2,6 +2,8 @@ import { useState } from "react";
 import { motion } from "framer-motion";
 import { Button } from "@/components/ui/button";
 import Layout from "@/components/Layout";
+import TrackedLink from "@/components/TrackedLink";
+import { PHONE_DISPLAY, PHONE_HREF, EMAIL, EMAIL_HREF } from "@/lib/tracking/config";
 import SEO from "@/components/SEO";
 import SectionHeading from "@/components/SectionHeading";
 import Testimonials from "@/components/Testimonials";
@@ -186,12 +188,12 @@ const ServicesPage = () => {
                       <ArrowRight className="h-4 w-4 mr-2" /> Request Service
                     </Button>
                   </Link>
-                  <a href="tel:+27845893702" className="flex items-center gap-2 text-frost/60 text-sm justify-center hover:text-ice transition-colors">
-                    <Phone className="h-4 w-4" /> +27 84 589 3702
-                  </a>
-                  <a href="mailto:info@frosticeaircon.co.za" className="flex items-center gap-2 text-frost/60 text-sm justify-center hover:text-ice transition-colors">
-                    <Mail className="h-4 w-4" /> info@frosticeaircon.co.za
-                  </a>
+                  <TrackedLink kind="call" placement="services_cta" href={PHONE_HREF} className="flex items-center gap-2 text-frost/60 text-sm justify-center hover:text-ice transition-colors">
+                    <Phone className="h-4 w-4" /> {PHONE_DISPLAY}
+                  </TrackedLink>
+                  <TrackedLink kind="email" placement="services_cta" href={EMAIL_HREF} className="flex items-center gap-2 text-frost/60 text-sm justify-center hover:text-ice transition-colors">
+                    <Mail className="h-4 w-4" /> {EMAIL}
+                  </TrackedLink>
                 </div>
 
                 {/* Trust mini-stats */}

@@ -3,6 +3,8 @@ import { Link, useLocation } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Menu, X, Phone } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
+import TrackedLink from "@/components/TrackedLink";
+import { PHONE_DISPLAY, PHONE_HREF } from "@/lib/tracking/config";
 
 const navLinks = [
   { label: "Home", to: "/" },
@@ -57,10 +59,10 @@ const Navbar = () => {
               {link.label}
             </Link>
           ))}
-          <a href="tel:+27845893702" className="flex items-center gap-2 text-frost group hover:text-secondary transition-colors font-display text-base tracking-widest">
+          <TrackedLink kind="call" placement="navbar_desktop" href={PHONE_HREF} className="flex items-center gap-2 text-frost group hover:text-secondary transition-colors font-display text-base tracking-widest">
             <Phone size={14} className="group-hover:scale-110 transition-transform" />
-            <span>+27 84 589 3702</span>
-          </a>
+            <span>{PHONE_DISPLAY}</span>
+          </TrackedLink>
           <Link to="/contact">
             <Button variant="secondary" size="sm" className="font-bold uppercase tracking-widest px-6">
               Quote
@@ -99,10 +101,10 @@ const Navbar = () => {
                   {link.label}
                 </Link>
               ))}
-              <a href="tel:+27845893702" className="flex items-center gap-2 text-frost/80 text-lg font-display tracking-widest">
+              <TrackedLink kind="call" placement="navbar_mobile" href={PHONE_HREF} className="flex items-center gap-2 text-frost/80 text-lg font-display tracking-widest">
                 <Phone size={18} />
-                <span>+27 84 589 3702</span>
-              </a>
+                <span>{PHONE_DISPLAY}</span>
+              </TrackedLink>
               <Link to="/contact">
                 <Button variant="secondary" size="lg" className="w-full font-bold uppercase tracking-widest">
                   Get a Quote

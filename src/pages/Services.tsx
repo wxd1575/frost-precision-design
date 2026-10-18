@@ -14,7 +14,8 @@ import serviceAc from "@/assets/service-ac.webp";
 import serviceRefrig from "@/assets/service-refrig.webp";
 import serviceTransport from "@/assets/service-transport.webp";
 import serviceElectrical from "@/assets/service-electrical.webp";
-
+import { GOOGLE_REVIEWS } from "@/data/reviews";
+import type { Review } from "@/data/reviews";
 const tabs = [
   { id: "ac", label: "Air Conditioning", icon: Thermometer },
   { id: "refrig", label: "Refrigeration", icon: Snowflake },
@@ -22,7 +23,7 @@ const tabs = [
   { id: "electrical", label: "Electrical", icon: Zap },
 ];
 
-const serviceData: Record<string, { badge: string; title: string; desc: string; services: string[]; benefits?: string[]; cardLabel: string; cardSub: string; image?: string; testimonial?: { text: string; name: string; role: string } }> = {
+const serviceData: Record<string, { badge: string; title: string; desc: string; services: string[]; benefits?: string[]; cardLabel: string; cardSub: string; image?: string; testimonial?: Review }> = {
   ac: {
     badge: "Service 01",
     title: "Air Conditioning",
@@ -32,7 +33,7 @@ const serviceData: Record<string, { badge: string; title: string; desc: string; 
     cardLabel: "Air Conditioning",
     cardSub: "Residential & Commercial",
     image: serviceAc,
-    testimonial: { text: "Frost Ice installed a new split unit in our home within 24 hours. Professional and the price was exactly as quoted.", name: "Sarah van der Merwe", role: "Homeowner, Pretoria" },
+    testimonial: GOOGLE_REVIEWS[2],
   },
   refrig: {
     badge: "Service 02",
@@ -42,7 +43,7 @@ const serviceData: Record<string, { badge: string; title: string; desc: string; 
     cardLabel: "Refrigeration",
     cardSub: "Industrial & Domestic",
     image: serviceRefrig,
-    testimonial: { text: "When our cold room went down on a Friday night, Frost Ice had a technician on-site within 2 hours.", name: "Linda Botha", role: "Restaurant Owner, Sandton" },
+    testimonial: GOOGLE_REVIEWS[0],
   },
   transport: {
     badge: "Service 03",
@@ -52,7 +53,6 @@ const serviceData: Record<string, { badge: string; title: string; desc: string; 
     cardLabel: "Transport Refrig.",
     cardSub: "Fleet & Logistics",
     image: serviceTransport,
-    testimonial: { text: "We rely on Frost Ice for our entire fleet of 12 refrigerated trucks. Their 24/7 response has saved us from losing stock multiple times.", name: "James Mkhize", role: "Operations Manager, FreshCo" },
   },
   electrical: {
     badge: "Service 04",
@@ -62,7 +62,6 @@ const serviceData: Record<string, { badge: string; title: string; desc: string; 
     cardLabel: "Electrical Services",
     cardSub: "Residential & Commercial",
     image: serviceElectrical,
-    testimonial: { text: "Outstanding solar installation and DB board upgrade. The team was efficient, clean, and explained everything clearly.", name: "David Ndlovu", role: "Business Owner, Centurion" },
   },
 };
 
@@ -172,7 +171,7 @@ const ServicesPage = () => {
                     ))}
                   </div>
                   <p className="text-muted-foreground text-sm italic leading-relaxed">"{data.testimonial.text}"</p>
-                  <p className="font-display text-xs font-700 uppercase text-secondary mt-3">{data.testimonial.name} — <span className="text-muted-foreground font-normal normal-case">{data.testimonial.role}</span></p>
+                  <p className="font-display text-xs font-700 uppercase text-secondary mt-3">{data.testimonial.name} — <span className="text-muted-foreground font-normal normal-case">Google review · {data.testimonial.when}</span></p>
                 </div>
               )}
             </div>
@@ -220,7 +219,7 @@ const ServicesPage = () => {
       {/* Testimonials */}
       <section className="py-24 bg-background">
         <div className="container mx-auto px-4">
-          <SectionHeading label="Client Reviews" heading="Trusted by Businesses & Homeowners" />
+          <SectionHeading label="Client Reviews" heading="Rated 5.0 on Google" />
           <Testimonials />
         </div>
       </section>

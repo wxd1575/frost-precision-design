@@ -1,5 +1,6 @@
 import { Helmet } from 'react-helmet-async';
 import { useLocation } from 'react-router-dom';
+import { GOOGLE_RATING, GOOGLE_REVIEW_COUNT } from '@/data/reviews';
 
 interface SEOProps {
   title?: string;
@@ -42,6 +43,12 @@ const SEO = ({
         "closes": "14:00"
       }
     ],
+    "aggregateRating": {
+      "@type": "AggregateRating",
+      "ratingValue": GOOGLE_RATING,
+      "reviewCount": GOOGLE_REVIEW_COUNT,
+      "bestRating": 5
+    },
     "description": description
   };
 

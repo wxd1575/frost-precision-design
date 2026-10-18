@@ -1,26 +1,7 @@
 import { motion } from "framer-motion";
 import { Star, Quote } from "lucide-react";
+import { GOOGLE_REVIEWS, GOOGLE_RATING, GOOGLE_REVIEW_COUNT, GOOGLE_MAPS_URL } from "@/data/reviews";
 
-const testimonials = [
-  {
-    name: "Sarah van der Merwe",
-    role: "Homeowner, Pretoria",
-    text: "Frost Ice installed a new split unit in our home within 24 hours of calling. Professional, clean, and the price was exactly as quoted. Haven't had a single issue since.",
-    rating: 5,
-  },
-  {
-    name: "James Mkhize",
-    role: "Operations Manager, FreshCo Logistics",
-    text: "We rely on Frost Ice for our entire fleet of 12 refrigerated trucks. Their 24/7 response has saved us from losing stock multiple times. Absolutely essential partner.",
-    rating: 5,
-  },
-  {
-    name: "Linda Botha",
-    role: "Restaurant Owner, Sandton",
-    text: "When our cold room went down on a Friday night, Frost Ice had a technician on-site within 2 hours. They saved thousands of rands in stock. Can't recommend them enough.",
-    rating: 5,
-  },
-];
 
 const fadeUp = {
   initial: { opacity: 0, y: 40 },
@@ -31,8 +12,9 @@ const fadeUp = {
 
 const Testimonials = () => {
   return (
+    <div>
     <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-      {testimonials.map((t, i) => (
+      {GOOGLE_REVIEWS.map((t, i) => (
         <motion.div
           key={t.name}
           {...fadeUp}
@@ -50,10 +32,16 @@ const Testimonials = () => {
           </p>
           <div className="border-t border-border pt-4">
             <p className="font-display text-sm font-700 uppercase text-secondary">{t.name}</p>
-            <p className="text-xs text-muted-foreground mt-0.5">{t.role}</p>
+            <p className="text-xs text-muted-foreground mt-0.5">Google review · {t.when}</p>
           </div>
         </motion.div>
       ))}
+    </div>
+    <p className="text-center text-sm text-muted-foreground mt-8">
+      <a href={GOOGLE_MAPS_URL} target="_blank" rel="noopener noreferrer" className="underline underline-offset-4 hover:text-primary">
+        {GOOGLE_RATING.toFixed(1)} · {GOOGLE_REVIEW_COUNT} Google reviews
+      </a>
+    </p>
     </div>
   );
 };

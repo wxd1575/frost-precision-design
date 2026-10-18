@@ -9,12 +9,14 @@ describe("service areas", () => {
   });
 
   it("leads with the corridors the ads target", () => {
-    // The campaign targets Sandton, Midrand and Centurion first, then the
-    // Kempton Park–Edenvale–Boksburg route, so those regions must come first.
-    expect(SERVICE_REGIONS.slice(0, 5).map((r) => r.region)).toEqual([
+    // The campaign targets Sandton, Midrand and Centurion first, then Pretoria
+    // East and Joburg North, then the Kempton Park–Edenvale–Boksburg route.
+    expect(SERVICE_REGIONS.slice(0, 7).map((r) => r.region)).toEqual([
       "Sandton & Bryanston",
       "Midrand & Kyalami",
       "Centurion & Irene",
+      "Pretoria East",
+      "Johannesburg North",
       "Kempton Park & Edenvale",
       "Boksburg & Germiston",
     ]);
@@ -23,6 +25,7 @@ describe("service areas", () => {
   it("covers every area the ads target, plus the Germiston base", () => {
     for (const name of [
       "Sandton", "Midrand", "Centurion",
+      "Menlyn", "Faerie Glen", "Randburg", "Fourways",
       "Kempton Park", "Edenvale", "Boksburg",
       "Germiston", "Benoni", "Alberton", "Springs",
     ]) {

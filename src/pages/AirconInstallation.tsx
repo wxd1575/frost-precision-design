@@ -5,11 +5,11 @@ import whyChooseUs from "@/assets/why-choose-us.webp";
 const content: LandingContent = {
   seoTitle: "Aircon Installation in Gauteng",
   seoDescription:
-    "Need a new aircon installed? Frosty Ice supplies and installs air conditioners, or installs your own unit, in Sandton, Midrand, Centurion and the East Rand.",
+    "Frosty Ice supplies and installs air conditioners, or installs the unit you bought, in Sandton, Midrand, Centurion, Pretoria East and the East Rand.",
   eyebrow: "Aircon installation · Gauteng",
   heading: "Need a New Aircon Installed?",
   subheading:
-    "Supply-and-install or installation-only for homes and businesses in Sandton, Midrand, Centurion and across the East Rand. Tell us your location and get a quote.",
+    "Supply-and-install or installation-only for homes and businesses in Sandton, Midrand, Centurion, Pretoria East, the East Rand and Johannesburg North. Tell us your location and get a quote.",
   highlights: [
     "Supply and installation, or install your own unit",
     "Split units for homes, offices and shops",

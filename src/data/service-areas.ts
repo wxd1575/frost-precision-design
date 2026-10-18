@@ -5,8 +5,9 @@ export interface ServiceRegion {
 
 /**
  * Ordered by the corridors the Google Ads campaign targets: the
- * Sandton–Midrand–Centurion triangle first, then the Kempton Park–Edenvale–Boksburg
- * route, then the rest of the East Rand around the Germiston base.
+ * Sandton–Midrand–Centurion triangle first, then Pretoria East and Johannesburg
+ * North, then the Kempton Park–Edenvale–Boksburg route and the rest of the East
+ * Rand around the Germiston base.
  */
 const REGIONS: ServiceRegion[] = [
   {
@@ -33,6 +34,24 @@ const REGIONS: ServiceRegion[] = [
       "Wierdapark", "Lyttelton", "Lyttelton Manor", "Clubview", "Doringkloof", "Rooihuiskraal",
       "Thatchfield", "Celtisdal", "Amberfield", "Mnandi", "Olievenhoutbosch", "Zwartkop",
       "Valhalla", "Pierre van Ryneveld", "Kosmosdal", "Raslouw", "The Reeds", "Sunderland Ridge",
+    ],
+  },
+  {
+    region: "Pretoria East",
+    suburbs: [
+      "Menlyn", "Menlo Park", "Faerie Glen", "Garsfontein", "Lynnwood", "Lynnwood Ridge",
+      "Moreleta Park", "Brooklyn", "Waterkloof", "Waterkloof Ridge", "Silver Lakes", "Equestria",
+      "Die Wilgers", "Murrayfield", "Meyerspark", "Constantia Park", "Erasmuskloof", "Hazelwood",
+      "Elardus Park", "Wapadrand", "Willow Acres", "Rietvalleirand", "Montana",
+    ],
+  },
+  {
+    region: "Johannesburg North",
+    suburbs: [
+      "Randburg", "Fourways", "Northcliff", "Olivedale", "Ferndale", "Blairgowrie", "Cresta",
+      "Linden", "Emmarentia", "Greenside", "Parkhurst", "Craighall Park", "Hyde Park",
+      "Douglasdale", "Lonehill", "Dainfern", "Broadacres", "Witkoppen", "Bordeaux", "Windsor",
+      "Robindale", "Jukskei Park",
     ],
   },
   {

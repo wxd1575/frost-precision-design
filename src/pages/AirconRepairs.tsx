@@ -5,11 +5,11 @@ import serviceAc from "@/assets/service-ac.webp";
 const content: LandingContent = {
   seoTitle: "Aircon Repairs in Gauteng",
   seoDescription:
-    "Aircon not cooling, leaking or noisy? Frosty Ice repairs, regas and services air conditioners in Sandton, Midrand, Centurion and the East Rand. Call or WhatsApp.",
+    "Aircon not cooling, leaking or noisy? Frosty Ice repairs, regas and services aircons in Sandton, Midrand, Centurion, Pretoria East and the East Rand.",
   eyebrow: "Aircon repairs · Gauteng",
   heading: "Aircon Not Cooling? Get It Fixed.",
   subheading:
-    "Qualified technicians for aircon repairs, regas and servicing for homes and businesses in Sandton, Midrand, Centurion and across the East Rand.",
+    "Qualified technicians for aircon repairs, regas and servicing for homes and businesses in Sandton, Midrand, Centurion, Pretoria East, the East Rand and Johannesburg North.",
   highlights: [
     "Repairs, regas and gas refills",
     "Homes, offices and shops",

@@ -7,6 +7,7 @@ import { supabase } from "@/lib/supabase";
 import { getAttribution, deriveLeadSource } from "@/lib/tracking/attribution";
 import { track } from "@/lib/tracking/events";
 import { leadValueZar } from "@/lib/tracking/config";
+import { SERVICE_SUBURBS } from "@/data/service-areas";
 import type { ServiceKind } from "@/lib/tracking/config";
 
 const baseFields = {
@@ -259,7 +260,10 @@ const QuoteForm = ({
             </div>
           )}
           <div>
-            <input name="suburb" value={form.suburb} onChange={handleChange} placeholder={compact ? "Your Suburb *" : "Suburb"} aria-label="Suburb" autoComplete="address-level3" disabled={isSubmitting} className={inputClass("suburb")} />
+            <input name="suburb" list="service-suburbs" value={form.suburb} onChange={handleChange} placeholder={compact ? "Your Suburb *" : "Suburb"} aria-label="Suburb" autoComplete="off" disabled={isSubmitting} className={inputClass("suburb")} />
+            <datalist id="service-suburbs">
+              {SERVICE_SUBURBS.map((name) => <option key={name} value={name} />)}
+            </datalist>
             {fieldError("suburb")}
           </div>
           <div>

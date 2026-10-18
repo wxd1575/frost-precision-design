@@ -6,13 +6,7 @@ import TrackedLink from "@/components/TrackedLink";
 import LandingLayout from "@/components/landing/LandingLayout";
 import { buttonVariants } from "@/components/ui/button";
 import { PHONE_DISPLAY, PHONE_HREF, whatsappUrl } from "@/lib/tracking/config";
-
-// Ekurhuleni areas shown on the landing pages. Confirm this list against the
-// suburbs Frostice actually serves profitably before the campaign launches.
-const SERVICE_AREAS = [
-  "Boksburg", "Benoni", "Germiston", "Kempton Park", "Edenvale", "Alberton",
-  "Springs", "Brakpan", "Nigel", "Bedfordview", "Isando", "Primrose",
-];
+import { SERVICE_REGIONS } from "@/data/service-areas";
 
 export interface LandingContent {
   seoTitle: string;
@@ -149,13 +143,25 @@ const LandingPage = ({ content }: { content: LandingContent }) => {
           <p className="text-muted-foreground font-body mb-4">
             Homes and businesses across Ekurhuleni, Gauteng. Not on the list? Ask us.
           </p>
-          <ul className="flex flex-wrap gap-2">
-            {SERVICE_AREAS.map((area) => (
-              <li key={area} className="rounded-full border border-border bg-background px-4 py-1.5 text-sm font-body">
-                {area}
-              </li>
+          <div className="space-y-2">
+            {SERVICE_REGIONS.map(({ region, suburbs }) => (
+              <details key={region} className="group rounded-lg border border-border bg-background">
+                <summary className="flex cursor-pointer items-center justify-between gap-2 px-4 py-3 font-display font-bold uppercase tracking-wide text-foreground min-h-[48px]">
+                  <span>{region}</span>
+                  <span className="text-xs font-body font-normal normal-case text-muted-foreground">
+                    {suburbs.length} areas
+                  </span>
+                </summary>
+                <ul className="flex flex-wrap gap-2 px-4 pb-4">
+                  {suburbs.map((area) => (
+                    <li key={area} className="rounded-full border border-border bg-card px-3 py-1 text-sm font-body">
+                      {area}
+                    </li>
+                  ))}
+                </ul>
+              </details>
             ))}
-          </ul>
+          </div>
         </div>
       </section>
 

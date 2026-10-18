@@ -26,8 +26,9 @@ const RouteTracker = () => {
         page_title: document.title,
       });
     };
-    const titleEl = document.querySelector("title");
-    if (titleEl) observer.observe(titleEl, { childList: true, characterData: true, subtree: true });
+    // Watch the whole head: react-helmet-async swaps the <title> element out
+    // rather than editing it, so an observer bound to the old element never fires.
+    observer.observe(document.head, { childList: true, characterData: true, subtree: true });
     timer = window.setTimeout(send, 1500);
     return () => {
       sent = true;

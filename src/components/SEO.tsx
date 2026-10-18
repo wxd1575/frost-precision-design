@@ -27,6 +27,10 @@ const SEO = ({
     "email": "info@frosticeaircon.co.za",
     "address": {
       "@type": "PostalAddress",
+      "streetAddress": "22 Selkirk St",
+      "addressLocality": "Germiston",
+      "addressRegion": "Gauteng",
+      "postalCode": "1401",
       "addressCountry": "ZA"
     },
     "openingHoursSpecification": [

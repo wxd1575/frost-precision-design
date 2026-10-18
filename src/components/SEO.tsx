@@ -57,7 +57,12 @@ const SEO = ({
   };
 
   return (
-    <Helmet>
+    // defer={false} writes the head during the commit instead of in a
+    // requestAnimationFrame callback. rAF never runs in a tab that is not
+    // painting (a Google Ads click opened in a background tab, a prerender),
+    // which left the head on the index.html defaults and made RouteTracker
+    // send GA4 the site-wide page_title.
+    <Helmet defer={false}>
       <title>{fullTitle}</title>
       <meta name="description" content={description} />
       <meta property="og:title" content={fullTitle} />

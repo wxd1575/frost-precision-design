@@ -39,7 +39,7 @@ const Navbar = () => {
         <Link to="/" className="flex items-center">
           <img 
             src="/frostice-logo-white.png" 
-            alt="Frost & Ice Aircon" 
+            alt="Frosty Ice Aircon and Refrigeration" 
             className="w-40 sm:w-48 lg:w-56 h-auto object-contain" 
           />
         </Link>

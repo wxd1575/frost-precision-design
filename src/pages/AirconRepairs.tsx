@@ -5,7 +5,7 @@ import serviceAc from "@/assets/service-ac.webp";
 const content: LandingContent = {
   seoTitle: "Aircon Repairs in Ekurhuleni",
   seoDescription:
-    "Aircon not cooling, leaking or noisy? Frost & Ice repairs, regas and services air conditioners for homes and businesses in Ekurhuleni. Call or WhatsApp us.",
+    "Aircon not cooling, leaking or noisy? Frosty Ice repairs, regas and services air conditioners for homes and businesses in Ekurhuleni. Call or WhatsApp us.",
   eyebrow: "Aircon repairs · Ekurhuleni",
   heading: "Aircon Not Cooling? Get It Fixed.",
   subheading:
@@ -37,9 +37,9 @@ const content: LandingContent = {
     { title: "Repair done properly", text: "We explain the repair and cost before work continues." },
   ],
   image: serviceAc,
-  imageAlt: "Frost & Ice technician working on an air conditioning unit",
+  imageAlt: "Frosty Ice technician working on an air conditioning unit",
   service: "AC Repair",
-  whatsappMessage: "Hi Frostice, my aircon needs a repair. (from /aircon-repairs)",
+  whatsappMessage: "Hi Frosty Ice, my aircon needs a repair. (from /aircon-repairs)",
   formHeading: "Request an Aircon Repair",
   formIntro: "Tell us what is wrong and where you are. We will get back to you.",
   submitLabel: "Request Repair",

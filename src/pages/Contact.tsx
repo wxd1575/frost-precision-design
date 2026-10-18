@@ -18,7 +18,7 @@ const ContactPage = () => {
       <Layout>
         <SEO 
           title="Contact Us"
-          description="Get a free quote for your air conditioning and refrigeration projects. Contact Frost & Ice Aircon today."
+          description="Get a free quote for your air conditioning and refrigeration projects. Contact Frosty Ice Aircon and Refrigeration today."
         />
         <section className="bg-hero-gradient pt-32 pb-20 min-h-screen flex items-center relative overflow-hidden">
           {/* Animated Background Elements */}
@@ -49,7 +49,7 @@ const ContactPage = () => {
                 </h2>
                 
                 <p className="text-frost/70 text-lg mb-10 leading-relaxed font-body">
-                  Thank you for choosing Frost & Ice. Your request has been prioritised. Our technical team will review your requirements and contact you within the hour.
+                  Thank you for choosing Frosty Ice. Your request has been prioritised. Our technical team will review your requirements and contact you within the hour.
                 </p>
                 
                 <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
@@ -91,7 +91,7 @@ const ContactPage = () => {
     <Layout>
       <SEO
         title="Contact Us"
-        description="Get a free quote for your air conditioning and refrigeration projects. Contact Frost & Ice Aircon today."
+        description="Get a free quote for your air conditioning and refrigeration projects. Contact Frosty Ice Aircon and Refrigeration today."
       />
       {/* Hero */}
       <section className="bg-primary pt-32 pb-20">
@@ -143,7 +143,7 @@ const ContactPage = () => {
               <TrackedLink
                 kind="whatsapp"
                 placement="contact_page"
-                href={whatsappUrl("Hi Frostice, I'd like a quote. (from /contact)")}
+                href={whatsappUrl("Hi Frosty Ice, I'd like a quote. (from /contact)")}
                 target="_blank"
                 rel="noopener noreferrer"
                 className="flex items-center justify-center gap-2 w-full py-3 rounded-lg bg-[hsl(142,70%,45%)] text-primary-foreground font-display uppercase tracking-wider text-sm hover:bg-[hsl(142,70%,40%)] transition-colors"

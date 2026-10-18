@@ -32,7 +32,7 @@ const AboutPage = () => {
     <Layout>
       <SEO 
         title="About Us"
-        description="Learn about Frost & Ice Aircon, our experienced team, our mission, and our values in providing premier HVAC and refrigeration solutions."
+        description="Learn about Frosty Ice Aircon and Refrigeration, our experienced team, our mission, and our values in providing premier HVAC and refrigeration solutions."
       />
       {/* Hero */}
       <section className="bg-primary pt-32 pb-20">

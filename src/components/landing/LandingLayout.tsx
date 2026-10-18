@@ -18,10 +18,10 @@ const LandingLayout = ({ children, whatsappMessage }: LandingLayoutProps) => (
   <div className="min-h-screen flex flex-col">
     <header className="bg-primary border-b border-white/10">
       <div className="container mx-auto flex items-center justify-between gap-4 px-4 py-3">
-        <Link to="/" aria-label="Frost & Ice Aircon home">
+        <Link to="/" aria-label="Frosty Ice Aircon and Refrigeration home">
           <img
             src="/frostice-logo-white.png"
-            alt="Frost & Ice Aircon"
+            alt="Frosty Ice Aircon and Refrigeration"
             width={192}
             height={48}
             className="w-36 sm:w-44 h-auto object-contain"
@@ -44,7 +44,7 @@ const LandingLayout = ({ children, whatsappMessage }: LandingLayoutProps) => (
 
     <footer className="bg-secondary text-frost">
       <div className="container mx-auto px-4 py-8 text-sm text-center space-y-2">
-        <p className="font-display uppercase tracking-widest">Frost &amp; Ice Aircon &amp; Refrigeration (PTY) LTD</p>
+        <p className="font-display uppercase tracking-widest">Frosty Ice Aircon and Refrigeration (PTY) LTD</p>
         <p className="text-frost/80">Mon–Fri 07:00–17:00 · Sat 08:00–14:00</p>
         <p>
           <Link to="/" className="underline underline-offset-4 hover:text-ice">

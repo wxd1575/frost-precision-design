@@ -1,6 +1,6 @@
-# Frost & Ice Aircon
+# Frosty Ice Aircon and Refrigeration
 
-Marketing site and admin dashboard for Frost & Ice Aircon, providing cooling, refrigeration and electrical services across South Africa.
+Marketing site and admin dashboard for Frosty Ice Aircon and Refrigeration, providing cooling, refrigeration and electrical services across South Africa.
 
 Live site: https://frosticeaircon.co.za
 

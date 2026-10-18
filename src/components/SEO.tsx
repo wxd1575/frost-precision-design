@@ -9,18 +9,18 @@ interface SEOProps {
 }
 
 const SEO = ({ 
-  title = "Frost & Ice Aircon", 
+  title = "Frosty Ice Aircon and Refrigeration", 
   description = "Reliable cooling, refrigeration, and electrical solutions for homes and businesses across South Africa.",
   type = "website"
 }: SEOProps) => {
   const location = useLocation();
-  const fullTitle = title === "Frost & Ice Aircon" ? title : `${title} | Frost & Ice Aircon`;
+  const fullTitle = title === "Frosty Ice Aircon and Refrigeration" ? title : `${title} | Frosty Ice Aircon and Refrigeration`;
   const canonicalUrl = `https://frosticeaircon.co.za${location.pathname === '/' ? '' : location.pathname}`;
 
   const localBusinessSchema = {
     "@context": "https://schema.org",
     "@type": "HVACBusiness",
-    "name": "Frost & Ice Aircon",
+    "name": "Frosty Ice Aircon and Refrigeration",
     "image": "https://frosticeaircon.co.za/favicon.png",
     "url": "https://frosticeaircon.co.za",
     "telephone": "+27845893702",

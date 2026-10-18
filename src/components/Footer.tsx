@@ -13,7 +13,7 @@ const Footer = () => {
             <Link to="/" className="block mb-6 transition-opacity hover:opacity-80">
               <img 
                 src="/frostice-logo-white.png" 
-                alt="Frost & Ice Aircon" 
+                alt="Frosty Ice Aircon and Refrigeration" 
                 className="w-56 md:w-64 lg:w-80 h-auto object-contain" 
               />
             </Link>

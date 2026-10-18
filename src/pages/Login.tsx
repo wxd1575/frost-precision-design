@@ -69,7 +69,7 @@ const Login = () => {
           <Link to="/" className="flex items-center group transition-all hover:opacity-90 active:scale-95">
             <img 
               src="/frostice-logo-white.png" 
-              alt="Frost & Ice" 
+              alt="Frosty Ice" 
               className="h-16 w-auto object-contain filter drop-shadow-[0_0_12px_rgba(0,67,139,0.15)]" 
             />
           </Link>
@@ -136,7 +136,7 @@ const Login = () => {
           
           <CardFooter className="bg-slate-50/50 backdrop-blur-md border-t border-white/20 flex justify-center py-6 px-10">
             <p className="text-[9px] uppercase tracking-[0.4em] text-slate-400 font-900">
-              Frost & Ice Precision Management
+              Frosty Ice Precision Management
             </p>
           </CardFooter>
         </Card>

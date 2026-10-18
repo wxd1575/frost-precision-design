@@ -10,7 +10,7 @@ const WhatsAppButton = () => {
     <TrackedLink
       kind="whatsapp"
       placement="floating_button"
-      href={whatsappUrl(`Hi Frostice, I'd like some help with aircon. (from ${pathname})`)}
+      href={whatsappUrl(`Hi Frosty Ice, I'd like some help with aircon. (from ${pathname})`)}
       target="_blank"
       rel="noopener noreferrer"
       aria-label="Chat on WhatsApp"

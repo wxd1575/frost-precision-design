@@ -310,7 +310,7 @@ const Dashboard = () => {
             <Link to="/" className="flex items-center group transition-all hover:opacity-90 active:scale-95">
               <img 
                 src="/frostice-logo-white.png" 
-                alt="Frost & Ice Aircon" 
+                alt="Frosty Ice Aircon and Refrigeration" 
                 className="h-12 w-auto object-contain filter drop-shadow-[0_0_8px_rgba(255,255,255,0.3)]" 
               />
             </Link>

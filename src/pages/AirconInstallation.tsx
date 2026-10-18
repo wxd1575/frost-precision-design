@@ -5,7 +5,7 @@ import whyChooseUs from "@/assets/why-choose-us.webp";
 const content: LandingContent = {
   seoTitle: "Aircon Installation in Ekurhuleni",
   seoDescription:
-    "Need a new aircon installed? Frost & Ice supplies and installs air conditioners, or installs your own unit, for homes and businesses in Ekurhuleni. Request a quote.",
+    "Need a new aircon installed? Frosty Ice supplies and installs air conditioners, or installs your own unit, for homes and businesses in Ekurhuleni. Request a quote.",
   eyebrow: "Aircon installation · Ekurhuleni",
   heading: "Need a New Aircon Installed?",
   subheading:
@@ -37,7 +37,7 @@ const content: LandingContent = {
   image: whyChooseUs,
   imageAlt: "Newly installed split air conditioning unit",
   service: "AC Installation",
-  whatsappMessage: "Hi Frostice, I'd like a quote to install an aircon. (from /aircon-installation)",
+  whatsappMessage: "Hi Frosty Ice, I'd like a quote to install an aircon. (from /aircon-installation)",
   formHeading: "Request an Installation Quote",
   formIntro: "Tell us your suburb and what you need. We will get back to you with a quote.",
   submitLabel: "Request Quote",

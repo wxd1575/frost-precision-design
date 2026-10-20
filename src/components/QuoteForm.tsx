@@ -58,8 +58,26 @@ const serviceKind = (service: string): ServiceKind => {
 
 // Columns added by the attribution migration. If it has not been applied yet
 // the insert is retried without them so a lead is never lost.
-const isMissingColumnError = (error: { code?: string; message?: string }) =>
-  error.code === "PGRST204" || error.code === "42703" || /column/i.test(error.message ?? "");
+const isMissingColumnError = (error: { code?: string }) =>
+  error.code === "PGRST204" || error.code === "42703";
+
+// The database guard raises 'contact_guard:<reason>'. Anything else is shown generically
+// so raw database errors never reach visitors.
+const submitErrorMessage = (error: { message?: string }) => {
+  const reason = /contact_guard:(\w+)/.exec(error.message ?? "")?.[1];
+  switch (reason) {
+    case "rate_limited":
+      return "We've received several requests from you already. Please try again later or call us.";
+    case "invalid_phone":
+      return "Please enter a valid phone number.";
+    case "invalid_email":
+      return "Please enter a valid email address.";
+    case "too_many_links":
+      return "Please remove the links from your message and try again.";
+    default:
+      return "We couldn't send your request. Please try again or call us.";
+  }
+};
 
 interface QuoteFormProps {
   variant?: "full" | "compact";
@@ -160,7 +178,7 @@ const QuoteForm = ({
     if (error) {
       toast({
         title: "Submission Failed",
-        description: error.message,
+        description: submitErrorMessage(error),
         variant: "destructive",
       });
       return;

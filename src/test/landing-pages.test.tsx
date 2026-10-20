@@ -8,6 +8,12 @@ vi.mock("@/lib/supabase", () => ({
   supabase: { from: () => ({ insert }) },
 }));
 
+const toast = vi.hoisted(() => vi.fn());
+vi.mock("@/hooks/use-toast", () => ({
+  useToast: () => ({ toast, toasts: [], dismiss: vi.fn() }),
+  toast,
+}));
+
 import AirconRepairs from "@/pages/AirconRepairs";
 import AirconInstallation from "@/pages/AirconInstallation";
 
@@ -20,6 +26,7 @@ const renderPage = (page: JSX.Element, path: string) =>
 
 beforeEach(() => {
   insert.mockReset();
+  toast.mockReset();
   window.sessionStorage.clear();
   window.dataLayer = [];
   window.history.pushState({}, "", "/aircon-repairs?utm_source=google&utm_medium=cpc&gclid=TEST123");
@@ -109,5 +116,30 @@ describe("landing page quote form", () => {
     fillAndSubmit();
     await waitFor(() => expect(screen.getByRole("status")).toBeInTheDocument());
     expect(insert).not.toHaveBeenCalled();
+  });
+
+  it("shows a friendly message when the database rate limit rejects the lead", async () => {
+    insert.mockResolvedValue({ error: { code: "P0001", message: "contact_guard:rate_limited" } });
+    renderPage(<AirconRepairs />, "/aircon-repairs");
+    fillAndSubmit();
+
+    await waitFor(() => expect(toast).toHaveBeenCalledTimes(1));
+    const shown = toast.mock.calls[0][0];
+    expect(shown.variant).toBe("destructive");
+    expect(shown.description).toMatch(/received several requests/i);
+    expect(shown.description).not.toMatch(/contact_guard/);
+    expect(insert).toHaveBeenCalledTimes(1);
+  });
+
+  it("hides raw database errors and does not retry unrelated failures", async () => {
+    insert.mockResolvedValue({ error: { code: "XX000", message: "internal column index corrupted" } });
+    renderPage(<AirconRepairs />, "/aircon-repairs");
+    fillAndSubmit();
+
+    await waitFor(() => expect(toast).toHaveBeenCalledTimes(1));
+    const shown = toast.mock.calls[0][0];
+    expect(shown.description).toMatch(/couldn't send your request/i);
+    expect(shown.description).not.toMatch(/corrupted/);
+    expect(insert).toHaveBeenCalledTimes(1);
   });
 });

@@ -7,7 +7,7 @@ import SectionHeading from "@/components/SectionHeading";
 import Testimonials from "@/components/Testimonials";
 import ClientLogos from "@/components/ClientLogos";
 import { Thermometer, Snowflake, Truck, Zap, Clock, Shield, Leaf, Building, ArrowRight, Phone } from "lucide-react";
-import heroBg from "@/assets/hero-bg.webp";
+import installationHero from "@/assets/aircon-installation-hero.webp";
 import TrackedLink from "@/components/TrackedLink";
 import { PHONE_DISPLAY, PHONE_HREF } from "@/lib/tracking/config";
 import serviceAc from "@/assets/service-ac.webp";
@@ -57,7 +57,7 @@ const Index = () => {
       {/* Hero */}
       <section className="relative min-h-[90vh] flex items-center overflow-hidden bg-primary">
         <div className="absolute inset-0">
-          <img src={heroBg} alt="HVAC systems" {...{ fetchpriority: "high" }} className="w-full h-full object-cover opacity-20" />
+          <img src={installationHero} alt="HVAC systems" {...{ fetchpriority: "high" }} className="w-full h-full object-cover opacity-20" />
           <div className="absolute inset-0 bg-primary opacity-60" />
         </div>
         
@@ -226,7 +226,7 @@ const Index = () => {
             </div>
             <div className="lg:w-1/2 w-full">
               <div className="aspect-square rounded-2xl overflow-hidden border-8 border-frost">
-                <img src={serviceAc} alt="Expert AC Service" className="w-full h-full object-cover" />
+                <img src={installationHero} alt="Expert AC Service" className="w-full h-full object-cover object-[25%_50%]" />
               </div>
             </div>
           </div>

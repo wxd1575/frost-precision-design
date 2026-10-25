@@ -1,6 +1,6 @@
 import LandingPage from "@/components/landing/LandingPage";
 import type { LandingContent } from "@/components/landing/LandingPage";
-import whyChooseUs from "@/assets/why-choose-us.webp";
+import installationHero from "@/assets/aircon-installation-hero.webp";
 
 const content: LandingContent = {
   seoTitle: "Aircon Installation in Gauteng",
@@ -34,8 +34,8 @@ const content: LandingContent = {
     { title: "We confirm the details", text: "We discuss the unit and installation options, then quote." },
     { title: "Installed and tested", text: "We install the unit and check it is working before we leave." },
   ],
-  image: whyChooseUs,
-  imageAlt: "Newly installed split air conditioning unit",
+  image: installationHero,
+  imageAlt: "Frostice technician installing an outdoor air conditioning unit",
   service: "AC Installation",
   whatsappMessage: "Hi Frosty Ice, I'd like a quote to install an aircon. (from /aircon-installation)",
   formHeading: "Request an Installation Quote",

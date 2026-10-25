@@ -1,6 +1,6 @@
 import LandingPage from "@/components/landing/LandingPage";
 import type { LandingContent } from "@/components/landing/LandingPage";
-import serviceAc from "@/assets/service-ac.webp";
+import repairsHero from "@/assets/aircon-repairs-hero.webp";
 
 const content: LandingContent = {
   seoTitle: "Aircon Repairs in Gauteng",
@@ -36,8 +36,8 @@ const content: LandingContent = {
     { title: "We book a callout", text: "A technician inspects the unit and finds the fault." },
     { title: "Repair done properly", text: "We explain the repair and cost before work continues." },
   ],
-  image: serviceAc,
-  imageAlt: "Frosty Ice technician working on an air conditioning unit",
+  image: repairsHero,
+  imageAlt: "Frostice technician repairing a wall-mounted air conditioner indoors",
   service: "AC Repair",
   whatsappMessage: "Hi Frosty Ice, my aircon needs a repair. (from /aircon-repairs)",
   formHeading: "Request an Aircon Repair",

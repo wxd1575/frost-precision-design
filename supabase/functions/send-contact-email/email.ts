@@ -6,6 +6,8 @@ export interface ContactRecord {
   phone: string | null;
   client_type: string | null;
   service_required: string | null;
+  /** Fault picked on the repairs landing page. Absent until the fault migration has run. */
+  fault?: string | null;
   address: string | null;
   suburb: string | null;
   urgency: string | null;
@@ -67,6 +69,7 @@ export function buildNotification(record: ContactRecord, notifyTo: string): Outg
       ${row("Phone", record.phone)}
       ${row("Client type", record.client_type)}
       ${row("Service required", record.service_required)}
+      ${row("Fault", record.fault)}
       ${row("Address", record.address)}
       ${row("Suburb", record.suburb)}
       ${row("Urgency", record.urgency)}

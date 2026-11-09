@@ -4,6 +4,9 @@ import SEO from "@/components/SEO";
 import QuoteForm from "@/components/QuoteForm";
 import TrackedLink from "@/components/TrackedLink";
 import LandingLayout from "@/components/landing/LandingLayout";
+import { DetailsSection, PhotoSection, TrustSection } from "@/components/landing/LandingSections";
+import type { DetailBlock, PhotoSlot, TrustSlot } from "@/components/landing/LandingSections";
+import { shouldShowPlaceholders } from "@/components/landing/placeholders";
 import { buttonVariants } from "@/components/ui/button";
 import { PHONE_DISPLAY, PHONE_HREF, whatsappUrl } from "@/lib/tracking/config";
 import { SERVICE_REGIONS } from "@/data/service-areas";
@@ -15,9 +18,19 @@ export interface LandingContent {
   heading: string;
   subheading: string;
   highlights: string[];
+  /** Price statement in the hero, above the call buttons. Two sentences, rendered as one line of copy. */
+  pricing?: { lead: string; note: string };
   priceNote: { label: string; text: string };
+  /** Real credentials and ratings. Slots still holding a {{PLACEHOLDER}} are hidden from visitors. */
+  trust?: { heading: string; slots: TrustSlot[] };
   helpHeading: string;
   helpItems: string[];
+  /** Adds a "what is the problem" dropdown to the quote form. */
+  faultOptions?: string[];
+  /** Longer explanatory copy. Paragraphs still holding a {{PLACEHOLDER}} are hidden from visitors. */
+  details?: { heading: string; blocks: DetailBlock[] };
+  /** Photos of real technicians or completed work. Slots without a `src` are hidden from visitors. */
+  photos?: { heading: string; intro: string; items: PhotoSlot[] };
   stepsHeading: string;
   steps: { title: string; text: string }[];
   image: string;
@@ -34,12 +47,57 @@ export interface LandingContent {
 
 const LandingPage = ({ content }: { content: LandingContent }) => {
   const [submitted, setSubmitted] = useState(false);
+  const showPlaceholders = shouldShowPlaceholders();
+
+  const intro = (
+    <div className={content.pricing ? "mt-6" : "mt-4"}>
+      <p className="text-frost/80 text-lg font-body">{content.subheading}</p>
+
+      <ul className="mt-6 space-y-2">
+        {content.highlights.map((item) => (
+          <li key={item} className="flex items-start gap-2 font-body">
+            <CheckCircle className="h-5 w-5 mt-0.5 shrink-0 text-secondary" aria-hidden="true" />
+            <span>{item}</span>
+          </li>
+        ))}
+      </ul>
+    </div>
+  );
+
+  const actions = (
+    <div className={content.pricing ? "mt-6" : "mt-8"}>
+      <div className="flex flex-col sm:flex-row gap-3">
+        <TrackedLink
+          kind="call"
+          placement="landing_hero"
+          href={PHONE_HREF}
+          className={buttonVariants({ variant: "secondary", size: "xl" })}
+        >
+          <Phone aria-hidden="true" /> Call {PHONE_DISPLAY}
+        </TrackedLink>
+        <TrackedLink
+          kind="whatsapp"
+          placement="landing_hero"
+          href={whatsappUrl(content.whatsappMessage)}
+          target="_blank"
+          rel="noopener noreferrer"
+          className={buttonVariants({ variant: "whatsapp", size: "xl" })}
+        >
+          <MessageCircle aria-hidden="true" /> WhatsApp Us
+        </TrackedLink>
+      </div>
+      <a href="#quote" className="mt-4 inline-flex items-center gap-2 text-ice underline underline-offset-4 min-h-[44px]">
+        <ArrowDown className="h-4 w-4" aria-hidden="true" /> Or request a quote online
+      </a>
+    </div>
+  );
 
   return (
     <LandingLayout whatsappMessage={content.whatsappMessage}>
       <SEO title={content.seoTitle} description={content.seoDescription} />
 
-      {/* Hero */}
+      {/* Hero. With a price statement, the order is headline, price, call buttons, then the supporting copy,
+          so the price and the call-to-action both sit above the fold on a phone. */}
       <section className="bg-hero-gradient text-frost">
         <div className="container mx-auto px-4 py-10 lg:py-16 grid gap-8 lg:grid-cols-2 lg:items-center">
           <div>
@@ -47,47 +105,29 @@ const LandingPage = ({ content }: { content: LandingContent }) => {
             <h1 className="font-display text-4xl sm:text-5xl lg:text-6xl font-800 uppercase leading-tight">
               {content.heading}
             </h1>
-            <p className="mt-4 text-frost/80 text-lg font-body">{content.subheading}</p>
 
-            <ul className="mt-6 space-y-2">
-              {content.highlights.map((item) => (
-                <li key={item} className="flex items-start gap-2 font-body">
-                  <CheckCircle className="h-5 w-5 mt-0.5 shrink-0 text-secondary" aria-hidden="true" />
-                  <span>{item}</span>
-                </li>
-              ))}
-            </ul>
-
-            <div className="mt-8 flex flex-col sm:flex-row gap-3">
-              <TrackedLink
-                kind="call"
-                placement="landing_hero"
-                href={PHONE_HREF}
-                className={buttonVariants({ variant: "secondary", size: "xl" })}
-              >
-                <Phone aria-hidden="true" /> Call {PHONE_DISPLAY}
-              </TrackedLink>
-              <TrackedLink
-                kind="whatsapp"
-                placement="landing_hero"
-                href={whatsappUrl(content.whatsappMessage)}
-                target="_blank"
-                rel="noopener noreferrer"
-                className={buttonVariants({ variant: "whatsapp", size: "xl" })}
-              >
-                <MessageCircle aria-hidden="true" /> WhatsApp Us
-              </TrackedLink>
-            </div>
-            <a href="#quote" className="mt-4 inline-flex items-center gap-2 text-ice underline underline-offset-4 min-h-[44px]">
-              <ArrowDown className="h-4 w-4" aria-hidden="true" /> Or request a quote online
-            </a>
+            {content.pricing ? (
+              <>
+                <p className="mt-5 rounded-lg border border-ice/40 bg-white/10 px-4 py-3 text-lg font-body leading-snug">
+                  <span className="font-bold text-ice">{content.pricing.lead}</span>{" "}
+                  <span>{content.pricing.note}</span>
+                </p>
+                {actions}
+                {intro}
+              </>
+            ) : (
+              <>
+                {intro}
+                {actions}
+              </>
+            )}
           </div>
 
           <img
             src={content.image}
             alt={content.imageAlt}
-            width={1024}
-            height={576}
+            width={1200}
+            height={800}
             {...{ fetchpriority: "high" }}
             decoding="async"
             className="w-full h-auto rounded-lg border border-white/10 shadow-xl"
@@ -102,6 +142,10 @@ const LandingPage = ({ content }: { content: LandingContent }) => {
           <p className="mt-1 text-lg text-foreground font-body">{content.priceNote.text}</p>
         </div>
       </section>
+
+      {content.trust && (
+        <TrustSection heading={content.trust.heading} slots={content.trust.slots} showPlaceholders={showPlaceholders} />
+      )}
 
       {/* What we help with + how it works */}
       <section className="py-12">
@@ -135,6 +179,23 @@ const LandingPage = ({ content }: { content: LandingContent }) => {
           </div>
         </div>
       </section>
+
+      {content.details && (
+        <DetailsSection
+          heading={content.details.heading}
+          blocks={content.details.blocks}
+          showPlaceholders={showPlaceholders}
+        />
+      )}
+
+      {content.photos && (
+        <PhotoSection
+          heading={content.photos.heading}
+          intro={content.photos.intro}
+          photos={content.photos.items}
+          showPlaceholders={showPlaceholders}
+        />
+      )}
 
       {/* Areas */}
       <section className="py-10 bg-card border-y border-border">
@@ -193,6 +254,7 @@ const LandingPage = ({ content }: { content: LandingContent }) => {
                 <QuoteForm
                   variant="compact"
                   defaultService={content.service}
+                  faultOptions={content.faultOptions}
                   formLocation={content.formLocation}
                   submitLabel={content.submitLabel}
                   onSuccess={() => setSubmitted(true)}

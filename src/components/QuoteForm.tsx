@@ -27,6 +27,8 @@ const baseFields = {
   serviceRequired: z.string().min(1, "Select a service"),
   urgency: z.string().optional(),
   fault: z.string().max(100).optional(),
+  roomSize: z.string().max(50).optional(),
+  hasUnit: z.string().optional(),
 };
 
 const fullSchema = z.object({
@@ -49,7 +51,7 @@ type QuoteFormValues = z.infer<typeof fullSchema>;
 
 const initialValues: QuoteFormValues = {
   firstName: "", lastName: "", email: "", phone: "", suburb: "",
-  clientType: "", serviceRequired: "", address: "", urgency: "", fault: "", message: "",
+  clientType: "", serviceRequired: "", address: "", urgency: "", fault: "", roomSize: "", hasUnit: "", message: "",
 };
 
 const clientTypes = ["Residential", "Commercial", "Industrial", "Transport"];
@@ -58,6 +60,12 @@ const serviceOptions = [
   "Industrial Refrigeration", "Domestic Fridge", "Regas", "Transport Refrigeration", "Electrical", "Other",
 ];
 const urgencyOptions = ["Emergency", "This week", "This month", "Just planning"];
+// Installation page only. Lets a quote be given without a site visit.
+const roomSizeOptions = ["Up to 15 m²", "15 to 25 m²", "25 to 40 m²", "Larger than 40 m²", "Not sure"];
+const hasUnitOptions = [
+  { value: "yes", label: "Yes, I have a unit" },
+  { value: "no", label: "No, I need one supplied" },
+];
 
 const serviceKind = (service: string): ServiceKind => {
   if (/install/i.test(service)) return "installation";
@@ -106,6 +114,8 @@ interface QuoteFormProps {
   defaultClientType?: string;
   /** When given, adds an optional "what is the problem" dropdown with these options. */
   faultOptions?: string[];
+  /** Adds optional room size and "do you already have a unit" questions (installation page). */
+  installationFields?: boolean;
   /** Short label of where the form sits, sent with the conversion event. */
   formLocation: string;
   submitLabel?: string;
@@ -117,6 +127,7 @@ const QuoteForm = ({
   defaultService = "",
   defaultClientType = "",
   faultOptions,
+  installationFields = false,
   formLocation,
   submitLabel = "Send Quote Request",
   onSuccess,
@@ -196,18 +207,30 @@ const QuoteForm = ({
       form_location: formLocation,
     };
 
+    // Columns added by the installation migration. Only sent from the installation page.
+    const hasUnitAnswer = form.hasUnit === "yes" ? "Yes" : form.hasUnit === "no" ? "No" : "";
+    const installRow: Record<string, unknown> = installationFields
+      ? { room_size: form.roomSize || null, has_unit: form.hasUnit ? form.hasUnit === "yes" : null }
+      : {};
+
     setIsSubmitting(true);
-    const row: Record<string, unknown> = { ...coreRow, ...attributionRow, ...formRow };
+    const row: Record<string, unknown> = { ...coreRow, ...attributionRow, ...formRow, ...installRow };
     let { error } = await supabase.from("contact_submissions").insert(row);
     // A missing column means its migration has not run yet. Drop only the group the database
     // named (every optional group if it did not say which) and retry, so a lead is never lost
     // and keeps its attribution when only the newer columns are missing.
-    for (let attempt = 0; attempt < 2 && error && isMissingColumnError(error); attempt++) {
+    for (let attempt = 0; attempt < 3 && error && isMissingColumnError(error); attempt++) {
       const column = missingColumnName(error);
-      const groups = [formRow, attributionRow].filter((group) => !column || column in group);
+      const groups = [formRow, attributionRow, installRow].filter(
+        (group) => Object.keys(group).length > 0 && (!column || column in group),
+      );
       for (const group of groups) for (const key of Object.keys(group)) delete row[key];
-      // Without its column the fault would be lost, so keep it in the message.
-      if (groups.includes(formRow) && form.fault) row.message = `${message}\nFault: ${form.fault}`;
+      // Without its column an answer would be lost, so keep it in the message.
+      if (groups.includes(formRow) && form.fault) row.message = `${row.message}\nFault: ${form.fault}`;
+      if (groups.includes(installRow)) {
+        if (form.roomSize) row.message = `${row.message}\nRoom size: ${form.roomSize}`;
+        if (hasUnitAnswer) row.message = `${row.message}\nAlready has a unit: ${hasUnitAnswer}`;
+      }
       ({ error } = await supabase.from("contact_submissions").insert(row));
     }
     setIsSubmitting(false);
@@ -341,6 +364,22 @@ const QuoteForm = ({
               {urgencyOptions.map((u) => <option key={u} value={u}>{u}</option>)}
             </select>
           </div>
+          {installationFields && (
+            <>
+              <div>
+                <select name="roomSize" aria-label="Room size" value={form.roomSize} onChange={handleChange} disabled={isSubmitting} className={inputClass("roomSize")}>
+                  <option value="">Room Size (optional)</option>
+                  {roomSizeOptions.map((size) => <option key={size} value={size}>{size}</option>)}
+                </select>
+              </div>
+              <div>
+                <select name="hasUnit" aria-label="Do you already have a unit" value={form.hasUnit} onChange={handleChange} disabled={isSubmitting} className={inputClass("hasUnit")}>
+                  <option value="">Already Have a Unit? (optional)</option>
+                  {hasUnitOptions.map((option) => <option key={option.value} value={option.value}>{option.label}</option>)}
+                </select>
+              </div>
+            </>
+          )}
           {!compact && (
             <div className="sm:col-span-2">
               <input name="address" value={form.address} onChange={handleChange} placeholder="Service Address / Area" aria-label="Service address" disabled={isSubmitting} className={inputClass("address")} />

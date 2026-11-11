@@ -42,6 +42,16 @@ describe("contact email builders", () => {
     expect(mail.html).toContain("abc123");
   });
 
+  it("shows the fault the customer picked in the business notification", () => {
+    const mail = buildNotification({ ...base, fault: "Aircon leaking water" }, "s@x.co");
+    expect(mail.html).toContain("<strong>Fault</strong>");
+    expect(mail.html).toContain("Aircon leaking water");
+  });
+
+  it("shows N/A for the fault on leads that have none", () => {
+    expect(buildNotification(base, "s@x.co").html).toMatch(/<strong>Fault<\/strong><\/td><td[^>]*>N\/A/);
+  });
+
   it("omits reply-to when the customer email is blank or invalid", () => {
     expect(buildNotification({ ...base, email: "" }, "s@x.co").reply_to).toBeUndefined();
     expect(buildNotification({ ...base, email: "not-an-email" }, "s@x.co").reply_to).toBeUndefined();

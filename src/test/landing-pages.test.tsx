@@ -132,23 +132,18 @@ describe("placeholders for content the client has not supplied", () => {
     expect(pageText()).not.toMatch(/\{\{|\}\}/);
     expect(screen.queryByText("Why Book With Us")).not.toBeInTheDocument();
     expect(screen.queryByText("Our Work")).not.toBeInTheDocument();
-    expect(screen.queryByText("How long it takes")).not.toBeInTheDocument();
-    expect(screen.queryByText("Brands we service")).not.toBeInTheDocument();
-    expect(screen.queryByText("What is not covered")).not.toBeInTheDocument();
   });
 
   it("shows every placeholder to the client in dev and preview builds", () => {
     placeholders.show = true;
     renderPage(<AirconRepairs />, "/aircon-repairs");
     expect(screen.getByText("Why Book With Us")).toBeInTheDocument();
-    for (const token of [
-      "{{SAQCC_NUMBER}}",
-      "{{TURNAROUND}}",
-      "{{BRANDS_SERVICED}}",
-      "{{NOT_COVERED}}",
-    ]) {
-      expect(screen.getByText(token)).toBeInTheDocument();
-    }
+    expect(screen.getByText("{{SAQCC_NUMBER}}")).toBeInTheDocument();
+    // Turnaround, brands and exclusions are left off the page until the client supplies them.
+    expect(pageText()).not.toMatch(/TURNAROUND|BRANDS_SERVICED|NOT_COVERED/);
+    expect(screen.queryByText("How long it takes")).not.toBeInTheDocument();
+    expect(screen.queryByText("Brands we service")).not.toBeInTheDocument();
+    expect(screen.queryByText("What is not covered")).not.toBeInTheDocument();
     expect(screen.getByText("{{GOOGLE_RATING}} from {{GOOGLE_REVIEW_COUNT}} Google reviews")).toBeInTheDocument();
     expect(screen.getByText("{{YEARS_IN_OPERATION}} years in operation")).toBeInTheDocument();
     expect(screen.getByText("{{GUARANTEE_PERIOD}} workmanship guarantee")).toBeInTheDocument();

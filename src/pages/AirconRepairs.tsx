@@ -12,10 +12,9 @@ import repairsHero from "@/assets/aircon-repairs-hero.webp";
 //     {{YEARS_IN_OPERATION}}                      years the business has operated
 //     {{GUARANTEE_PERIOD}}                        workmanship guarantee period, as the client will honour it
 //     {{SAQCC_NUMBER}}                            registration number, with the registering body's name
-//   Body copy
-//     {{TURNAROUND}}                              typical time to a call-out and to complete a repair
-//     {{BRANDS_SERVICED}}                         the aircon brands the technicians service
-//     {{NOT_COVERED}}                             what a repair or call-out does not cover
+//   Body copy (not on the page yet)
+//     Turnaround, brands serviced and what is not covered were removed until the client supplies them.
+//     Add a block for each to details.blocks below once the real wording is known.
 //   Photos
 //     photos.items[].src and .alt                 real photos of technicians or completed work. Add the
 //                                                 files to src/assets, import them, and set src and alt.
@@ -81,9 +80,6 @@ const content: LandingContent = {
           "We explain what is wrong and what the repair will cost before any work continues.",
         ],
       },
-      { title: "How long it takes", paragraphs: ["{{TURNAROUND}}"] },
-      { title: "Brands we service", paragraphs: ["{{BRANDS_SERVICED}}"] },
-      { title: "What is not covered", paragraphs: ["{{NOT_COVERED}}"] },
       {
         title: "What usually causes common faults",
         items: [

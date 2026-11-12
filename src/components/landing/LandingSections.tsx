@@ -205,7 +205,7 @@ const InclusionList = ({ lines, icon }: { lines: InclusionLine[]; icon: "include
             className={`h-5 w-5 mt-0.5 shrink-0 ${icon === "included" ? "text-primary" : "text-secondary"}`}
             aria-hidden="true"
           />
-          <span>
+          <span className="min-w-0 [overflow-wrap:anywhere]">
             <span className="font-bold">{line.label}.</span>{" "}
             <span className={isPlaceholder(line.detail) ? todoClass : ""}>{line.detail}</span>
           </span>
@@ -305,6 +305,37 @@ export const LeadTimeNote = ({
     </section>
   );
 };
+
+export interface Illustration {
+  src: string;
+  alt: string;
+}
+
+/**
+ * Supporting images that are not photos of real jobs. No heading or caption, so nothing on the page
+ * presents them as Frostice's own work; real job photos belong in PhotoSection.
+ */
+export const IllustrationStrip = ({ images }: { images: Illustration[] }) => (
+  <section className="pb-12">
+    <div className="container mx-auto px-4">
+      <ul className="grid gap-4 sm:grid-cols-2">
+        {images.map((image) => (
+          <li key={image.src}>
+            <img
+              src={image.src}
+              alt={image.alt}
+              width={1200}
+              height={800}
+              loading="lazy"
+              decoding="async"
+              className="aspect-[3/2] w-full rounded-lg border border-border object-cover"
+            />
+          </li>
+        ))}
+      </ul>
+    </div>
+  </section>
+);
 
 /** Slim line under the price strip that jumps to the quote form while the holding offer runs. */
 export const PromoBanner = ({ headline }: { headline: string }) => (

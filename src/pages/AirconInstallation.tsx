@@ -1,6 +1,8 @@
 import LandingPage from "@/components/landing/LandingPage";
 import type { LandingContent } from "@/components/landing/LandingPage";
 import installationHero from "@/assets/aircon-installation-hero.webp";
+import illustrationOutdoor from "@/assets/installation-illustration-outdoor.webp";
+import illustrationIndoor from "@/assets/installation-illustration-indoor.webp";
 import {
   EXTRA_CHARGE_TRIGGERS,
   INCLUDED,
@@ -40,6 +42,8 @@ import {
 //     Photos
 //       photos.items[].src and .alt                   real photos of completed installations. Add the files to
 //                                                     src/assets, import them, and set src and alt.
+//       The two `illustrations` are AI-generated images supplied by the client. They are shown without a
+//       heading or caption and must never be moved into photos.items or captioned as completed jobs.
 
 const content: LandingContent = {
   seoTitle: "Aircon Installation in Gauteng",
@@ -81,6 +85,16 @@ const content: LandingContent = {
     { title: "Request a quote", text: "Tell us your suburb, the room size and whether you have a unit." },
     { title: "We confirm the details", text: "We discuss the unit and installation options, then quote." },
     { title: "Installed and tested", text: "We install the unit and check it is working before we leave." },
+  ],
+  illustrations: [
+    {
+      src: illustrationOutdoor,
+      alt: "Illustration of a technician connecting the pipework on an outdoor aircon unit",
+    },
+    {
+      src: illustrationIndoor,
+      alt: "Illustration of a technician mounting an indoor split unit on a lounge wall",
+    },
   ],
   details: {
     heading: "What to Expect When You Book an Installation",

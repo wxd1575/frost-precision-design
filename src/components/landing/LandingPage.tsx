@@ -6,6 +6,7 @@ import TrackedLink from "@/components/TrackedLink";
 import LandingLayout from "@/components/landing/LandingLayout";
 import {
   DetailsSection,
+  IllustrationStrip,
   InclusionsSection,
   LeadTimeNote,
   PaymentSection,
@@ -15,7 +16,7 @@ import {
   PromoBlock,
   TrustSection,
 } from "@/components/landing/LandingSections";
-import type { DetailBlock, PhotoSlot, TrustSlot } from "@/components/landing/LandingSections";
+import type { DetailBlock, Illustration, PhotoSlot, TrustSlot } from "@/components/landing/LandingSections";
 import type { InclusionLine, PricingPath } from "@/data/installation-offer";
 import { shouldShowPlaceholders } from "@/components/landing/placeholders";
 import { buttonVariants } from "@/components/ui/button";
@@ -53,6 +54,8 @@ export interface LandingContent {
   faultOptions?: string[];
   /** Longer explanatory copy. Paragraphs still holding a {{PLACEHOLDER}} are hidden from visitors. */
   details?: { heading: string; blocks: DetailBlock[] };
+  /** Illustrative images, not photos of real jobs. Shown without a heading or caption after "How it works". */
+  illustrations?: Illustration[];
   /** Photos of real technicians or completed work. Slots without a `src` are hidden from visitors. */
   photos?: { heading: string; intro: string; items: PhotoSlot[] };
   stepsHeading: string;
@@ -248,6 +251,10 @@ const LandingPage = ({ content }: { content: LandingContent }) => {
           </div>
         </div>
       </section>
+
+      {content.illustrations && content.illustrations.length > 0 && (
+        <IllustrationStrip images={content.illustrations} />
+      )}
 
       {content.details && (
         <DetailsSection

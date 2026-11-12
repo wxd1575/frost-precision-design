@@ -419,6 +419,17 @@ describe("installation page conversion content", () => {
     expect(screen.getByText(/That is the fitting fee\. If we supply the unit, it is quoted on top\./)).toBeInTheDocument();
   });
 
+  it("shows the AI-generated images only as uncaptioned illustrations, never as our work", () => {
+    renderPage(<AirconInstallation />, "/aircon-installation");
+    const illustrations = screen.getAllByRole("img", { name: /^Illustration of/ });
+    expect(illustrations).toHaveLength(2);
+    for (const image of illustrations) {
+      expect(image.closest("figure")).toBeNull();
+      expect(image.closest("section")!.querySelector("h2, figcaption")).toBeNull();
+    }
+    expect(screen.queryByText("Our Work")).not.toBeInTheDocument();
+  });
+
   it("never shows unfilled inclusions or photo slots to visitors, no trust section, and no finance wording", () => {
     renderPage(<AirconInstallation />, "/aircon-installation");
     expect(pageText()).not.toContain("{{");

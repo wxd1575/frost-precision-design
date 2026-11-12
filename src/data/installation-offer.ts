@@ -13,20 +13,19 @@ export interface PricingPath {
 }
 
 /**
- * The two paths the page offers, priced separately. The headline "Installations from R1 800" in the
- * page's priceNote is a separate, confirmed figure and is not set here.
- * Open question for the client: does R1 800 include a unit, or is it the fitting fee with the unit extra?
+ * The two paths the page offers, priced separately. Confirmed by the client: installations quote between
+ * R1 800 and R2 500, and that is the fitting fee only. A supplied unit is priced on top.
  */
 export const PRICING_PATHS: PricingPath[] = [
   {
     title: "Supply and install",
-    from: "{{SUPPLY_INSTALL_FROM}}",
-    blurb: "We supply the unit and install it, in one quote.",
+    from: "Unit price + R1 800 to R2 500 fitting",
+    blurb: "We supply the unit and install it. The unit is quoted on top of the fitting fee.",
   },
   {
     title: "Installation only",
-    from: "{{INSTALL_ONLY_FROM}}",
-    blurb: "You already have the unit. We install it.",
+    from: "R1 800 to R2 500",
+    blurb: "The fitting fee for a unit you already have.",
   },
 ];
 

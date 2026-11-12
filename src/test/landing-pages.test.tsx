@@ -411,10 +411,18 @@ describe("installation page conversion content", () => {
     expect(document.querySelector('#quote [role="note"]')).toBeNull();
   });
 
-  it("never shows unfilled pricing, inclusions, trust or photo slots to visitors, or implies finance", () => {
+  it("prices both paths for visitors, with the fitting fee range and the unit on top", () => {
+    renderPage(<AirconInstallation />, "/aircon-installation");
+    expect(screen.getByText("What It Costs")).toBeInTheDocument();
+    expect(screen.getByText("R1 800 to R2 500")).toBeInTheDocument();
+    expect(screen.getByText("Unit price + R1 800 to R2 500 fitting")).toBeInTheDocument();
+    expect(screen.getByText(/That is the fitting fee\. If we supply the unit, it is quoted on top\./)).toBeInTheDocument();
+  });
+
+  it("never shows unfilled inclusions or photo slots to visitors, no trust section, and no finance wording", () => {
     renderPage(<AirconInstallation />, "/aircon-installation");
     expect(pageText()).not.toContain("{{");
-    for (const heading of ["What It Costs", "What Is Included, and What Costs Extra", "Why Book With Us", "Our Work", "Payment options"]) {
+    for (const heading of ["What Is Included, and What Costs Extra", "Why Book With Us", "Our Work", "Payment options"]) {
       expect(screen.queryByText(heading)).not.toBeInTheDocument();
     }
     expect(pageText()).not.toMatch(/layby|financ|instalment|credit|pay just now/i);
@@ -423,9 +431,6 @@ describe("installation page conversion content", () => {
   it("shows every slot the client must fill in dev, but never the payment slot until it is confirmed", () => {
     placeholders.show = true;
     renderPage(<AirconInstallation />, "/aircon-installation");
-    expect(screen.getByText("What It Costs")).toBeInTheDocument();
-    expect(screen.getByText("{{SUPPLY_INSTALL_FROM}}")).toBeInTheDocument();
-    expect(screen.getByText("{{INSTALL_ONLY_FROM}}")).toBeInTheDocument();
     for (const label of [
       "Brackets and mounting", "Piping", "Electrical connection", "Drainage", "Compliance certificate",
       "Long pipe runs", "Difficult access", "Electrical work beyond the isolator", "Scaffolding",
@@ -433,7 +438,8 @@ describe("installation page conversion content", () => {
       expect(screen.getByText(`${label}.`)).toBeInTheDocument();
     }
     expect(screen.getByText("{{CURRENT_LEAD_TIME}}")).toBeInTheDocument();
-    expect(screen.getByText("{{SAQCC_NUMBER}}")).toBeInTheDocument();
+    // The trust section was left out at the client's request, so it is absent even in dev.
+    expect(screen.queryByText("Why Book With Us")).not.toBeInTheDocument();
     expect(screen.getAllByText(/TODO: real photo/)).toHaveLength(3);
     expect(screen.queryByText("Payment options")).not.toBeInTheDocument();
   });

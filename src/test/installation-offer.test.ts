@@ -23,9 +23,13 @@ describe("installation offer config", () => {
     expect(isPromoActive(new Date("2026-12-01T10:00:00+02:00"))).toBe(false);
   });
 
-  it("prices the two paths separately, and leaves unconfirmed figures as placeholders", () => {
+  it("prices the two paths separately: the confirmed fitting fee, with a supplied unit on top", () => {
     expect(PRICING_PATHS.map((path) => path.title)).toEqual(["Supply and install", "Installation only"]);
-    for (const path of PRICING_PATHS) expect(path.from).toMatch(/^\{\{[A-Z0-9_]+\}\}$/);
+    const [supply, installOnly] = PRICING_PATHS;
+    expect(installOnly.from).toBe("R1 800 to R2 500");
+    expect(supply.from).toContain("Unit price");
+    expect(supply.from).toContain("R1 800 to R2 500");
+    for (const path of PRICING_PATHS) expect(path.from).not.toMatch(/\{\{/);
   });
 
   it("covers every inclusion and extra-charge trigger the brief names, none with invented wording", () => {

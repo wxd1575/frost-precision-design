@@ -20,8 +20,7 @@ import {
 // the whole {{...}} text (and the words around it) with the real wording.
 //
 //   src/data/installation-offer.ts  (prices, inclusions, payment, lead time and the Black Friday block)
-//     {{SUPPLY_INSTALL_FROM}}, {{INSTALL_ONLY_FROM}}  entry price for each path, e.g. "From R2 400".
-//                                                     First answer: does the R1 800 headline include a unit?
+//     Pricing is confirmed: R1 800 to R2 500 is the fitting fee only, a supplied unit is extra.
 //     {{INCLUDED_*}}                                  what is covered: brackets, piping and its length,
 //                                                     electrical connection, drainage, compliance certificate
 //     {{EXTRA_*}}                                     what triggers an extra charge: long pipe runs, difficult
@@ -31,13 +30,10 @@ import {
 //     PROMO                                           edit headline and body once the Black Friday terms are
 //                                                     set on 20 November; it hides itself on PROMO.endsOn
 //   This file
-//     Trust section
-//       {{SAQCC_NUMBER}}                              SAQCC Gas registration number
-//       {{GOOGLE_RATING}}, {{GOOGLE_REVIEW_COUNT}}   current figures from the Google Business profile
-//       {{YEARS_IN_OPERATION}}                        years the business has operated
-//       {{GUARANTEE_PERIOD}}                          installation guarantee period, as the client will honour it
-//       {{BRANDS_INSTALLED}}                          brands installed
-//       {{WARRANTY_PRESERVED}}                        whether a Frostice installation preserves the manufacturer warranty
+//     Trust section (not on the page)
+//       Left out at the client's request. To add it back, add a trust block like the repairs page has,
+//       with real values only: SAQCC Gas number, Google rating and review count, years in operation,
+//       guarantee period, brands installed, and whether the manufacturer warranty is preserved.
 //     Body copy
 //       {{INSTALL_DURATION}}                          how long a typical installation takes
 //       The sizing, day-of-installation and preparation wording is general and must be confirmed by the client.
@@ -60,7 +56,7 @@ const content: LandingContent = {
   ],
   priceNote: {
     label: "Installations from R1 800",
-    text: "The final price depends on the unit, the site and the installation. We quote before we start.",
+    text: "That is the fitting fee. If we supply the unit, it is quoted on top. The final price depends on the unit, the site and the installation. We quote before we start.",
   },
   pricingPaths: { heading: "What It Costs", paths: PRICING_PATHS },
   payment: PAYMENT_OPTIONS,
@@ -71,17 +67,6 @@ const content: LandingContent = {
   },
   leadTime: LEAD_TIME,
   promo: { headline: PROMO.headline, body: PROMO.body, isActive: () => isPromoActive() },
-  trust: {
-    heading: "Why Book With Us",
-    slots: [
-      { label: "SAQCC Gas registration", value: "{{SAQCC_NUMBER}}" },
-      { label: "Google rating", value: "{{GOOGLE_RATING}} from {{GOOGLE_REVIEW_COUNT}} Google reviews" },
-      { label: "Years in operation", value: "{{YEARS_IN_OPERATION}} years in operation" },
-      { label: "Installation guarantee", value: "{{GUARANTEE_PERIOD}} installation guarantee" },
-      { label: "Brands we install", value: "{{BRANDS_INSTALLED}}" },
-      { label: "Manufacturer warranty", value: "{{WARRANTY_PRESERVED}}" },
-    ],
-  },
   helpHeading: "Installation Options",
   helpItems: [
     "Supply and install a new unit",

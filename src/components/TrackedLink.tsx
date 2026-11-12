@@ -1,8 +1,8 @@
 import type { AnchorHTMLAttributes } from "react";
+import { recordClick } from "@/lib/tracking/clicks";
+import type { ClickKind } from "@/lib/tracking/clicks";
 import { track } from "@/lib/tracking/events";
 import type { TrackedEvent } from "@/lib/tracking/events";
-
-type ClickKind = "call" | "whatsapp" | "email";
 
 const EVENT_BY_KIND: Record<ClickKind, TrackedEvent> = {
   call: "click_call",
@@ -16,7 +16,10 @@ interface TrackedLinkProps extends AnchorHTMLAttributes<HTMLAnchorElement> {
   placement: string;
 }
 
-/** An anchor that reports tel:, WhatsApp and mailto: clicks to the dataLayer. */
+/**
+ * An anchor that reports tel:, WhatsApp and mailto: clicks to the dataLayer, and
+ * stores the click's gclid so the conversion survives without advertising cookies.
+ */
 const TrackedLink = ({ kind, placement, onClick, children, ...props }: TrackedLinkProps) => (
   <a
     {...props}
@@ -25,6 +28,7 @@ const TrackedLink = ({ kind, placement, onClick, children, ...props }: TrackedLi
         placement,
         page_path: window.location.pathname,
       });
+      recordClick(kind, placement);
       onClick?.(e);
     }}
   >

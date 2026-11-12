@@ -1,5 +1,11 @@
-import { beforeEach, describe, expect, it } from "vitest";
+import { beforeEach, describe, expect, it, vi } from "vitest";
+
+const insert = vi.hoisted(() => vi.fn(() => Promise.resolve({ error: null })));
+vi.mock("@/lib/supabase", () => ({ supabase: { from: vi.fn(() => ({ insert })) } }));
+
+import { supabase } from "@/lib/supabase";
 import { captureAttribution, deriveLeadSource, getAttribution } from "@/lib/tracking/attribution";
+import { recordClick } from "@/lib/tracking/clicks";
 import { track } from "@/lib/tracking/events";
 import { leadValueZar, whatsappUrl } from "@/lib/tracking/config";
 
@@ -8,6 +14,8 @@ const visit = (path: string) => window.history.pushState({}, "", path);
 beforeEach(() => {
   window.sessionStorage.clear();
   window.dataLayer = [];
+  insert.mockClear();
+  vi.mocked(supabase.from).mockClear();
   visit("/");
 });
 
@@ -74,6 +82,30 @@ describe("track", () => {
       gclid: "TEST123",
       lead_source: "Google Ads – repairs",
     });
+  });
+});
+
+describe("recordClick", () => {
+  it("stores the click id behind a tap, so the conversion survives without cookies", () => {
+    visit("/aircon-repairs?gclid=TEST123");
+    captureAttribution();
+    visit("/aircon-repairs");
+    recordClick("whatsapp", "landing_hero");
+    expect(supabase.from).toHaveBeenCalledWith("click_events");
+    expect(insert).toHaveBeenCalledWith(
+      expect.objectContaining({
+        kind: "whatsapp",
+        placement: "landing_hero",
+        page_path: "/aircon-repairs",
+        gclid: "TEST123",
+        lead_source: "Google Ads – repairs",
+      }),
+    );
+  });
+
+  it("never throws or blocks the click when the write fails", () => {
+    insert.mockImplementationOnce(() => Promise.reject(new Error("offline")));
+    expect(() => recordClick("call", "navbar")).not.toThrow();
   });
 });
 

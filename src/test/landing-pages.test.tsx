@@ -1,4 +1,4 @@
-import { beforeEach, describe, expect, it, vi } from "vitest";
+import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { fireEvent, render, screen, waitFor } from "@testing-library/react";
 import { MemoryRouter } from "react-router-dom";
 import { HelmetProvider } from "react-helmet-async";
@@ -24,6 +24,8 @@ vi.mock("@/components/landing/placeholders", async (importOriginal) => {
 import AirconRepairs from "@/pages/AirconRepairs";
 import AirconInstallation from "@/pages/AirconInstallation";
 import QuoteForm from "@/components/QuoteForm";
+import { SERVICE_REGIONS } from "@/data/service-areas";
+import { PROMO } from "@/data/installation-offer";
 
 const renderPage = (page: JSX.Element, path: string) =>
   render(
@@ -367,6 +369,192 @@ describe("landing page quote form", () => {
     expect(shown.description).toMatch(/couldn't send your request/i);
     expect(shown.description).not.toMatch(/corrupted/);
     expect(insert).toHaveBeenCalledTimes(1);
+  });
+});
+
+describe("installation page conversion content", () => {
+  const WA_TAG = "(from /aircon-installation)";
+  const submitQuote = () => fireEvent.click(screen.getByRole("button", { name: /request quote/i }));
+
+  beforeEach(() => {
+    // The Black Friday block is date-driven, so pin the clock to a day it is running.
+    vi.useFakeTimers({ toFake: ["Date"] });
+    vi.setSystemTime(new Date("2026-11-12T10:00:00+02:00"));
+    window.history.pushState({}, "", "/aircon-installation?utm_source=google&utm_medium=cpc&gclid=TEST123");
+  });
+
+  afterEach(() => {
+    vi.useRealTimers();
+  });
+
+  it("keeps the headline, the R1 800 price and the source tag on every WhatsApp link", () => {
+    renderPage(<AirconInstallation />, "/aircon-installation");
+    expect(screen.getByRole("heading", { level: 1, name: /need a new aircon installed\?/i })).toBeInTheDocument();
+    expect(screen.getByText("Installations from R1 800")).toBeInTheDocument();
+    const links = Array.from(document.querySelectorAll<HTMLAnchorElement>('a[href^="https://wa.me/"]'));
+    expect(links.length).toBeGreaterThanOrEqual(2);
+    for (const link of links) expect(decodeURIComponent(link.href)).toContain(WA_TAG);
+  });
+
+  it("shows the Black Friday holding line directly above the quote form", () => {
+    renderPage(<AirconInstallation />, "/aircon-installation");
+    const note = document.querySelector('#quote [role="note"]')!;
+    expect(note.textContent).toContain(PROMO.headline);
+    expect(follows(note, document.querySelector("#quote form")!)).toBe(true);
+    expect(screen.getAllByText(PROMO.headline).length).toBeGreaterThanOrEqual(2);
+  });
+
+  it("removes the Black Friday block once its end date has passed", () => {
+    vi.setSystemTime(new Date(`${PROMO.endsOn}T00:30:00+02:00`));
+    renderPage(<AirconInstallation />, "/aircon-installation");
+    expect(screen.queryByText(PROMO.headline)).not.toBeInTheDocument();
+    expect(document.querySelector('#quote [role="note"]')).toBeNull();
+  });
+
+  it("prices both paths for visitors, with the fitting fee range and the unit on top", () => {
+    renderPage(<AirconInstallation />, "/aircon-installation");
+    expect(screen.getByText("What It Costs")).toBeInTheDocument();
+    expect(screen.getByText("R1 800 to R2 500")).toBeInTheDocument();
+    expect(screen.getByText("Unit price + R1 800 to R2 500 fitting")).toBeInTheDocument();
+    expect(screen.getByText(/That is the fitting fee\. If we supply the unit, it is quoted on top\./)).toBeInTheDocument();
+  });
+
+  it("shows the AI-generated images only as uncaptioned illustrations, never as our work", () => {
+    renderPage(<AirconInstallation />, "/aircon-installation");
+    const illustrations = screen.getAllByRole("img", { name: /^Illustration of/ });
+    expect(illustrations).toHaveLength(2);
+    for (const image of illustrations) {
+      expect(image.closest("figure")).toBeNull();
+      expect(image.closest("section")!.querySelector("h2, figcaption")).toBeNull();
+    }
+    expect(screen.queryByText("Our Work")).not.toBeInTheDocument();
+  });
+
+  it("never shows unfilled inclusions or photo slots to visitors, no trust section, and no finance wording", () => {
+    renderPage(<AirconInstallation />, "/aircon-installation");
+    expect(pageText()).not.toContain("{{");
+    for (const heading of ["What Is Included, and What Costs Extra", "Why Book With Us", "Our Work", "Payment options"]) {
+      expect(screen.queryByText(heading)).not.toBeInTheDocument();
+    }
+    expect(pageText()).not.toMatch(/layby|financ|instalment|credit|pay just now/i);
+  });
+
+  it("shows every slot the client must fill in dev, but never the payment slot until it is confirmed", () => {
+    placeholders.show = true;
+    renderPage(<AirconInstallation />, "/aircon-installation");
+    for (const label of [
+      "Brackets and mounting", "Piping", "Electrical connection", "Drainage", "Compliance certificate",
+      "Long pipe runs", "Difficult access", "Electrical work beyond the isolator", "Scaffolding",
+    ]) {
+      expect(screen.getByText(`${label}.`)).toBeInTheDocument();
+    }
+    expect(screen.getByText("{{CURRENT_LEAD_TIME}}")).toBeInTheDocument();
+    // The trust section was left out at the client's request, so it is absent even in dev.
+    expect(screen.queryByText("Why Book With Us")).not.toBeInTheDocument();
+    expect(screen.getAllByText(/TODO: real photo/)).toHaveLength(3);
+    expect(screen.queryByText("Payment options")).not.toBeInTheDocument();
+  });
+
+  it("leads the areas list with the targeted areas and keeps full coverage", () => {
+    renderPage(<AirconInstallation />, "/aircon-installation");
+    for (const area of ["Centurion", "Midrand", "Kempton Park", "Pretoria East", "Randburg", "Fourways", "Sandton"]) {
+      expect(screen.getAllByText(area).length).toBeGreaterThan(0);
+    }
+    const details = Array.from(document.querySelectorAll("details"));
+    expect(details).toHaveLength(SERVICE_REGIONS.length);
+    const names = details.map((d) => d.querySelector("summary span")!.textContent);
+    expect(names.slice(0, 3)).toEqual(["Centurion & Irene", "Midrand & Kyalami", "Kempton Park & Edenvale"]);
+    expect(details[0].open).toBe(true);
+    expect(details[1].open).toBe(false);
+    expect(details[2].open).toBe(false);
+  });
+
+  it("has far more copy than the original thin page, covering the day, the timing, preparation and sizing", () => {
+    renderPage(<AirconInstallation />, "/aircon-installation");
+    expect(document.querySelector("main")!.textContent!.length).toBeGreaterThan(4500);
+    for (const title of ["How the right unit size is decided", "What happens on the day", "How to prepare"]) {
+      expect(screen.getByText(title)).toBeInTheDocument();
+    }
+  });
+
+  it("keeps every existing form field, including Just planning, and adds room size and unit questions", () => {
+    renderPage(<AirconInstallation />, "/aircon-installation");
+    for (const label of ["First name", "Last name", "Phone number", "Email address", "Home or business", "Suburb", "How urgent is this", "Tell us more"]) {
+      expect(screen.getByLabelText(label)).toBeInTheDocument();
+    }
+    expect(screen.getByRole("option", { name: "Just planning" })).toBeInTheDocument();
+    expect(screen.getByLabelText("Room size")).not.toBeRequired();
+    expect(screen.getByLabelText("Do you already have a unit")).not.toBeRequired();
+  });
+
+  it("does not submit a blank form and requires first name, phone and suburb", () => {
+    renderPage(<AirconInstallation />, "/aircon-installation");
+    for (const label of ["First name", "Phone number", "Suburb"]) {
+      expect(screen.getByLabelText(label)).toBeRequired();
+    }
+    submitQuote();
+    expect(insert).not.toHaveBeenCalled();
+    expect(screen.getByText("First name is required")).toBeInTheDocument();
+    expect(screen.getByText("Phone number is required")).toBeInTheDocument();
+    expect(screen.getByText("Tell us your suburb")).toBeInTheDocument();
+  });
+
+  it("saves the room size and whether the visitor has a unit on the lead", async () => {
+    insert.mockResolvedValue({ error: null });
+    renderPage(<AirconInstallation />, "/aircon-installation");
+    fillForm();
+    fireEvent.change(screen.getByLabelText("Room size"), { target: { value: "15 to 25 m²" } });
+    fireEvent.change(screen.getByLabelText("Do you already have a unit"), { target: { value: "no" } });
+    submitQuote();
+
+    await waitFor(() => expect(insert).toHaveBeenCalledTimes(1));
+    expect(insert.mock.calls[0][0]).toMatchObject({
+      service_required: "AC Installation",
+      form_location: "landing_installation",
+      lead_source: "Google Ads – installation",
+      room_size: "15 to 25 m²",
+      has_unit: false,
+    });
+  });
+
+  it("saves empty answers as null so the questions stay optional", async () => {
+    insert.mockResolvedValue({ error: null });
+    renderPage(<AirconInstallation />, "/aircon-installation");
+    fillForm();
+    submitQuote();
+
+    await waitFor(() => expect(insert).toHaveBeenCalledTimes(1));
+    expect(insert.mock.calls[0][0]).toMatchObject({ room_size: null, has_unit: null });
+  });
+
+  it("keeps the answers in the message if the installation migration has not been applied yet", async () => {
+    insert
+      .mockResolvedValueOnce({ error: { code: "PGRST204", message: "Could not find the 'room_size' column" } })
+      .mockResolvedValueOnce({ error: null });
+    renderPage(<AirconInstallation />, "/aircon-installation");
+    fillForm();
+    fireEvent.change(screen.getByLabelText("Room size"), { target: { value: "15 to 25 m²" } });
+    fireEvent.change(screen.getByLabelText("Do you already have a unit"), { target: { value: "yes" } });
+    submitQuote();
+
+    await waitFor(() => expect(insert).toHaveBeenCalledTimes(2));
+    const retried = insert.mock.calls[1][0];
+    expect(retried).not.toHaveProperty("room_size");
+    expect(retried).not.toHaveProperty("has_unit");
+    expect(retried).toMatchObject({ gclid: "TEST123", form_location: "landing_installation" });
+    expect(retried.message).toContain("Room size: 15 to 25 m²");
+    expect(retried.message).toContain("Already has a unit: Yes");
+  });
+
+  it("does not add the installation questions or columns to the repairs form", async () => {
+    insert.mockResolvedValue({ error: null });
+    renderPage(<AirconRepairs />, "/aircon-repairs");
+    expect(screen.queryByLabelText("Room size")).not.toBeInTheDocument();
+    fillAndSubmit();
+
+    await waitFor(() => expect(insert).toHaveBeenCalledTimes(1));
+    expect(insert.mock.calls[0][0]).not.toHaveProperty("room_size");
+    expect(insert.mock.calls[0][0]).not.toHaveProperty("has_unit");
   });
 });
 

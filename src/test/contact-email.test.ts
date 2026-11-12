@@ -42,6 +42,21 @@ describe("contact email builders", () => {
     expect(mail.html).toContain("abc123");
   });
 
+  it("shows the room size and whether the customer has a unit, so a quote needs no visit", () => {
+    const mail = buildNotification({ ...base, room_size: "15 to 25 m²", has_unit: false }, "s@x.co");
+    expect(mail.html).toMatch(/<strong>Room size<\/strong><\/td><td[^>]*>15 to 25 m²/);
+    expect(mail.html).toMatch(/<strong>Already has a unit<\/strong><\/td><td[^>]*>No/);
+    expect(buildNotification({ ...base, has_unit: true }, "s@x.co").html).toMatch(
+      /<strong>Already has a unit<\/strong><\/td><td[^>]*>Yes/,
+    );
+  });
+
+  it("shows N/A for the installation answers when they were not given", () => {
+    const html = buildNotification(base, "s@x.co").html;
+    expect(html).toMatch(/<strong>Room size<\/strong><\/td><td[^>]*>N\/A/);
+    expect(html).toMatch(/<strong>Already has a unit<\/strong><\/td><td[^>]*>N\/A/);
+  });
+
   it("shows the fault the customer picked in the business notification", () => {
     const mail = buildNotification({ ...base, fault: "Aircon leaking water" }, "s@x.co");
     expect(mail.html).toContain("<strong>Fault</strong>");

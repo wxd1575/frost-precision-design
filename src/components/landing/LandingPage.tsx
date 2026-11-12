@@ -4,8 +4,20 @@ import SEO from "@/components/SEO";
 import QuoteForm from "@/components/QuoteForm";
 import TrackedLink from "@/components/TrackedLink";
 import LandingLayout from "@/components/landing/LandingLayout";
-import { DetailsSection, PhotoSection, TrustSection } from "@/components/landing/LandingSections";
-import type { DetailBlock, PhotoSlot, TrustSlot } from "@/components/landing/LandingSections";
+import {
+  DetailsSection,
+  IllustrationStrip,
+  InclusionsSection,
+  LeadTimeNote,
+  PaymentSection,
+  PhotoSection,
+  PricingSection,
+  PromoBanner,
+  PromoBlock,
+  TrustSection,
+} from "@/components/landing/LandingSections";
+import type { DetailBlock, Illustration, PhotoSlot, TrustSlot } from "@/components/landing/LandingSections";
+import type { InclusionLine, PricingPath } from "@/data/installation-offer";
 import { shouldShowPlaceholders } from "@/components/landing/placeholders";
 import { buttonVariants } from "@/components/ui/button";
 import { PHONE_DISPLAY, PHONE_HREF, whatsappUrl } from "@/lib/tracking/config";
@@ -21,6 +33,19 @@ export interface LandingContent {
   /** Price statement in the hero, above the call buttons. Two sentences, rendered as one line of copy. */
   pricing?: { lead: string; note: string };
   priceNote: { label: string; text: string };
+  /** Separate entry prices for each way of buying. Paths still holding a {{PLACEHOLDER}} price are hidden from visitors. */
+  pricingPaths?: { heading: string; paths: PricingPath[] };
+  /** What the price covers and what can cost extra. Lines still holding a {{PLACEHOLDER}} are hidden from visitors. */
+  inclusions?: { heading: string; included: InclusionLine[]; extras: InclusionLine[] };
+  /** Only rendered once `confirmed` is true, so no payment arrangement is implied before the client confirms one. */
+  payment?: { heading: string; text: string; confirmed: boolean };
+  leadTime?: { label: string; value: string };
+  /** Temporary offer shown above the quote form while `isActive()` is true. Checked on every render. */
+  promo?: { headline: string; body: string; isActive: () => boolean };
+  /** Leads the areas list with the areas the ads target. The full list stays below. */
+  areaFocus?: { heading: string; regions: string[]; suburbs: string[]; openCount: number };
+  /** Adds room size and "do you already have a unit" questions to the quote form. */
+  installationFields?: boolean;
   /** Real credentials and ratings. Slots still holding a {{PLACEHOLDER}} are hidden from visitors. */
   trust?: { heading: string; slots: TrustSlot[] };
   helpHeading: string;
@@ -29,6 +54,8 @@ export interface LandingContent {
   faultOptions?: string[];
   /** Longer explanatory copy. Paragraphs still holding a {{PLACEHOLDER}} are hidden from visitors. */
   details?: { heading: string; blocks: DetailBlock[] };
+  /** Illustrative images, not photos of real jobs. Shown without a heading or caption after "How it works". */
+  illustrations?: Illustration[];
   /** Photos of real technicians or completed work. Slots without a `src` are hidden from visitors. */
   photos?: { heading: string; intro: string; items: PhotoSlot[] };
   stepsHeading: string;
@@ -48,6 +75,15 @@ export interface LandingContent {
 const LandingPage = ({ content }: { content: LandingContent }) => {
   const [submitted, setSubmitted] = useState(false);
   const showPlaceholders = shouldShowPlaceholders();
+  const promo = content.promo?.isActive() ? content.promo : undefined;
+
+  // Targeted regions lead, in the order the ads prioritise them. Every other region follows unchanged.
+  const focus = content.areaFocus;
+  const priorityRank = (region: string) => {
+    const rank = focus ? focus.regions.indexOf(region) : -1;
+    return rank === -1 ? Number.MAX_SAFE_INTEGER : rank;
+  };
+  const regions = [...SERVICE_REGIONS].sort((a, b) => priorityRank(a.region) - priorityRank(b.region));
 
   const intro = (
     <div className={content.pricing ? "mt-6" : "mt-4"}>
@@ -143,6 +179,42 @@ const LandingPage = ({ content }: { content: LandingContent }) => {
         </div>
       </section>
 
+      {promo && <PromoBanner headline={promo.headline} />}
+
+      {content.pricingPaths && (
+        <PricingSection
+          heading={content.pricingPaths.heading}
+          paths={content.pricingPaths.paths}
+          showPlaceholders={showPlaceholders}
+        />
+      )}
+
+      {content.payment && (
+        <PaymentSection
+          heading={content.payment.heading}
+          text={content.payment.text}
+          confirmed={content.payment.confirmed}
+          showPlaceholders={showPlaceholders}
+        />
+      )}
+
+      {content.inclusions && (
+        <InclusionsSection
+          heading={content.inclusions.heading}
+          included={content.inclusions.included}
+          extras={content.inclusions.extras}
+          showPlaceholders={showPlaceholders}
+        />
+      )}
+
+      {content.leadTime && (
+        <LeadTimeNote
+          label={content.leadTime.label}
+          value={content.leadTime.value}
+          showPlaceholders={showPlaceholders}
+        />
+      )}
+
       {content.trust && (
         <TrustSection heading={content.trust.heading} slots={content.trust.slots} showPlaceholders={showPlaceholders} />
       )}
@@ -180,6 +252,10 @@ const LandingPage = ({ content }: { content: LandingContent }) => {
         </div>
       </section>
 
+      {content.illustrations && content.illustrations.length > 0 && (
+        <IllustrationStrip images={content.illustrations} />
+      )}
+
       {content.details && (
         <DetailsSection
           heading={content.details.heading}
@@ -205,9 +281,28 @@ const LandingPage = ({ content }: { content: LandingContent }) => {
             Homes and businesses in Sandton, Midrand, Centurion, Pretoria East, the East Rand
             and Johannesburg North. Not on the list? Ask us.
           </p>
+          {focus && (
+            <div className="mb-4">
+              <p className="font-display text-sm uppercase tracking-widest text-secondary mb-2">{focus.heading}</p>
+              <ul className="flex flex-wrap gap-2">
+                {focus.suburbs.map((area) => (
+                  <li
+                    key={area}
+                    className="rounded-full border border-secondary bg-secondary/10 px-3 py-1 text-sm font-body font-bold text-foreground"
+                  >
+                    {area}
+                  </li>
+                ))}
+              </ul>
+            </div>
+          )}
           <div className="space-y-2">
-            {SERVICE_REGIONS.map(({ region, suburbs }) => (
-              <details key={region} className="group rounded-lg border border-border bg-background">
+            {regions.map(({ region, suburbs }, index) => (
+              <details
+                key={region}
+                open={focus ? index < focus.openCount : undefined}
+                className="group rounded-lg border border-border bg-background"
+              >
                 <summary className="flex cursor-pointer items-center justify-between gap-2 px-4 py-3 font-display font-bold uppercase tracking-wide text-foreground min-h-[48px]">
                   <span>{region}</span>
                   <span className="text-xs font-body font-normal normal-case text-muted-foreground">
@@ -230,6 +325,7 @@ const LandingPage = ({ content }: { content: LandingContent }) => {
       {/* Quote form */}
       <section id="quote" className="py-12 scroll-mt-4">
         <div className="container mx-auto px-4 max-w-2xl">
+          {promo && !submitted && <PromoBlock headline={promo.headline} body={promo.body} />}
           <div className="relative bg-card border border-border rounded-lg p-6 sm:p-8">
             {submitted ? (
               <div className="text-center py-6" role="status">
@@ -255,6 +351,7 @@ const LandingPage = ({ content }: { content: LandingContent }) => {
                   variant="compact"
                   defaultService={content.service}
                   faultOptions={content.faultOptions}
+                  installationFields={content.installationFields}
                   formLocation={content.formLocation}
                   submitLabel={content.submitLabel}
                   onSuccess={() => setSubmitted(true)}
